@@ -1,7 +1,4 @@
 // 轮播图接口
-/**
- * Created by yucccc on 2017/6/29.
- */
 var express = require('express')
 var router = express.Router()
 var mongoose = require('mongoose')

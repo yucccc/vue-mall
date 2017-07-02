@@ -1,17 +1,25 @@
 <template>
   <div class="login">
     <div>
+      <!--头部-->
       <header class="login-header">
         <div class="w">
-          <router-link to="/">欢迎登陆</router-link>
+          <router-link to="/">
+            <img src="/static/images/logo-201305-b.png" alt="logo">
+          </router-link>
+          <div>欢迎登陆</div>
         </div>
       </header>
+      <!--登陆信息-->
       <div class="bg-box">
         <div class="login-bg w">
           <div class="from">
             <div class="from-item">
-              <div><a href="#">扫码登陆</a></div>
-              <div><a href="#">账号登陆</a></div>
+              <div style="border-right: 1px solid #ccc" @click="loginWay = 1">
+                <a :class="{active:loginWay}" href="javascript:;">账号登陆</a></div>
+              <div @click="loginWay = 0">
+                <a :class="{active:!loginWay}" href="javascript:;">扫码登陆</a>
+              </div>
             </div>
             <div style="margin-top: 23px;">
               <el-form :model="ruleForm2" ref="ruleForm2" class="demo-ruleForm">
@@ -29,31 +37,57 @@
           </div>
         </div>
       </div>
+      <!--底部-->
+      <y-footer></y-footer>
     </div>
   </div>
 </template>
 <script>
+  import YFooter from '/common/footer'
   export default {
     data () {
       return {
+        loginWay: 1,
         ruleForm2: {
           pass: '',
           checkPass: '',
           age: ''
         }
       }
+    },
+    components: {
+      YFooter
     }
   }
 </script>
 <style lang="scss" scoped>
   .login-header {
-    background-color: #ccc;
-    height: 80px;
+    background-color: #fff;
+    /*height: 80px;*/
+    > div {
+      display: flex;
+      align-items: center;
+      > div {
+        margin-left: 10px;
+        font-size: 24px;
+      }
+    }
+    a {
+      display: flex;
+      align-items: center;
+      height: 80px;
+      /*width: 30%;*/
+      width: 170px;
+    }
+    img {
+      display: block;
+    }
   }
 
   .bg-box {
     background-color: #e93854;
     height: 475px;
+    margin-bottom: 20px;
     .login-bg {
       background: url("../assets/images/loginBg.png") no-repeat;
       background-size: cover;
@@ -81,7 +115,8 @@
         justify-content: center;
         width: 100%;
         a {
-          padding: 20px;
+          display: block;
+          /*padding: 8px;*/
         }
       }
     }

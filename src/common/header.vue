@@ -2,6 +2,7 @@
   <div class="box">
     <header class="w">
       <div>
+        <router-link to="goods">商品</router-link>
         <router-link to="login">登录</router-link>
         <router-link to="/">我的订单</router-link>
       </div>

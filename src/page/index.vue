@@ -4,7 +4,7 @@
     <!--logo搜索块-->
     <div class="logo-box">
       <div class="w pr">
-        <div class="pa logo">logo</div>
+        <div class="pa logo"><a href="/" style="display: block;height: 100%">logo</a></div>
         <div class="search">
           <y-search></y-search>
         </div>
