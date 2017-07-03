@@ -5,9 +5,11 @@ import ElementUI from 'element-ui'
 import '../theme/index.css'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
+import store from './store'
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  store,
   router,
   render: h => h(App)
 })

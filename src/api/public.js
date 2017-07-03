@@ -1,5 +1,4 @@
 import axios from 'axios'
-import qs from 'qs'
 axios.defaults.timeout = 5000
 axios.defaults.headers.post['Content-Type'] = 'application/x-www=form-urlencoded'
 export default {
@@ -14,7 +13,7 @@ export default {
   },
   fetchPost (url, params = {}) {
     return new Promise((resolve, reject) => {
-      axios.post(url, qs.stringify(params)).then(res => {
+      axios.post(url, params).then(res => {
         resolve(res.data)
       }).catch(error => {
         reject(error)

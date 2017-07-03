@@ -22,7 +22,8 @@
     "morgan": "~1.8.1",
     "serve-favicon": "~2.4.2",
     "vue": "^2.3.3",
-    "vue-router": "^2.3.1"
+    "vue-router": "^2.3.1",
+    "vuex": "^2.3.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

@@ -22,17 +22,17 @@
               </div>
             </div>
             <div style="margin-top: 23px;">
-              <el-form :model="ruleForm2" ref="ruleForm2" class="demo-ruleForm">
+              <el-form class="demo-ruleForm">
                 <el-form-item label="账号" label-width="64px">
-                  <el-input v-model="ruleForm2.pass"></el-input>
+                  <el-input v-model="ruleForm.userName"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="pass" label-width="64px">
-                  <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
+                  <el-input type="password" v-model="ruleForm.userPwd"></el-input>
                 </el-form-item>
               </el-form>
             </div>
             <div class="clickLogin">
-              <el-button type="primary">登陆</el-button>
+              <el-button type="primary" @click="login()">登陆</el-button>
             </div>
           </div>
         </div>
@@ -44,16 +44,42 @@
 </template>
 <script>
   import YFooter from '/common/footer'
+  import {userLogin} from '/api/index.js'
   export default {
     data () {
       return {
         loginWay: 1,
-        ruleForm2: {
-          pass: '',
-          checkPass: '',
-          age: ''
+        ruleForm: {
+          userName: '',
+          userPwd: ''
+        },
+        rules: {
+          userName: [
+            {required: true, message: '请输入账号', trigger: 'blur'},
+            {min: 3, max: 12, message: '账号格式错误', trigger: 'blur'}
+          ]
         }
       }
+    },
+    computed: {
+      count () {
+        return this.$store.state.login
+      }
+    },
+    methods: {
+      login () {
+        userLogin({userName: this.ruleForm.userName, userPwd: this.ruleForm.userPwd}).then(res => {
+          if (res.status === '0') {
+            // 暂时先存在seetion
+            sessionStorage.setItem('userMsg', JSON.stringify(res.result))
+            this.$router.go(-1)
+          } else {
+            alert(res.msg)
+          }
+        })
+      }
+    },
+    mounted () {
     },
     components: {
       YFooter
