@@ -16,3 +16,11 @@
 .active {
   color: #c81623;
 }
+
+.clearfix :after {
+  content: '';
+  display: block;
+  clear: both;
+  line-height: 0;
+  visibility: hidden;
+}

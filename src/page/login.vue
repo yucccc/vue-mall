@@ -37,6 +37,7 @@
           </div>
         </div>
       </div>
+      <el-button :plain="true"></el-button>
       <!--底部-->
       <y-footer></y-footer>
     </div>
@@ -68,13 +69,18 @@
     },
     methods: {
       login () {
-        userLogin({userName: this.ruleForm.userName, userPwd: this.ruleForm.userPwd}).then(res => {
+        if (!this.ruleForm.userName || !this.ruleForm.userPwd) {
+          this.$message.error('账号或者密码不能为空')
+          return false
+        }
+        var params = {userName: this.ruleForm.userName, userPwd: this.ruleForm.userPwd}
+        userLogin(params).then(res => {
           if (res.status === '0') {
             // 暂时先存在seetion
             sessionStorage.setItem('userMsg', JSON.stringify(res.result))
             this.$router.go(-1)
           } else {
-            alert(res.msg)
+            this.$message.error('账号或者密码错误')
           }
         })
       }

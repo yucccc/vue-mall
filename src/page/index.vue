@@ -4,18 +4,20 @@
     <!--logo搜索块-->
     <div class="logo-box">
       <div class="w pr">
-        <div class="pa logo"><a href="/" style="display: block;height: 100%">logo</a></div>
+        <div class="pa logo"><a href="/" style="display: block;height: 100%"></a></div>
         <div class="search">
           <y-search></y-search>
         </div>
       </div>
     </div>
     <router-view></router-view>
+    <y-footer></y-footer>
   </div>
 </template>
 <script>
   import YHeader from '/common/header'
   import YSearch from '/components/search'
+  import YFooter from '/common/footer'
   export default {
     data () {
       return {
@@ -24,12 +26,16 @@
     },
     components: {
       YHeader,
+      YFooter,
       YSearch
     }
   }
 </script>
 <style lang="scss" scoped>
   .logo {
+    background-image: url('/static/images/logo.v2@2x.png');
+    background-repeat: no-repeat;
+    background-size: cover;
     left: 0;
     box-shadow: 0 -12px 10px rgba(0, 0, 0, .2);
     background-color: #fff;

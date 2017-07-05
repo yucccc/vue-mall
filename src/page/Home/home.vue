@@ -11,7 +11,7 @@
       <div>
         <div><span>秒杀块标题</span><span>时间</span></div>
         <!--商品-->
-        <div class="goods">
+        <div class="goods ">
           <div class="sk_item" v-for="item in 6">
             <router-link to="/"><img
               src="https://img14.360buyimg.com/n4/s260x260_jfs/t1963/236/905138712/127581/cdf8c9e0/5631d325Ncc976adb.jpg"

@@ -2,8 +2,10 @@
   <div class="box">
     <header class="w">
       <div>
-        <router-link to="login" style="color: #f10215">亲，请登录</router-link>
+        <router-link :to="loginRouter" style="color: #f10215">{{name}}</router-link>
+        <router-link to="myOrder">我的订单</router-link>
         <router-link to="goods">进入商城</router-link>
+
         <router-link class="shop" to="/">
           <img src="/static/svg/shop.svg" alt="">
           <span style="padding-right: 4px;">购物车 </span><span> (0)</span>
@@ -12,6 +14,30 @@
     </header>
   </div>
 </template>
+<script>
+  export default{
+    data () {
+      return {
+        login: false,
+        loginRouter: 'login',
+        name: '亲，请登录'
+      }
+    },
+    methods: {
+      getName () {
+        var name = sessionStorage.getItem('userMsg')
+        if (name) {
+          this.login = true
+          this.loginRouter = 'perDetails'
+          this.name = JSON.parse(name).name
+        }
+      }
+    },
+    created () {
+      this.getName()
+    }
+  }
+</script>
 <style lang="scss" scoped>
   @import "../assets/style/theme";
 
