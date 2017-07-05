@@ -1,4 +1,4 @@
-一个假京东
+#### 一个假京东
 ###前言
 由于自己从没接触过后端,这也是第一次从后端到前端完全实现,也是边做边学,当做是一次练习.
 ##### 关于项目
@@ -8,18 +8,14 @@
 
 ### 启动
 
-``` bash
-# install dependencies
-npm install
+>需要先clone另外一个接口项目 https://github.com/yucccc/node-api以拿到页面数据
 
-# serve with hot reload at localhost:8080
-npm run dev
+安装依赖
+>npm install
 
-# build for production with minification
-npm run build
+启动项目
+>npm run dev
 
-# build for production and view the bundle analyzer report
-npm run build --report
-```
+编译打包
+>npm run build
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
