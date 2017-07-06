@@ -12,21 +12,46 @@
       </div>
     </div>
     <div class="goods-box w">
-      <div class="good-item" v-for="item in 8">
-        <div>
-          <router-link to="/"><img src="/static/images/test1.jpg" alt=""></router-link>
+      <div class="good-item" v-for="(item,i) in computer" :key="i">
+        <div class="good-img">
+          <router-link to="/"><img v-lazy="item.productImageBig" alt=""></router-link>
         </div>
-        <p class="good-price"></p>
+        <div class="small-img">
+          <ul class="clearfix">
+            <li class="fl" v-for="(sImg,j) in item.productImageSmall" :key="j">
+              <img v-lazy="sImg" alt="">
+            </li>
+          </ul>
+        </div>
+        <p class="good-price">${{item.salePrice}}</p>
       </div>
-
     </div>
   </div>
 </template>
 <script>
-  export default {}
+  import {getComputer} from '/api/goods.js'
+  export default {
+    data () {
+      return {
+        computer: {}
+      }
+    },
+    methods: {
+      _getComputer () {
+        getComputer().then(res => {
+          this.computer = res.result.data
+//          console.log()
+        })
+      }
+    },
+    mounted () {
+      this._getComputer()
+    }
+  }
 </script>
 <style lang="scss" scoped>
   @import "../../assets/style/mixin";
+  @import "../../assets/style/theme";
 
   .nav {
     padding: 18px 0;
@@ -50,7 +75,6 @@
 
   .goods-box {
     @extend %block-center;
-    /*display: flex;*/
     justify-content: space-between;
     flex-wrap: wrap;
   }
@@ -59,5 +83,20 @@
     background: #fff;
     width: 220px;
     height: 383px;
+    .good-img {
+      display: block;
+      width: 100%;
+      img {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+    }
+    .good-price {
+      color: #e4393c;
+      font-size: 20px;
+    }
+
   }
 </style>

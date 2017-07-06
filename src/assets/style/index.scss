@@ -1,8 +1,16 @@
 @import "reset";
 // @import "theme";
 .w {
-  width: 990px;
+  width: 1190px;
   margin: 0 auto;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
 }
 
 .pr {
