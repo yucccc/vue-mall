@@ -119,9 +119,8 @@
   .bg-box {
     background-color: #e93854;
     height: 475px;
-    margin-bottom: 20px;
     .login-bg {
-      background: url("../assets/images/loginBg.png") no-repeat;
+      background: url("../../assets/images/loginBg.png") no-repeat;
       background-size: cover;
       height: 100%;
       display: flex;

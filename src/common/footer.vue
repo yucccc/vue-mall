@@ -10,6 +10,9 @@
   </div>
 </template>
 <style lang="scss" scoped>
+  .foorter{
+    padding:20px 0 10px;
+  }
   .tag {
     display: flex;
     justify-content: center;
