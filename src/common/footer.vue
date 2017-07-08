@@ -9,7 +9,7 @@
 
   </div>
 </template>
-<style lang="scss" scoped>
+<style lang="scss" rel="stylesheet/scss" scoped>
   .foorter{
     padding:20px 0 10px;
   }

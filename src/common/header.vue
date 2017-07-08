@@ -38,7 +38,7 @@
     }
   }
 </script>
-<style lang="scss" scoped>
+<style lang="scss" rel="stylesheet/scss" scoped>
   @import "../assets/style/theme";
 
   .shop {

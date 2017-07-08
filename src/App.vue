@@ -9,7 +9,6 @@
     name: 'app'
   }
 </script>
-
-<style lang="scss" >
+<style lang="scss" rel="stylesheet/scss">
   @import "assets/style/index.scss";
 </style>
