@@ -46,7 +46,7 @@
     }
   }
 </script>
-<style lang="scss" scoped>
+<style lang="scss" rel="stylesheet/scss" scoped>
   .shuffling {
     width: 60%;
     margin: 0 auto;

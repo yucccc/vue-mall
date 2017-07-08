@@ -92,7 +92,7 @@
     }
   }
 </script>
-<style lang="scss" scoped>
+<style lang="scss" rel="stylesheet/scss" scoped>
   .login-header {
     background-color: #fff;
     /*height: 80px;*/
