@@ -1,8 +1,5 @@
 <template>
   <div class="goods">
-    <!--<div style="background: #fff">-->
-    <!--<nav class="w">商品列表</nav>-->
-    <!--</div>-->
     <div style="background: #fff;border-bottom: 1px solid #E7E3E7;margin:10px 0;" class="nav">
 
       <div class="w">分类:
@@ -14,7 +11,7 @@
         <div class="price-interval">
           <input type="text" placeholder="输入价格区间" v-model="min"><span style="margin: 0 2px"> - </span>
           <input type="text" placeholder="输入价格区间" v-model="max">
-          <input type="button" @click="screening" value="确定">
+          <input type="button" @click="reset" style="cursor: pointer;" value="确定">
         </div>
       </div>
     </div>
@@ -22,7 +19,6 @@
     <!--商品-->
     <div class="goods-box w">
       <mall-goods :msg="computer"></mall-goods>
-
     </div>
     <div v-show="!busy" class="w" style="text-align: center;background: #fff" v-infinite-scroll="loadMore"
          infinite-scroll-disabled="busy" infinite-scroll-distance="100">
@@ -83,12 +79,6 @@
       sort (v) {
         v === 1 ? this.sortType = 2 : this.sortType = 3
         this.params.sort = v
-        this.params.page = 1
-        this.busy = false
-        this._getComputer()
-      },
-      screening () {
-        this.params.sort = ''
         this.params.page = 1
         this.busy = false
         this._getComputer()

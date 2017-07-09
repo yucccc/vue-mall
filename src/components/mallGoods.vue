@@ -17,7 +17,7 @@
         <div class="good-price pr">
           <div class="ds pa">
             <input type="button" value="查看详情" @click="goodsDetails(item.productId)">
-            <input type="button" value="加入购物车">
+            <input type="button" value="加入购物车" @click="open2">
           </div>
           <p><span style="font-size: 16px">￥</span>
             {{item.salePrice}}</p>
@@ -37,6 +37,16 @@
     methods: {
       goodsDetails (id) {
         this.$router.push({path: 'goodsDetails/productId=' + id})
+      },
+      open2 () {
+        this.$confirm('加入购物车成功', '提示', {
+          confirmButtonText: '去购物车结算',
+          cancelButtonText: '继续任性选购',
+          type: 'success'
+        }).then(() => {
+          this.$router.push({path: '/cart'})
+        }).catch(() => {
+        })
       }
     }
   }

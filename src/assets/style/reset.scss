@@ -14,11 +14,13 @@ a {
   font-style: normal;
   text-decoration: none;
   color: #666;
+  cursor: pointer;
+
 }
 
-#app a:hover {
-  color: #c81623;
-}
+//#app a:hover {
+//  color: #c81623;
+//}
 
 li {
   list-style-type: none;
@@ -29,4 +31,13 @@ img,
 button {
   border: none;
   outline: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: 100%;
+  font-weight: 400;
+}
+
+i {
+  font-style: normal;
 }
