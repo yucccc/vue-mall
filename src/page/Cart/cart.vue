@@ -13,7 +13,7 @@
             <!--列表-->
             <div class="cart-table">
               <div class="cart-group divide pr">
-                <div v-for="item in 2" class="cart-top-items">
+                <div class="cart-top-items">
                   <div class="cart-items clearfix js-cart-items">
                     <!--勾选-->
                     <div class="items-choose">

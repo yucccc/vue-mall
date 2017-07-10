@@ -9,8 +9,8 @@
         <a href="javascript:;" @click="sort(1)" :class="{active:sortType===2}">价格从低到高</a>
         <a href="javascript:;" @click="sort(-1)" :class="{active:sortType===3}">价格从高到低</a>
         <div class="price-interval">
-          <input type="text" placeholder="输入价格区间" v-model="min"><span style="margin: 0 2px"> - </span>
-          <input type="text" placeholder="输入价格区间" v-model="max">
+          <input type="number" placeholder="输入价格区间" v-model="min"><span style="margin: 0 2px"> - </span>
+          <input type="number" placeholder="输入价格区间" v-model="max">
           <input type="button" @click="reset" style="cursor: pointer;" value="确定">
         </div>
       </div>

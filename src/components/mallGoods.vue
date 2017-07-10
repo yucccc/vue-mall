@@ -6,18 +6,11 @@
           <router-link :to="'goodsDetails/productId='+item.productId"><img v-lazy="item.productImageBig" alt="">
           </router-link>
         </div>
-        <!--<div class="small-img">-->
-        <!--<ul class="clearfix">-->
-        <!--<li class="fl" v-for="(sImg,j) in item.productImageSmall" :key="j">-->
-        <!--<img v-lazy="sImg" alt="">-->
-        <!--</li>-->
-        <!--</ul>-->
-        <!--</div>-->
         <p class="good-title">{{item.productTitle}}</p>
         <div class="good-price pr">
           <div class="ds pa">
             <input type="button" value="查看详情" @click="goodsDetails(item.productId)">
-            <input type="button" value="加入购物车" @click="open2">
+            <input type="button" value="加入购物车" @click="addCart(item.productId)">
           </div>
           <p><span style="font-size: 16px">￥</span>
             {{item.salePrice}}</p>
@@ -32,13 +25,35 @@
       msg: {type: [Object, Array]}
     },
     data () {
-      return {}
+      return {
+        // 是否登录 后期通过vuex获取
+        login: false
+      }
     },
     methods: {
       goodsDetails (id) {
         this.$router.push({path: 'goodsDetails/productId=' + id})
       },
-      open2 () {
+      addCart (id) {
+        if (this.login) { // 登录了 直接存在用户名下
+
+        } else { // 未登录 存在cookie
+          if (this.$cookie.get(id)) { // 如果存在 则加数量
+            let num = this.$cookie.get(id)
+            this.$cookie.set(id, ++num)
+          } else {
+            this.$cookie.set(id, 1)
+            // 保存在数组中
+            if (this.$cookie.get('cs')) {
+              let cs = this.$cookie.get('cs')
+              cs += (',' + id)
+              this.$cookie.set('cs', cs)
+            } else {
+              this.$cookie.set('cs', id)
+            }
+          }
+        }
+        // todo
         this.$confirm('加入购物车成功', '提示', {
           confirmButtonText: '去购物车结算',
           cancelButtonText: '继续任性选购',
@@ -122,7 +137,6 @@
       height: 30px;
       text-align: center;
       line-height: 30px;
-      /*padding: 15px 0;*/
       color: #e4393c;
       font-size: 20px;
     }

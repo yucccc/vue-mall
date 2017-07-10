@@ -4,8 +4,10 @@ import router from './router'
 import VueLazyload from 'vue-lazyload'
 import infiniteScroll from 'vue-infinite-scroll'
 import ElementUI from 'element-ui'
+import VueCookie from 'vue-cookie'
 import '../theme/index.css'
 Vue.use(infiniteScroll)
+Vue.use(VueCookie)
 Vue.use(VueLazyload, {
   // preLoad: 1.3,
   // error: 'dist/error.png',

@@ -5,22 +5,21 @@
 }
 
 body {
+  font-family: PingFang SC, Helvetica Neue, Helvetica, Arial, Hiragino Sans GB, Microsoft Yahei, \\5FAE\8F6F\96C5\9ED1, STHeiti, \\534E\6587\7EC6\9ED1, sans-serif;
   color: #666;
-  background: #f6f6f6;
-  font: 12px/150% Arial, Verdana, "\5b8b\4f53", arial, "Hiragino Sans GB", "Microsoft YaHei", "微軟正黑體", "儷黑 Pro", sans-serif;;
+  font-size: 14px;
 }
 
 a {
   font-style: normal;
   text-decoration: none;
-  color: #666;
+  color: #5079d9;
   cursor: pointer;
-
+  transition: all .15s ease-out;
+  &:hover {
+    color: #6b95ea;
+  }
 }
-
-//#app a:hover {
-//  color: #c81623;
-//}
 
 li {
   list-style-type: none;
@@ -40,4 +39,16 @@ h1, h2, h3, h4, h5, h6 {
 
 i {
   font-style: normal;
+}
+
+input[type=number], textarea {
+  -moz-appearance: textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button,
+input[type="submit"],
+input[type="search"],
+input[type="reset"] {
+  -webkit-appearance: none;
 }

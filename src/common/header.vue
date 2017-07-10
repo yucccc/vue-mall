@@ -2,10 +2,10 @@
   <div class="box">
     <header class="w">
       <div>
+        <router-link to="/">首页</router-link>
         <router-link :to="loginRouter" style="color: #f10215">{{name}}</router-link>
-        <router-link to="myOrder">我的订单</router-link>
+        <router-link to="order">我的订单</router-link>
         <router-link to="goods">进入商城</router-link>
-
         <router-link class="shop" to="/cart">
           <img src="/static/svg/shop.svg" alt="">
           <span style="padding-right: 4px;">购物车 </span><span> (0)</span>
