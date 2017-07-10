@@ -31,7 +31,7 @@
     }
   }
 </script>
-<style lang="scss" scoped>
+<style lang="scss" rel="stylesheet/scss" scoped>
   .logo {
     background-image: url('/static/images/logo.v2@2x.png');
     background-repeat: no-repeat;

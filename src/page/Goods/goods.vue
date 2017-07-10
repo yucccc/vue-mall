@@ -29,6 +29,7 @@
 <script>
   import {getComputer} from '/api/goods.js'
   import mallGoods from '/components/mallGoods'
+
   export default {
     data () {
       return {

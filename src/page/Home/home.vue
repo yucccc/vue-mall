@@ -2,11 +2,11 @@
   <div>
     <div class="w">
       <div class="shuffling">
-        <el-carousel height="340px" :interval="5000">
-          <el-carousel-item v-for="(item,i) in banner.data" :key="i">
-            <router-link :to="item.href"><img :src="item.src" :alt="item.alt"></router-link>
-          </el-carousel-item>
-        </el-carousel>
+        <!--<el-carousel height="340px" :interval="5000">-->
+          <!--<el-carousel-item v-for="(item,i) in banner.data" :key="i">-->
+            <!--<router-link :to="item.href"><img :src="item.src" :alt="item.alt"></router-link>-->
+          <!--</el-carousel-item>-->
+        <!--</el-carousel>-->
       </div>
       <div>
         <div><span>秒杀块标题</span><span>时间</span></div>

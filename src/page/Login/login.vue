@@ -22,22 +22,22 @@
               </div>
             </div>
             <div style="margin-top: 23px;">
-              <el-form class="demo-ruleForm">
-                <el-form-item label="账号" label-width="64px">
-                  <el-input v-model="ruleForm.userName"></el-input>
-                </el-form-item>
-                <el-form-item label="密码" prop="pass" label-width="64px">
-                  <el-input type="password" v-model="ruleForm.userPwd"></el-input>
-                </el-form-item>
-              </el-form>
+              <!--<el-form class="demo-ruleForm">-->
+                <!--<el-form-item label="账号" label-width="64px">-->
+                  <!--<el-input v-model="ruleForm.userName"></el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="密码" prop="pass" label-width="64px">-->
+                  <!--<el-input type="password" v-model="ruleForm.userPwd"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-form>-->
             </div>
             <div class="clickLogin">
-              <el-button type="primary" @click="login()">登陆</el-button>
+              <!--<el-button type="primary" @click="login()">登陆</el-button>-->
             </div>
           </div>
         </div>
       </div>
-      <el-button :plain="true"></el-button>
+      <!--<el-button :plain="true"></el-button>-->
       <!--底部-->
       <y-footer></y-footer>
     </div>
@@ -45,21 +45,21 @@
 </template>
 <script>
   import YFooter from '/common/footer'
-  import {userLogin} from '/api/index.js'
+//  import {userLogin} from '/api/index.js'
   export default {
     data () {
       return {
-        loginWay: 1,
-        ruleForm: {
-          userName: '',
-          userPwd: ''
-        },
-        rules: {
-          userName: [
-            {required: true, message: '请输入账号', trigger: 'blur'},
-            {min: 3, max: 12, message: '账号格式错误', trigger: 'blur'}
-          ]
-        }
+//        loginWay: 1,
+//        ruleForm: {
+//          userName: '',
+//          userPwd: ''
+//        },
+//        rules: {
+//          userName: [
+//            {required: true, message: '请输入账号', trigger: 'blur'},
+//            {min: 3, max: 12, message: '账号格式错误', trigger: 'blur'}
+//          ]
+//        }
       }
     },
     computed: {
@@ -68,22 +68,22 @@
       }
     },
     methods: {
-      login () {
-        if (!this.ruleForm.userName || !this.ruleForm.userPwd) {
-          this.$message.error('账号或者密码不能为空')
-          return false
-        }
-        var params = {userName: this.ruleForm.userName, userPwd: this.ruleForm.userPwd}
-        userLogin(params).then(res => {
-          if (res.status === '0') {
-            // 暂时先存在seetion
-            sessionStorage.setItem('userMsg', JSON.stringify(res.result))
-            this.$router.go(-1)
-          } else {
-            this.$message.error('账号或者密码错误')
-          }
-        })
-      }
+//      login () {
+//        if (!this.ruleForm.userName || !this.ruleForm.userPwd) {
+//          this.$message.error('账号或者密码不能为空')
+//          return false
+//        }
+//        var params = {userName: this.ruleForm.userName, userPwd: this.ruleForm.userPwd}
+//        userLogin(params).then(res => {
+//          if (res.status === '0') {
+//            // 暂时先存在seetion
+//            sessionStorage.setItem('userMsg', JSON.stringify(res.result))
+//            this.$router.go(-1)
+//          } else {
+//            this.$message.error('账号或者密码错误')
+//          }
+//        })
+//      }
     },
     mounted () {
     },
