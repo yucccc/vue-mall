@@ -2,14 +2,14 @@
   <div>
     <y-header></y-header>
     <!--logo搜索块-->
-    <div class="logo-box">
-      <div class="w pr">
-        <!--<div class="pa logo"><a href="/" style="display: block;height: 100%"></a></div>-->
-        <div class="search">
-          <y-search></y-search>
-        </div>
-      </div>
-    </div>
+    <!--<div class="logo-box">-->
+      <!--<div class="w pr">-->
+        <!--&lt;!&ndash;<div class="pa logo"><a href="/" style="display: block;height: 100%"></a></div>&ndash;&gt;-->
+        <!--<div class="search">-->
+          <!--<y-search></y-search>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
     <router-view></router-view>
     <y-footer></y-footer>
   </div>
