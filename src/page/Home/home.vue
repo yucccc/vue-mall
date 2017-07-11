@@ -9,18 +9,18 @@
         <!--</el-carousel>-->
       </div>
       <div>
-        <div><span>秒杀块标题</span><span>时间</span></div>
+        <!--<div><span>秒杀块标题</span><span>时间</span></div>-->
         <!--商品-->
-        <div class="goods ">
-          <div class="sk_item" v-for="item in 6">
-            <router-link to="/"><img
-              src="https://img14.360buyimg.com/n4/s260x260_jfs/t1963/236/905138712/127581/cdf8c9e0/5631d325Ncc976adb.jpg"
-              alt="#">
-              <p class="sk_item_name">【京东超市】苏泊尔supor 火红点2代不粘无油烟炒锅32cm明火专用可立盖PC32R7（陶瓷煲赠品送完即止） </p></router-link>
-            <p class="sk_item_price"><span class="price_new"><i>¥</i><span>359.00</span></span><span
-              class=" price_origin"><i>¥</i><del>399.00</del></span></p>
-          </div>
-        </div>
+        <!--<div class="goods ">-->
+          <!--<div class="sk_item" v-for="item in 6">-->
+            <!--<router-link to="/"><img-->
+              <!--src="https://img14.360buyimg.com/n4/s260x260_jfs/t1963/236/905138712/127581/cdf8c9e0/5631d325Ncc976adb.jpg"-->
+              <!--alt="#">-->
+              <!--<p class="sk_item_name">【京东超市】苏泊尔supor 火红点2代不粘无油烟炒锅32cm明火专用可立盖PC32R7（陶瓷煲赠品送完即止） </p></router-link>-->
+            <!--<p class="sk_item_price"><span class="price_new"><i>¥</i><span>359.00</span></span><span-->
+              <!--class=" price_origin"><i>¥</i><del>399.00</del></span></p>-->
+          <!--</div>-->
+        <!--</div>-->
       </div>
     </div>
   </div>

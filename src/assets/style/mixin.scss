@@ -3,3 +3,8 @@
   align-items: center;
   justify-content: center;
 }
+
+@mixin wh($w,$h) {
+  width: $w;
+  height: $h;
+}

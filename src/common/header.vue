@@ -11,28 +11,101 @@
           <div class="nav-list">
             <router-link to="goods">全部商品</router-link>
             <router-link to="/">坚果 Pro</router-link>
-            <router-link to="/"> Smartisan M1 / M1L </router-link>
-            <router-link to="/"> Smartisan OS </router-link>
+            <router-link to="/">Smartisan M1 / M1L</router-link>
+            <router-link to="/">Smartisan OS</router-link>
             <router-link to="/">欢喜云</router-link>
             <router-link to="/">应用下载</router-link>
             <router-link to="/">官方论坛</router-link>
           </div>
           <div class="nav-aside">
-            <div class="user">
+            <div class="user pr">
               <router-link to="user">个人中心</router-link>
+              <!--用户信息显示-->
+              <div class="nav-user-wrapper pa">
+                <div class="nav-user-list">
+                  <ul>
+                    <!--头像-->
+                    <li class="nav-user-avatar">
+                      <div>
+                        <span class="avatar"></span>
+                      </div>
+                      <p class="name">宇cccc</p>
+                    </li>
+                    <li>
+                      <router-link to="order">我的订单</router-link>
+                    </li>
+                    <li>
+                      <router-link to="/">售后服务</router-link>
+                    </li>
+                    <li>
+                      <router-link to="/">我的优惠</router-link>
+                    </li>
+                    <li>
+                      <router-link to="/">账号资料</router-link>
+                    </li>
+                    <li>
+                      <router-link to="/">收货地址</router-link>
+                    </li>
+                    <li>
+                      <router-link to="/">退出</router-link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
-            <div class="shop">
+            <div class="shop pr">
               <router-link to="shop"></router-link>
               <span class="cart-num"><i>7</i></span>
+              <!--购物车显示块-->
+              <div class="nav-user-wrapper pa">
+                <div class="nav-user-list">
+                  <div class="full">
+                    <!--购物列表-->
+                    <div class="nav-cart-items">
+                      <ul>
+                        <li class="clearfix">
+                          <div class="cart-item js-cart-item cart-item-sell" id="100026601">
+                            <div class="cart-item-inner">
+                              <div class="item-thumb"><img
+                                src="http://image.smartisanos.cn/resource/c79a73ffc6f8e782160d978f49f543dc.jpg?x-oss-process=image/resize,w_160/quality,Q_90/format,webp">
+                              </div>
+                              <div class="item-desc">
+                                <div class="cart-cell"><h4>
+                                  <a href="#/item/100026601">Smartisan 原装 Type-C 数据线</a>
+                                </h4>
+                                  <p class="attrs"><span>白色</span>
+                                  </p> <h6><span class="price-icon">¥</span><span
+                                    class="price-num">39</span><span
+                                    class="item-num">x 1</span>
+                                  </h6></div>
+                              </div>
+                              <div class="del-btn">删除</div>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                    <!--总件数-->
+                    <div class="nav-cart-total"><p>共 <strong>7</strong> 件商品</p> <h5>合计：<span
+                      class="price-icon">¥</span><span
+                      class="price-num">1503</span></h5>
+                      <h6>
+                        <y-button classStyle="main-btn" style="height: 40px;width: 100%;margin: 0;color: #fff;font-size: 14px"
+                                  text="去购物车"></y-button>
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
       </div>
     </header>
   </div>
 </template>
 <script>
+  import YButton from '/components/YButton'
   export default{
     data () {
       return {
@@ -53,14 +126,18 @@
     },
     created () {
       this.getName()
+    },
+    components: {
+      YButton
     }
   }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../assets/style/theme";
+  @import "../assets/style/mixin";
 
   .box {
-    background: #1a1a1a;
+    background: $head-bgc;
     background-image: -webkit-linear-gradient(#000, #121212);
     background-image: linear-gradient(#000, #121212);
     width: 100%;
@@ -97,17 +174,16 @@
         background: url(/static/images/global-logo-red@2x.85550cd7bec73c98adacee227ba6a8a0.png) no-repeat 50%;
         background-size: cover;
         display: block;
-        height: 40px;
-        width: 50px;
+        @include wh(50px, 40px);
         text-indent: -9999px;
         background-position: 0 0;
-
       }
     }
     .nav-list {
       display: flex;
       justify-content: center;
       align-items: center;
+      margin-right: 22px;
       a {
         color: #c8c8c8;
         display: block;
@@ -141,30 +217,97 @@
     .user {
       margin-left: 41px;
       width: 36px;
-      position: relative;
       &:hover {
         a:before {
-          content: " ";
           background-position: -5px 0;
         }
+        .nav-user-wrapper {
+          top: 18px;
+          visibility: visible;
+          opacity: 1;
+          -webkit-transition: opacity .15s ease-out;
+          transition: opacity .15s ease-out;
+        }
       }
-      a {
+      > a {
         position: relative;
-        width: 36px;
-        height: 20px;
+        @include wh(36px, 20px);
         display: block;
         text-indent: -9999px;
         &:before {
           content: " ";
           position: absolute;
           left: 8px;
-          width: 20px;
           top: 0;
-          height: 20px;
-          background: url(/static/images/account-icon@2x.32d87deb02b3d1c3cc5bcff0c26314ac.png) -5px 0;
+          @include wh(20px, 20px);
+          background: url(/static/images/account-icon@2x.32d87deb02b3d1c3cc5bcff0c26314ac.png) -155px 0;
           background-size: 240px 107px;
-          background-position: -155px 0;
           transition: none;
+        }
+
+      }
+      li + li {
+        text-align: center;
+        position: relative;
+        border-top: 1px solid #f5f5f5;
+        line-height: 44px;
+        height: 44px;
+        color: #616161;
+        font-size: 12px;
+        &:hover {
+          background: #fafafa;
+        }
+        a {
+          display: block;
+          color: #616161;
+        }
+      }
+      .nav-user-avatar {
+        > div {
+          position: relative;
+          margin: 0 auto;
+          width: 46px;
+          height: 46px;
+          margin-bottom: 8px;
+          text-align: center;
+          &:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border-radius: 50%;
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06);
+          }
+          .avatar {
+            border-radius: 50%;
+            display: block;
+            width: 100%;
+            height: 100%;
+            background-image: url(/static/images/user-avatar.png);
+            background-repeat: no-repeat;
+            background-size: contain;
+          }
+
+        }
+        .name {
+          margin-bottom: 16px;
+          font-size: 12px;
+          line-height: 1.5;
+          text-align: center;
+          color: #757575;
+        }
+      }
+      .nav-user-wrapper {
+        width: 168px;
+        transform: translate(-50%);
+        left: 50%;
+      }
+      .nav-user-list {
+        width: 168px;
+        &:before {
+          left: 50%;
         }
 
       }
@@ -179,8 +322,15 @@
           content: " ";
           background-position: 0 -22px;
         }
+        .nav-user-wrapper {
+          top: 18px;
+          visibility: visible;
+          opacity: 1;
+          -webkit-transition: opacity .15s ease-out;
+          transition: opacity .15s ease-out;
+        }
       }
-      a {
+      > a {
         position: absolute;
         left: 0;
         top: 0;
@@ -222,7 +372,230 @@
           font-size: 12px;
         }
       }
+      .nav-user-wrapper {
+        right: 0;
+        width: 360px;
+        .nav-user-list {
+          &:before {
+            right: 34px;
+          }
+        }
+      }
+      .nav-user-list {
+        padding: 0;
+        width: 100%;
+        .full {
+          border-radius: 8px;
+          overflow: hidden;
+        }
+        .nav-cart-items {
+          max-height: 363px;
+          overflow-x: hidden;
+          overflow-y: auto;
+        }
+        .cart-item {
+          height: 120px;
+          width: 100%;
+          overflow: hidden;
+          border-top: 1px solid #f0f0f0;
+        }
+        li:first-child .cart-item:first-child {
+          border-top: none;
+          border-radius: 8px 8px 0 0;
+          overflow: hidden;
+        }
+        .cart-item-inner {
+          padding: 20px;
+          position: relative;
+        }
+        .item-thumb {
+          position: relative;
+          float: left;
+          width: 80px;
+          height: 80px;
+          border-radius: 3px;
+          &:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 2;
+            border: 1px solid #f0f0f0;
+            border: 0 solid transparent;
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06);
+            border-radius: 3px;
+          }
+          img {
+            display: block;
+            @include wh(80px, 80px);
+            border-radius: 3px;
+            overflow: hidden;
+          }
+        }
+        .item-desc {
+          margin-left: 98px;
+          display: table;
+          @include wh(205px, 80px);
+          h4 {
+            color: #000;
+            width: 185px;
+            overflow: hidden;
+            word-break: keep-all;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            font-size: 14px;
+            line-height: 16px;
+            margin-bottom: 10px;
+          }
+          .attrs span {
+            position: relative;
+            display: inline-block;
+            margin-right: 20px;
+            font-size: 14px;
+            line-height: 14px;
+            color: #999;
+          }
+          .attrs span:last-child {
+            margin-right: 0;
+          }
+          h6 {
+            color: #cacaca;
+            font-size: 12px;
+            line-height: 14px;
+            margin-top: 20px;
+            span {
+              display: inline-block;
+              font-weight: 700;
+              color: #cacaca;
+            }
+            .price-icon, .price-num {
+              color: #d44d44;
+            }
+            .price-num {
+              margin-left: 5px;
+              font-size: 14px;
+            }
+            .item-num {
+              margin-left: 10px;
+            }
+          }
+
+        }
+        .cart-cell {
+          display: table-cell;
+          vertical-align: middle;
+        }
+        .del-btn {
+          cursor: pointer;
+          /*display: none;*/
+          /*overflow: hidden;*/
+          width: 20px;
+          height: 20px;
+          position: absolute;
+          right: 20px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: url(/static/images/account-icon@2x.32d87deb02b3d1c3cc5bcff0c26314ac.png) -50px -60px no-repeat;
+          background-size: 240px 107px;
+          text-indent: -9999em;
+        }
+      }
+      .nav-cart-total {
+        box-sizing: content-box;
+        position: relative;
+        padding: 20px;
+        height: 40px;
+        background: #fafafa;
+        border-top: 1px solid #f0f0f0;
+        border-radius: 0 0 8px 8px;
+        box-shadow: inset 0 -1px 0 hsla(0, 0%, 100%, .5), 0 -3px 8px rgba(0, 0, 0, .04);
+        background: -webkit-linear-gradient(#fafafa, #f5f5f5);
+        background: linear-gradient(#fafafa, #f5f5f5);
+        p {
+          margin-bottom: 4px;
+          line-height: 16px;
+          font-size: 12px;
+          color: #c1c1c1;
+        }
+        h5 {
+          line-height: 20px;
+          font-size: 14px;
+          color: #6f6f6f;
+          span {
+            font-size: 18px;
+            color: #de4037;
+            display: inline-block;
+            font-weight: 700;
+          }
+          span:first-child {
+            font-size: 12px;
+            margin-right: 5px;
+          }
+        }
+        h6 {
+          position: absolute;
+          right: 20px;
+          top: 20px;
+          width: 108px;
+        }
+      }
     }
+  }
+
+  @media (max-height: 780px) {
+    .nav-cart-items {
+      max-height: 423px;
+    }
+  }
+
+  @media (max-height: 900px) {
+    .nav-cart-items {
+      max-height: 544px;
+    }
+  }
+
+  @media (max-height: 1080px) {
+    .nav-cart-items {
+      max-height: 655px;
+    }
+  }
+
+  @media (max-height: 1200px) {
+    .nav-cart-items {
+      max-height: 786px;
+    }
+  }
+
+  // 用户信息弹出
+  .nav-user-wrapper {
+    position: absolute;
+    z-index: 30;
+    padding-top: 18px;
+    opacity: 0;
+    visibility: hidden;
+    top: -3000px;
+    .nav-user-list {
+      position: relative;
+      padding-top: 20px;
+      background: #fff;
+      border: 1px solid #d6d6d6;
+      border-color: rgba(0, 0, 0, .08);
+      border-radius: 8px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, .15);
+      z-index: 10;
+      &:before {
+        position: absolute;
+        content: " ";
+        background: url(/static/images/account-icon@2x.32d87deb02b3d1c3cc5bcff0c26314ac.png) no-repeat -49px -43px;
+        background-size: 240px 107px;
+        @include wh(20px, 8px);
+        top: -8px;
+        margin-left: -10px;
+      }
+    }
+
   }
 </style>
 
