@@ -1,131 +1,191 @@
 <template>
-  <div class="box">
-    <header class="w">
-      <div class="w-box">
-        <div class="nav-logo">
-          <h1>
-            <router-link to="/" title="锤子科技官网">Smartisan</router-link>
-          </h1>
-        </div>
-        <div class="right-box">
-          <div class="nav-list">
-            <router-link to="goods">全部商品</router-link>
-            <router-link to="/">坚果 Pro</router-link>
-            <router-link to="/">Smartisan M1 / M1L</router-link>
-            <router-link to="/">Smartisan OS</router-link>
-            <router-link to="/">欢喜云</router-link>
-            <router-link to="/">应用下载</router-link>
-            <router-link to="/">官方论坛</router-link>
+  <div class="header-box">
+    <div>
+      <header class="w">
+        <div class="w-box">
+          <div class="nav-logo">
+            <h1>
+              <router-link to="/" title="锤子科技官网">Smartisan</router-link>
+            </h1>
           </div>
-          <div class="nav-aside">
-            <div class="user pr">
-              <router-link to="user">个人中心</router-link>
-              <!--用户信息显示-->
-              <div class="nav-user-wrapper pa">
-                <div class="nav-user-list">
-                  <ul>
-                    <!--头像-->
-                    <li class="nav-user-avatar">
-                      <div>
-                        <span class="avatar"></span>
-                      </div>
-                      <p class="name">宇cccc</p>
-                    </li>
-                    <li>
-                      <router-link to="order">我的订单</router-link>
-                    </li>
-                    <li>
-                      <router-link to="/">售后服务</router-link>
-                    </li>
-                    <li>
-                      <router-link to="/">我的优惠</router-link>
-                    </li>
-                    <li>
-                      <router-link to="/">账号资料</router-link>
-                    </li>
-                    <li>
-                      <router-link to="/">收货地址</router-link>
-                    </li>
-                    <li>
-                      <router-link to="/">退出</router-link>
-                    </li>
-                  </ul>
+          <div class="right-box">
+            <div class="nav-list">
+              <router-link to="goods">全部商品</router-link>
+              <router-link to="/">坚果 Pro</router-link>
+              <router-link to="/">Smartisan M1 / M1L</router-link>
+              <router-link to="/">Smartisan OS</router-link>
+              <router-link to="/">欢喜云</router-link>
+              <router-link to="/">应用下载</router-link>
+              <router-link to="/">官方论坛</router-link>
+            </div>
+            <div class="nav-aside" ref="aside" :class="{fixed:st}">
+              <div class="user pr">
+                <router-link :to="login? 'user' :'login'">个人中心</router-link>
+                <!--用户信息显示-->
+                <div class="nav-user-wrapper pa" v-if="login">
+                  <div class="nav-user-list">
+                    <ul>
+                      <!--头像-->
+                      <li class="nav-user-avatar">
+                        <div>
+                          <span class="avatar"></span>
+                        </div>
+                        <p class="name">宇cccc</p>
+                      </li>
+                      <li>
+                        <router-link to="order">我的订单</router-link>
+                      </li>
+                      <li>
+                        <router-link to="/">售后服务</router-link>
+                      </li>
+                      <li>
+                        <router-link to="/">我的优惠</router-link>
+                      </li>
+                      <li>
+                        <router-link to="/">账号资料</router-link>
+                      </li>
+                      <li>
+                        <router-link to="/">收货地址</router-link>
+                      </li>
+                      <li>
+                        <router-link to="/">退出</router-link>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="shop pr">
-              <router-link to="shop"></router-link>
-              <span class="cart-num"><i>7</i></span>
-              <!--购物车显示块-->
-              <div class="nav-user-wrapper pa">
-                <div class="nav-user-list">
-                  <div class="full">
-                    <!--购物列表-->
-                    <div class="nav-cart-items">
-                      <ul>
-                        <li class="clearfix">
-                          <div class="cart-item js-cart-item cart-item-sell" id="100026601">
-                            <div class="cart-item-inner">
-                              <div class="item-thumb"><img
-                                src="http://image.smartisanos.cn/resource/c79a73ffc6f8e782160d978f49f543dc.jpg?x-oss-process=image/resize,w_160/quality,Q_90/format,webp">
+              <div class="shop pr">
+                <router-link to="shop"></router-link>
+                <span class="cart-num"><i :class="{no:goodsSartList.length === 0}">{{goodsSartList.length}}</i></span>
+                <!--购物车显示块-->
+                <div class="nav-user-wrapper pa">
+                  <div class="nav-user-list">
+                    <div class="full" v-show="goodsSartList.length">
+                      <!--购物列表-->
+                      <div class="nav-cart-items">
+                        <ul>
+                          <li class="clearfix" v-for="(item,i) in goodsSartList">
+                            <div class="cart-item">
+                              <div class="cart-item-inner">
+                                <div class="item-thumb">
+                                  <img :src="item.productImageBig">
+                                </div>
+                                <div class="item-desc">
+                                  <div class="cart-cell"><h4>
+                                    <a href="" v-text="item.productTitle"></a>
+                                  </h4>
+                                    <p class="attrs"><span>白色</span>
+                                    </p> <h6><span class="price-icon">¥</span><span
+                                      class="price-num">{{item.salePrice}}</span><span
+                                      class="item-num">x 1</span>
+                                    </h6></div>
+                                </div>
+                                <div class="del-btn del">删除</div>
                               </div>
-                              <div class="item-desc">
-                                <div class="cart-cell"><h4>
-                                  <a href="#/item/100026601">Smartisan 原装 Type-C 数据线</a>
-                                </h4>
-                                  <p class="attrs"><span>白色</span>
-                                  </p> <h6><span class="price-icon">¥</span><span
-                                    class="price-num">39</span><span
-                                    class="item-num">x 1</span>
-                                  </h6></div>
-                              </div>
-                              <div class="del-btn">删除</div>
                             </div>
-                          </div>
-                        </li>
-                      </ul>
+                          </li>
+                        </ul>
+                      </div>
+                      <!--总件数-->
+                      <div class="nav-cart-total"><p>共 <strong>7</strong> 件商品</p> <h5>合计：<span
+                        class="price-icon">¥</span><span
+                        class="price-num">{{totalPrice}}</span></h5>
+                        <h6>
+                          <y-button classStyle="main-btn"
+                                    style="height: 40px;width: 100%;margin: 0;color: #fff;font-size: 14px"
+                                    text="去购物车"></y-button>
+                        </h6>
+                      </div>
                     </div>
-                    <!--总件数-->
-                    <div class="nav-cart-total"><p>共 <strong>7</strong> 件商品</p> <h5>合计：<span
-                      class="price-icon">¥</span><span
-                      class="price-num">1503</span></h5>
-                      <h6>
-                        <y-button classStyle="main-btn" style="height: 40px;width: 100%;margin: 0;color: #fff;font-size: 14px"
-                                  text="去购物车"></y-button>
-                      </h6>
-                    </div>
+                    <div v-show="!goodsSartList.length" style="height: 100px;text-align: center">没有商品</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </header>
+      <div class="nav-sub" :class="{fixed:st}">
+        <div class="nav-sub-bg"></div>
+        <div class="nav-sub-wrapper" :class="{fixed:st}">
+          <div class="w">
+            <ul class="nav-list">
+              <li v-for="item in 10">
+                <router-link to="/">首页</router-link>
+              </li>
+            </ul>
+            <div></div>
+          </div>
+        </div>
       </div>
-    </header>
+    </div>
   </div>
 </template>
 <script>
   import YButton from '/components/YButton'
+  import {mapMutations, mapState} from 'vuex'
+  import {getCartList} from '/api/goods'
+  //  import {getStore} from '/utils/storage'
   export default{
     data () {
       return {
-        login: false,
         loginRouter: 'login',
-        name: '亲，请登录'
+        name: '亲，请登录',
+        // 查询数据库的商品
+        goodsSartList: [],
+        st: false
+      }
+    },
+    computed: {
+      ...mapState([
+        'cartList', 'login'
+      ]),
+      // 计算价格
+      totalPrice () {
+        var totalPrice = 0
+        this.goodsSartList && this.goodsSartList.forEach(item => {
+          totalPrice += item.salePrice
+        })
+        return totalPrice
       }
     },
     methods: {
+      ...mapMutations(['ADD_CART', 'INIT_BUYCART']),
       getName () {
-        var name = sessionStorage.getItem('userMsg')
-        if (name) {
-          this.login = true
-          this.loginRouter = 'perDetails'
-          this.name = JSON.parse(name).name
+//        var name = sessionStorage.getItem('userMsg')
+//        if (name) {
+//          this.login = true
+//          this.loginRouter = 'perDetails'
+//          this.name = JSON.parse(name).name
+//        }
+      },
+      // 获取购物车商品
+      getCartList () {
+        var arr = []
+        // 根据id 去数据库查
+        for (let key in this.cartList) {
+          let goodsId = this.cartList[key]['goods'].id
+          arr.push(goodsId)
         }
+        getCartList({goodsList: arr}).then(res => {
+          this.goodsSartList = res.result
+        })
+      },
+      // 控制顶部
+      navFixed () {
+        var st = document.body.scrollTop
+        st >= 100 ? this.st = true : this.st = false
       }
     },
     created () {
       this.getName()
+      this.INIT_BUYCART()
+//      this.getCartList()
+    },
+    mounted () {
+      if (this.$route.path === '/goods') {
+        window.addEventListener('scroll', this.navFixed)
+      }
     },
     components: {
       YButton
@@ -136,22 +196,12 @@
   @import "../assets/style/theme";
   @import "../assets/style/mixin";
 
-  .box {
+  .header-box {
     background: $head-bgc;
     background-image: -webkit-linear-gradient(#000, #121212);
     background-image: linear-gradient(#000, #121212);
     width: 100%;
-    &:after {
-      border-top: 1px solid #232323;
-      border-top: 1px solid hsla(0, 0%, 100%, .06);
-      border-bottom: 1px solid #000;
-      border-bottom: 1px solid rgba(0, 0, 0, .4);
-      content: " ";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -1px;
-    }
+
   }
 
   header {
@@ -171,7 +221,7 @@
       display: flex;
       align-items: center;
       > a {
-        background: url(/static/images/global-logo-red@2x.85550cd7bec73c98adacee227ba6a8a0.png) no-repeat 50%;
+        background: url(/static/images/global-logo-red@2x.png) no-repeat 50%;
         background-size: cover;
         display: block;
         @include wh(50px, 40px);
@@ -200,14 +250,43 @@
         background: #333;
         background: hsla(0, 0%, 100%, .2);
         content: " ";
-        height: 13px;
-        width: 1px;
+        @include wh(1px, 13px);
         overflow: hidden;
         position: absolute;
         top: 4px;
         left: 0;
       }
+      &.fixed {
+        width: 262px;
+        position: fixed;
+        left: 50%;
+        top: 19px;
+        margin-left: 451px;
+        margin-top: 0;
+        z-index: 32;
+        top: -40px;
+        -webkit-transform: translate3d(0, 59px, 0);
+        transform: translate3d(0, 59px, 0);
+        -webkit-transition: -webkit-transform .3s cubic-bezier(.165, .84, .44, 1);
+        transition: transform .3s cubic-bezier(.165, .84, .44, 1);
+        .user {
+          &:hover {
+            a:before {
+              background-position: -215px 0;
+            }
+          }
+        }
+        .shop {
+          &:hover {
+            a:before {
+              background-position: -210px -22px;
+            }
+          }
+        }
+
+      }
     }
+
     .right-box {
       display: flex;
     }
@@ -239,7 +318,7 @@
           position: absolute;
           left: 8px;
           top: 0;
-          @include wh(20px, 20px);
+          @include wh(20px);
           background: url(/static/images/account-icon@2x.32d87deb02b3d1c3cc5bcff0c26314ac.png) -155px 0;
           background-size: 240px 107px;
           transition: none;
@@ -265,10 +344,8 @@
       .nav-user-avatar {
         > div {
           position: relative;
-          margin: 0 auto;
-          width: 46px;
-          height: 46px;
-          margin-bottom: 8px;
+          margin: 0 auto 8px;
+          @include wh(46px);
           text-align: center;
           &:before {
             content: "";
@@ -283,8 +360,7 @@
           .avatar {
             border-radius: 50%;
             display: block;
-            width: 100%;
-            height: 100%;
+            @include wh(100%);
             background-image: url(/static/images/user-avatar.png);
             background-repeat: no-repeat;
             background-size: contain;
@@ -340,9 +416,8 @@
         z-index: 1;
         &:before {
           display: block;
-          height: 100%;
+          @include wh(30px, 100%);
           content: " ";
-          width: 30px;
           background: url(/static/images/account-icon@2x.32d87deb02b3d1c3cc5bcff0c26314ac.png) 0 -22px;
           background-size: 240px 107px;
           background-position: -150px -22px;
@@ -364,13 +439,19 @@
           text-align: center;
           font-style: normal;
           display: inline-block;
-          width: 20px;
-          height: 20px;
+          @include wh(20px);
           line-height: 20px;
           border-radius: 10px;
           color: #fff;
           font-size: 12px;
+          &.no {
+            background: #969696;
+            background-image: -webkit-linear-gradient(#A4A4A4, #909090);
+            background-image: linear-gradient(#A4A4A4, #909090);
+            box-shadow: inset 0 0 1px #838383, 0 1px 2px #838383;
+          }
         }
+
       }
       .nav-user-wrapper {
         right: 0;
@@ -398,6 +479,13 @@
           width: 100%;
           overflow: hidden;
           border-top: 1px solid #f0f0f0;
+          &:hover {
+            background: #fcfcfc;
+            .del {
+              display: block;
+            }
+          }
+
         }
         li:first-child .cart-item:first-child {
           border-top: none;
@@ -487,19 +575,13 @@
           display: table-cell;
           vertical-align: middle;
         }
-        .del-btn {
-          cursor: pointer;
-          /*display: none;*/
-          /*overflow: hidden;*/
-          width: 20px;
-          height: 20px;
+        .del {
+          display: none;
+          overflow: hidden;
           position: absolute;
           right: 20px;
           top: 50%;
           transform: translateY(-50%);
-          background: url(/static/images/account-icon@2x.32d87deb02b3d1c3cc5bcff0c26314ac.png) -50px -60px no-repeat;
-          background-size: 240px 107px;
-          text-indent: -9999em;
         }
       }
       .nav-cart-total {
@@ -546,25 +628,19 @@
 
   @media (max-height: 780px) {
     .nav-cart-items {
-      max-height: 423px;
+      max-height: 423px !important;
     }
   }
 
   @media (max-height: 900px) {
     .nav-cart-items {
-      max-height: 544px;
+      max-height: 544px !important;
     }
   }
 
   @media (max-height: 1080px) {
     .nav-cart-items {
-      max-height: 655px;
-    }
-  }
-
-  @media (max-height: 1200px) {
-    .nav-cart-items {
-      max-height: 786px;
+      max-height: 655px !important;
     }
   }
 
@@ -595,7 +671,92 @@
         margin-left: -10px;
       }
     }
+  }
 
+  .nav-sub {
+    position: relative;
+    z-index: 20;
+    height: 90px;
+    background: #f7f7f7;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .04);
+    &.fixed {
+      position: fixed;
+      z-index: 21;
+      height: 60px;
+      top: 0;
+      left: 0;
+      right: 0;
+      border-bottom: 1px solid #dadada;
+      background-image: -webkit-linear-gradient(#fff, #f1f1f1);
+      background-image: linear-gradient(#fff, #f1f1f1);
+    }
+    .nav-sub-wrapper {
+      padding: 31px 0;
+      height: 90px;
+      position: relative;
+      &.fixed {
+        padding: 0;
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+      &:after {
+        content: " ";
+        position: absolute;
+        top: 89px;
+        left: 50%;
+        margin-left: -610px;
+        width: 1220px;
+        background: #000;
+        height: 1px;
+        display: none;
+        opacity: 0;
+        -webkit-transition: opacity .3s ease-in;
+        transition: opacity .3s ease-in;
+      }
+    }
+    .w {
+      display: flex;
+      justify-content: space-between;
+    }
+    .nav-list {
+      height: 28px;
+      line-height: 28px;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      li:first-child {
+        padding-left: 0;
+        a {
+          padding-left: 10px;
+        }
+      }
+      li {
+        position: relative;
+        float: left;
+        padding-left: 2px;
+        a {
+          display: block;
+          padding: 0 20px;
+          color: #666;
+        }
+      }
+      li:before {
+        content: ' ';
+        position: absolute;
+        left: 0;
+        top: 13px;
+        width: 2px;
+        height: 2px;
+        background: #bdbdbd;
+      }
+    }
+  }
+
+  @media (min-width: 1px) {
+    .nav-sub .nav-sub-wrapper:after {
+      display: block;
+    }
   }
 </style>
 

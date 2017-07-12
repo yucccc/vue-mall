@@ -1,1 +1,4 @@
+export const INIT_BUYCART = 'INIT_BUYCART'
 export const ADD_CART = 'ADD_CART'
+export const GET_USERINFO = 'GET_USERINFO'
+export const RECORD_USERINFO = 'RECORD_USERINFO'

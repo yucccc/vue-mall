@@ -40,3 +40,17 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+// 删除按钮
+.del-btn {
+  display: block;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  background: url(/static/images/account-icon@2x.32d87deb02b3d1c3cc5bcff0c26314ac.png) -50px -60px no-repeat;
+  background-size: 240px 107px;
+  text-indent: -9999em;
+  &:hover {
+    background-position: -75px -60px;
+  }
+}

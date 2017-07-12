@@ -21,6 +21,7 @@
 </template>
 <script>
   import YButton from '/components/YButton'
+  import {mapMutations} from 'vuex'
   export default {
     props: {
       msg: {type: [Object, Array]}
@@ -32,37 +33,16 @@
       }
     },
     methods: {
+      ...mapMutations(['ADD_CART']),
       goodsDetails (id) {
         this.$router.push({path: 'goodsDetails/productId=' + id})
       },
       addCart (id) {
         if (this.login) { // 登录了 直接存在用户名下
 
-        } else { // 未登录 存在cookie
-          if (this.$cookie.get(id)) { // 如果存在 则加数量
-            let num = this.$cookie.get(id)
-            this.$cookie.set(id, ++num)
-          } else {
-            this.$cookie.set(id, 1)
-            // 保存在数组中
-            if (this.$cookie.get('cs')) {
-              let cs = this.$cookie.get('cs')
-              cs += (',' + id)
-              this.$cookie.set('cs', cs)
-            } else {
-              this.$cookie.set('cs', id)
-            }
-          }
+        } else { // 未登录 vuex
+          this.ADD_CART({shopId: id, goodsId: id})
         }
-        // todo
-        this.$confirm('加入购物车成功', '提示', {
-          confirmButtonText: '去购物车结算',
-          cancelButtonText: '继续任性选购',
-          type: 'success'
-        }).then(() => {
-          this.$router.push({path: '/cart'})
-        }).catch(() => {
-        })
       }
     },
     components: {

@@ -4,7 +4,7 @@
   justify-content: center;
 }
 
-@mixin wh($w,$h) {
+@mixin wh($w,$h:$w) {
   width: $w;
   height: $h;
 }
