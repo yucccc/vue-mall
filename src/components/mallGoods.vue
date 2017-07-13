@@ -10,7 +10,9 @@
         <div class="good-price pr">
           <div class="ds pa">
             <y-button text="查看详情" @btnClick="goodsDetails(item.productId)"></y-button>
-            <y-button text="加入购物车" @btnClick="addCart(item.productId)" classStyle="main-btn"></y-button>
+            <y-button text="加入购物车"
+                      @btnClick="addCart(item.productId,item.salePrice,item.productTitle,item.productImageBig)"
+                      classStyle="main-btn"></y-button>
           </div>
           <p><span style="font-size: 16px">￥</span>
             {{item.salePrice}}</p>
@@ -33,17 +35,26 @@
       }
     },
     methods: {
-      ...mapMutations(['ADD_CART']),
+      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION']),
       goodsDetails (id) {
         this.$router.push({path: 'goodsDetails/productId=' + id})
       },
-      addCart (id) {
+      addCart (id, price, name, img) {
         if (this.login) { // 登录了 直接存在用户名下
 
         } else { // 未登录 vuex
-          this.ADD_CART({shopId: id, goodsId: id})
+          this.ADD_CART({shopId: id, goodsId: id, price: price, name: name, img: img})
+          // 获取点击的坐标
+          let elLeft = event.target.getBoundingClientRect().left
+          let elTop = event.target.getBoundingClientRect().top
+          // 需要触发
+          console.log(elLeft + 'elLeft')
+          console.log(elTop + 'elTop')
+          this.ADD_ANIMATION({elLeft: elLeft, elTop: elTop})
         }
       }
+    },
+    mounted () {
     },
     components: {
       YButton

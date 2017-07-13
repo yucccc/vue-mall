@@ -6,27 +6,27 @@
           <div class="return-btn ng-hide"></div>
           <h4>使用 Smartisan ID 登录在线商城</h4><a class="close"></a></div>
         <div class="content">
-          <form autocomplete="off" novalidate>
-            <ul class="common-form">
-              <li class="username border-1p">
-                <div class="input invalid">
-                  <span>账号</span>
-                  <input type="text" v-model="ruleForm.userName">
-                </div>
-              </li>
-              <li>
-                <div class="input invalid">
-                  <span>密码</span>
-                  <input type="text" v-model="ruleForm.userPwd">
-                </div>
-              </li>
-            </ul>
-            <!--登陆-->
-            <div>
-              <y-button text="登陆" classStyle="main-btn" @btnClick="login"
-                        style="margin: 0;width: 100%;height: 48px;font-size: 18px;"></y-button>
-            </div>
-          </form>
+          <!--<form autocomplete="off" novalidate>-->
+          <ul class="common-form">
+            <li class="username border-1p">
+              <div class="input invalid">
+                <span>账号</span>
+                <input type="text" v-model="ruleForm.userName">
+              </div>
+            </li>
+            <li>
+              <div class="input invalid">
+                <span>密码</span>
+                <input type="text" v-model="ruleForm.userPwd">
+              </div>
+            </li>
+          </ul>
+          <!--登陆-->
+          <div>
+            <y-button text="登陆" classStyle="main-btn" @btnClick="login"
+                      style="margin: 0;width: 100%;height: 48px;font-size: 18px;"></y-button>
+          </div>
+          <!--</form>-->
         </div>
       </div>
 

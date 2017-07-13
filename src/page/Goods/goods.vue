@@ -24,12 +24,18 @@
          infinite-scroll-disabled="busy" infinite-scroll-distance="100">
       正在加载中...
     </div>
+    <transition @after-enter='afterEnter' @before-enter="beforeEnter">
+      <!--整张图片-->
+      <div class="move_img" v-show="showMoveImg">
+        <!--<img src="" alt="">-->
+      </div>
+    </transition>
   </div>
 </template>
 <script>
   import {getComputer} from '/api/goods.js'
   import mallGoods from '/components/mallGoods'
-
+  import {mapState} from 'vuex'
   export default {
     data () {
       return {
@@ -39,6 +45,7 @@
         busy: false,
         timer: null,
         sortType: 1,
+        windowHeight: null,
         params: {
           page: 1,
           sort: ''
@@ -46,6 +53,7 @@
       }
     },
     methods: {
+//      ...mapMutations(['ADD_ANIMATION']),
       _getComputer (flag) {
         let params = {
           params: {
@@ -92,10 +100,40 @@
           this._getComputer(true)
           this.busy = false
         }, 500)
+      },
+      //
+      beforeEnter (el) {
+//        `
+        console.log(`translate3d(${this.elLeft}px,${this.elTop}px,0)`)
+        el.style.transform = `translate3d(${-this.elLeft}px,${this.elTop}px,0)`
+//        el.style.transform = `translate3d(0,,0)`
+        el.children[0].style.opacity = 0
+        console.log('beforeEnter')
+      },
+      afterEnter (el) {
+        el.style.transform = `translate3d(0,0,0)`
+        el.children[0].style.transform = `translate3d(0,0,0)`
+        el.style.transition = 'transform .5s cubic-bezier(.1,1.26,.7,1.15)'
+        el.children[0].style.transition = 'transform .5s linear'
+//        this.showMoveDot = this.showMoveDot.map(item => false);
+        el.children[0].style.opacity = 1
+        // 动画结束
+        el.children[0].addEventListener('transitionend', () => {
+          console.log(1 + 'transitionend')
+        })
+        el.children[0].addEventListener('webkitAnimationEnd', () => {
+          console.log(2 + 'webkitAnimationEnd')
+        })
       }
     },
     created () {
       this._getComputer()
+    },
+    mounted () {
+      this.windowHeight = window.innerHeight
+    },
+    computed: {
+      ...mapState(['showMoveImg', 'elLeft', 'elTop'])
     },
     components: {
       mallGoods
@@ -105,6 +143,21 @@
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../assets/style/mixin";
   @import "../../assets/style/theme";
+
+  /*.move_img {*/
+  /*width: 20px;*/
+  /*height: 20px;*/
+  /*background: #1a1a1a;*/
+  /*position: fixed;*/
+  /*top: 30px;*/
+  /*right: 30px;*/
+  /*z-index: 9999999;*/
+  /*svg {*/
+  /*width: 100px;*/
+  /*height: 100px;*/
+  /*fill: blue;*/
+  /*}*/
+  /*}*/
 
   .nav {
     > div {

@@ -54,30 +54,30 @@
                   </div>
                 </div>
               </div>
-              <div class="shop pr">
+              <div class="shop pr" @mouseover="cartShowState(true)" @mouseout="cartShowState(false)">
                 <router-link to="shop"></router-link>
-                <span class="cart-num"><i :class="{no:goodsSartList.length === 0}">{{goodsSartList.length}}</i></span>
+                <span class="cart-num"><i :class="{no:cartList.length === 0}">{{totalNum}}</i></span>
                 <!--购物车显示块-->
-                <div class="nav-user-wrapper pa">
+                <div class="nav-user-wrapper pa" :class="{active:cartShow}">
                   <div class="nav-user-list">
-                    <div class="full" v-show="goodsSartList.length">
+                    <div class="full" v-show="cartList.length">
                       <!--购物列表-->
                       <div class="nav-cart-items">
                         <ul>
-                          <li class="clearfix" v-for="(item,i) in goodsSartList">
-                            <div class="cart-item">
+                          <li class="clearfix" v-for="(list,i) in cartList">
+                            <div class="cart-item" v-for="(item,j) in list.goods">
                               <div class="cart-item-inner">
                                 <div class="item-thumb">
-                                  <img :src="item.productImageBig">
+                                  <img :src="item.img">
                                 </div>
                                 <div class="item-desc">
                                   <div class="cart-cell"><h4>
-                                    <a href="" v-text="item.productTitle"></a>
+                                    <a href="" v-text="item.name"></a>
                                   </h4>
                                     <p class="attrs"><span>白色</span>
                                     </p> <h6><span class="price-icon">¥</span><span
-                                      class="price-num">{{item.salePrice}}</span><span
-                                      class="item-num">x 1</span>
+                                      class="price-num">{{item.price}}</span><span
+                                      class="item-num">x {{item.num}}</span>
                                     </h6></div>
                                 </div>
                                 <div class="del-btn del">删除</div>
@@ -87,7 +87,7 @@
                         </ul>
                       </div>
                       <!--总件数-->
-                      <div class="nav-cart-total"><p>共 <strong>7</strong> 件商品</p> <h5>合计：<span
+                      <div class="nav-cart-total"><p>共 <strong>{{totalNum}}</strong> 件商品</p> <h5>合计：<span
                         class="price-icon">¥</span><span
                         class="price-num">{{totalPrice}}</span></h5>
                         <h6>
@@ -97,7 +97,7 @@
                         </h6>
                       </div>
                     </div>
-                    <div v-show="!goodsSartList.length" style="height: 100px;text-align: center">没有商品</div>
+                    <div v-show="!cartList.length" style="height: 100px;text-align: center">没有商品</div>
                   </div>
                 </div>
               </div>
@@ -124,7 +124,7 @@
 <script>
   import YButton from '/components/YButton'
   import {mapMutations, mapState} from 'vuex'
-  import {getCartList} from '/api/goods'
+  //  import {getCartList} from '/api/goods'
   //  import {getStore} from '/utils/storage'
   export default{
     data () {
@@ -132,8 +132,9 @@
         loginRouter: 'login',
         name: '亲，请登录',
         // 查询数据库的商品
-        goodsSartList: [],
-        st: false
+        st: false,
+        // 头部购物车显示
+        cartShow: false
       }
     },
     computed: {
@@ -143,10 +144,22 @@
       // 计算价格
       totalPrice () {
         var totalPrice = 0
-        this.goodsSartList && this.goodsSartList.forEach(item => {
-          totalPrice += item.salePrice
+        this.cartList && this.cartList.forEach(item => {
+          item.goods.forEach(o => {
+            totalPrice += (o.price * o.num)
+          })
         })
         return totalPrice
+      },
+      // 计算数量
+      totalNum () {
+        var totalNum = 0
+        this.cartList && this.cartList.forEach(item => {
+          item.goods.forEach(o => {
+            totalNum += o.num
+          })
+        })
+        return totalNum
       }
     },
     methods: {
@@ -159,17 +172,22 @@
 //          this.name = JSON.parse(name).name
 //        }
       },
+      // 购物车显示
+      cartShowState (state) {
+        this.cartShow = state
+      },
       // 获取购物车商品
       getCartList () {
-        var arr = []
-        // 根据id 去数据库查
-        for (let key in this.cartList) {
-          let goodsId = this.cartList[key]['goods'].id
-          arr.push(goodsId)
-        }
-        getCartList({goodsList: arr}).then(res => {
-          this.goodsSartList = res.result
-        })
+//        var arr = []
+//        // 根据id 去数据库查
+//        for (let key in this.cartList) {
+//          let goodsId = this.cartList[key]['goods'].id
+//          arr.push(goodsId)
+//        }
+//        getCartList({goodsList: arr}).then(res => {
+//          this.goodsSartList = res.result
+//        })
+
       },
       // 控制顶部
       navFixed () {
@@ -177,14 +195,14 @@
         st >= 100 ? this.st = true : this.st = false
       }
     },
-    created () {
-      this.getName()
-      this.INIT_BUYCART()
-//      this.getCartList()
-    },
     mounted () {
       if (this.$route.path === '/goods') {
         window.addEventListener('scroll', this.navFixed)
+      }
+      if (this.login) {
+        this.getCartList()
+      } else {
+        this.INIT_BUYCART()
       }
     },
     components: {
@@ -283,7 +301,6 @@
             }
           }
         }
-
       }
     }
 
@@ -293,6 +310,7 @@
     .nav-aside {
       display: flex;
     }
+    // 用户
     .user {
       margin-left: 41px;
       width: 36px;
@@ -398,13 +416,13 @@
           content: " ";
           background-position: 0 -22px;
         }
-        .nav-user-wrapper {
-          top: 18px;
-          visibility: visible;
-          opacity: 1;
-          -webkit-transition: opacity .15s ease-out;
-          transition: opacity .15s ease-out;
-        }
+      }
+      .nav-user-wrapper.active {
+        top: 18px;
+        visibility: visible;
+        opacity: 1;
+        -webkit-transition: opacity .15s ease-out;
+        transition: opacity .15s ease-out;
       }
       > a {
         position: absolute;

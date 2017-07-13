@@ -1,5 +1,5 @@
 <template>
-  <button :class="classStyle" @click="btnClick" :disabled="classStyle==='disabled-btn'">
+  <button :class="classStyle" @click="btnClick($event)" :disabled="classStyle==='disabled-btn'">
     <span>{{text}}</span>
   </button>
 </template>
@@ -16,8 +16,8 @@
       }
     },
     methods: {
-      btnClick () {
-        this.$emit('btnClick')
+      btnClick (event) {
+        this.$emit('btnClick', event)
       }
     }
   }
