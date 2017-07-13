@@ -107,10 +107,6 @@
         el.style.transform = `translate3d(0,${this.elTop - 30}px,0)`
         el.children[0].style.transform = `translate3d(${-(this.windowWidth - this.elLeft)}px,0,0)`
         el.children[0].style.opacity = 0
-//        el.children[0].style.transform = `translate3D(${-(this.windowWidth - this.elLeft)}px,${this.elTop - 30}px,0)`
-//        el.style.transform = `translate3D(${-(this.windowWidth - this.elLeft)}px,0,0)`
-//        el.style.transform = `translateY()`
-//        el.style.transform = `translate3d(${this.elLeft}px,${this.elTop}px,0)`
       },
       afterEnter (el) {
         el.style.transform = `translate3d(0,0,0)`
@@ -119,10 +115,10 @@
         el.children[0].style.transition = 'transform .55s linear'
         el.children[0].style.opacity = 1
         // 动画结束
-        el.addEventListener('transitionend', () => {
+        el.children[0].addEventListener('transitionend', () => {
           this.ADD_ANIMATION({moveShow: false})
         })
-        el.addEventListener('webkitAnimationEnd', () => {
+        el.children[0].addEventListener('webkitAnimationEnd', () => {
           this.ADD_ANIMATION({moveShow: false})
         })
       }
@@ -151,9 +147,8 @@
     top: 30px;
     right: 120px;
     width: 45px;
-    z-index: 20;
+    z-index: 99;
     height: 45px;
-    /*transition: transform 1s cubic-bezier(.2,1.35,.99,1.07);*/
     img {
       width: 100%;
       height: 100%;
@@ -175,8 +170,7 @@
         @extend %block-center;
       }
       input {
-        width: 80px;
-        height: 30px;
+        @include wh(80px, 30px);
         border: 1px solid #ccc;
       }
       input + input {

@@ -2,25 +2,15 @@
   <div>
     <div class="w">
       <div class="shuffling">
-        <!--<el-carousel height="340px" :interval="5000">-->
-          <!--<el-carousel-item v-for="(item,i) in banner.data" :key="i">-->
-            <!--<router-link :to="item.href"><img :src="item.src" :alt="item.alt"></router-link>-->
-          <!--</el-carousel-item>-->
-        <!--</el-carousel>-->
+        <div class="banner w">
+          <div class="bg" @mouseover="bannerT($refs.bg)" ref="bg">
+            <span class="img a"></span>
+            <span class="text b">以傲慢与偏执<br/>回敬傲慢与偏见</span>
+            <span class="copyright c">code by qingjin.me | picture from t.tt</span>
+          </div>
+        </div>
       </div>
       <div>
-        <!--<div><span>秒杀块标题</span><span>时间</span></div>-->
-        <!--商品-->
-        <!--<div class="goods ">-->
-          <!--<div class="sk_item" v-for="item in 6">-->
-            <!--<router-link to="/"><img-->
-              <!--src="https://img14.360buyimg.com/n4/s260x260_jfs/t1963/236/905138712/127581/cdf8c9e0/5631d325Ncc976adb.jpg"-->
-              <!--alt="#">-->
-              <!--<p class="sk_item_name">【京东超市】苏泊尔supor 火红点2代不粘无油烟炒锅32cm明火专用可立盖PC32R7（陶瓷煲赠品送完即止） </p></router-link>-->
-            <!--<p class="sk_item_price"><span class="price_new"><i>¥</i><span>359.00</span></span><span-->
-              <!--class=" price_origin"><i>¥</i><del>399.00</del></span></p>-->
-          <!--</div>-->
-        <!--</div>-->
       </div>
     </div>
   </div>
@@ -39,6 +29,36 @@
           console.log(res)
           this.banner = res.result
         })
+      },
+      bannerT (e) {
+        var thisPX = e.offsetLeft
+        var thisPY = e.offsetTop
+        console.log(thisPX)
+        console.log(thisPY)
+        var boxWidth = e.offsetWidth
+        var boxHeight = e.offsetHeight
+        e.classList.add('threeD')
+        console.log(boxWidth + 'boxWidth')
+        console.log(boxHeight + 'boxHeight')
+//        var boxHeight = this.outerHeight()
+        var three = document.querySelector('.threeD')
+        three.addEventListener('MouseMove', function (event) {
+          var mouseX = event.pageX - thisPX
+          var mouseY = event.pageY - thisPY
+          var X
+          var Y
+          if (mouseX > boxWidth / 2) {
+            X = mouseX - boxWidth / 2
+          } else {
+            X = mouseX - boxWidth / 2
+          }
+          if (mouseY > boxHeight / 2) {
+            Y = boxHeight / 2 - mouseY
+          } else {
+            Y = boxHeight / 2 - mouseY
+          }
+          three.style.transform = `rotateY(${X / 50}deg) rotateX(${Y / 50}deg)`
+        })
       }
     },
     mounted () {
@@ -48,10 +68,82 @@
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
   .shuffling {
-    width: 60%;
-    margin: 0 auto;
+    /*width: 60%;*/
+    /*margin: 0 auto;*/
   }
 
+  /*---*/
+  * {
+    font-family: "Microsoft YaHei";
+    transition: all .3s;
+    -webkit-transition: all .3s;
+    transition-timing-function: linear;
+    -webkit-transition-timing-function: linear;
+  }
+
+  .banner {
+    perspective: 800px;
+  }
+
+  .bg {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background: url("http://static.smartisanos.cn/index/img/store/home/banner-3d-item-1-box-1_61bdc2f4f9.png") center no-repeat;
+    background-size: 100% 100%;
+    border-radius: 10px;
+    transform-style: preserve-3d;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webkit-transform: rotateY(0deg) rotateX(0deg);
+  }
+
+  .img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    bottom: 8px;
+    left: 0;
+    background: url("http://static.smartisanos.cn/index/img/store/home/banner-3d-item-1-box-3_8fa7866d59.png") center no-repeat;
+    background-size: 95% 100%;
+  }
+
+  .text {
+    position: absolute;
+    top: 20%;
+    right: 10%;
+    font-size: 30px;
+    color: #fff;
+    text-align: right;
+    font-weight: lighter;
+  }
+
+  .copyright {
+    position: absolute;
+    bottom: 10%;
+    right: 10%;
+    font-size: 10px;
+    color: #fff;
+    text-align: right;
+    font-weight: lighter;
+  }
+
+  .a {
+    -webkit-transform: translateZ(40px);
+    transform: translateZ(40px);
+  }
+
+  .b {
+    -webkit-transform: translateZ(20px);
+    transform: translateZ(20px);
+  }
+
+  .c {
+    -webkit-transform: translateZ(0px);
+    transform: translateZ(0px);
+  }
+
+  /*----*/
   .goods {
     display: flex;
     padding: 12px 0;
