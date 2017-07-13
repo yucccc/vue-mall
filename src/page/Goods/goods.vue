@@ -26,8 +26,8 @@
     </div>
     <transition @after-enter='afterEnter' @before-enter="beforeEnter">
       <!--整张图片-->
-      <div class="move_img" v-show="showMoveImg">
-        <!--<img src="" alt="">-->
+      <div class="move_img" v-if="showMoveImg">
+        <div><img :src="moveImgUrl"></div>
       </div>
     </transition>
   </div>
@@ -35,7 +35,7 @@
 <script>
   import {getComputer} from '/api/goods.js'
   import mallGoods from '/components/mallGoods'
-  import {mapState} from 'vuex'
+  import {mapState, mapMutations} from 'vuex'
   export default {
     data () {
       return {
@@ -46,6 +46,7 @@
         timer: null,
         sortType: 1,
         windowHeight: null,
+        windowWidth: null,
         params: {
           page: 1,
           sort: ''
@@ -53,7 +54,7 @@
       }
     },
     methods: {
-//      ...mapMutations(['ADD_ANIMATION']),
+      ...mapMutations(['ADD_ANIMATION']),
       _getComputer (flag) {
         let params = {
           params: {
@@ -103,26 +104,26 @@
       },
       //
       beforeEnter (el) {
-//        `
-        console.log(`translate3d(${this.elLeft}px,${this.elTop}px,0)`)
-        el.style.transform = `translate3d(${-this.elLeft}px,${this.elTop}px,0)`
-//        el.style.transform = `translate3d(0,,0)`
+        el.style.transform = `translate3d(0,${this.elTop - 30}px,0)`
+        el.children[0].style.transform = `translate3d(${-(this.windowWidth - this.elLeft)}px,0,0)`
         el.children[0].style.opacity = 0
-        console.log('beforeEnter')
+//        el.children[0].style.transform = `translate3D(${-(this.windowWidth - this.elLeft)}px,${this.elTop - 30}px,0)`
+//        el.style.transform = `translate3D(${-(this.windowWidth - this.elLeft)}px,0,0)`
+//        el.style.transform = `translateY()`
+//        el.style.transform = `translate3d(${this.elLeft}px,${this.elTop}px,0)`
       },
       afterEnter (el) {
         el.style.transform = `translate3d(0,0,0)`
         el.children[0].style.transform = `translate3d(0,0,0)`
-        el.style.transition = 'transform .5s cubic-bezier(.1,1.26,.7,1.15)'
-        el.children[0].style.transition = 'transform .5s linear'
-//        this.showMoveDot = this.showMoveDot.map(item => false);
+        el.style.transition = 'transform .55s cubic-bezier(.2,1.35,.99,1.07)'
+        el.children[0].style.transition = 'transform .55s linear'
         el.children[0].style.opacity = 1
         // 动画结束
-        el.children[0].addEventListener('transitionend', () => {
-          console.log(1 + 'transitionend')
+        el.addEventListener('transitionend', () => {
+          this.ADD_ANIMATION({moveShow: false})
         })
-        el.children[0].addEventListener('webkitAnimationEnd', () => {
-          console.log(2 + 'webkitAnimationEnd')
+        el.addEventListener('webkitAnimationEnd', () => {
+          this.ADD_ANIMATION({moveShow: false})
         })
       }
     },
@@ -131,9 +132,10 @@
     },
     mounted () {
       this.windowHeight = window.innerHeight
+      this.windowWidth = window.innerWidth
     },
     computed: {
-      ...mapState(['showMoveImg', 'elLeft', 'elTop'])
+      ...mapState(['showMoveImg', 'elLeft', 'elTop', 'moveImgUrl'])
     },
     components: {
       mallGoods
@@ -144,20 +146,24 @@
   @import "../../assets/style/mixin";
   @import "../../assets/style/theme";
 
-  /*.move_img {*/
-  /*width: 20px;*/
-  /*height: 20px;*/
-  /*background: #1a1a1a;*/
-  /*position: fixed;*/
-  /*top: 30px;*/
-  /*right: 30px;*/
-  /*z-index: 9999999;*/
-  /*svg {*/
-  /*width: 100px;*/
-  /*height: 100px;*/
-  /*fill: blue;*/
-  /*}*/
-  /*}*/
+  .move_img {
+    position: fixed;
+    top: 30px;
+    right: 120px;
+    width: 45px;
+    z-index: 20;
+    height: 45px;
+    /*transition: transform 1s cubic-bezier(.2,1.35,.99,1.07);*/
+    img {
+      width: 100%;
+      height: 100%;
+      opacity: .6;
+      display: block;
+      border-style: none;
+      border-width: 0;
+      border: none;
+    }
+  }
 
   .nav {
     > div {

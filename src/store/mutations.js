@@ -33,13 +33,10 @@ export default {
           flag = false
           let flag1 = true
           let goodsArr = item['goods']
-          console.log('找到shopId')
           if (goodsArr.length) {
-            console.log('该店铺good列表不为空')
             for (let j = 0; j < goodsArr.length; j++) {
               let goodsArrj = goodsArr[j]
               if (goodsArrj['id'] === goodsId) { // 已经存在此商品
-                console.log(' 已经存在此商品')
                 goodsArrj['num']++
                 flag1 = false
                 break
@@ -61,7 +58,6 @@ export default {
         })
       }
     } else {
-      console.log('现在内容为空')
       cart.push({
         shopId: shopId,
         goods: [goods]
@@ -72,10 +68,11 @@ export default {
     setStore('buyCart', cart)
   },
   // 加入购物车动画
-  [ADD_ANIMATION] (state, {elLeft, elTop}) {
-    state.showMoveImg = true
+  [ADD_ANIMATION] (state, {moveShow, elLeft = 0, elTop = 0, img}) {
+    state.showMoveImg = moveShow
     state.elLeft = elLeft
     state.elTop = elTop
+    state.moveImgUrl = img
   },
   // 记录用户信息
   [RECORD_USERINFO] (state, info) {

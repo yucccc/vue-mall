@@ -10,7 +10,8 @@ const state = {
   cartList: [],   // 加入购物车列表
   showMoveImg: false, // 显示飞入图片
   elLeft: 0,
-  elTop: 0
+  elTop: 0,
+  moveImgUrl: null
 }
 
 export default new Vuex.Store({

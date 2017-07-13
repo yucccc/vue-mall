@@ -23,16 +23,13 @@
 </template>
 <script>
   import YButton from '/components/YButton'
-  import {mapMutations} from 'vuex'
+  import {mapMutations, mapState} from 'vuex'
   export default {
     props: {
       msg: {type: [Object, Array]}
     },
     data () {
-      return {
-        // 是否登录 后期通过vuex获取
-        login: false
-      }
+      return {}
     },
     methods: {
       ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION']),
@@ -40,19 +37,23 @@
         this.$router.push({path: 'goodsDetails/productId=' + id})
       },
       addCart (id, price, name, img) {
-        if (this.login) { // 登录了 直接存在用户名下
+        if (!this.showMoveImg) {
+          if (this.login) { // 登录了 直接存在用户名下
 
-        } else { // 未登录 vuex
-          this.ADD_CART({shopId: id, goodsId: id, price: price, name: name, img: img})
+          } else { // 未登录 vuex
+            this.ADD_CART({shopId: id, goodsId: id, price: price, name: name, img: img})
+          }
+          var dom = event.target // 获取点击的元素
           // 获取点击的坐标
-          let elLeft = event.target.getBoundingClientRect().left
-          let elTop = event.target.getBoundingClientRect().top
+          let elLeft = dom.getBoundingClientRect().left + 182
+          let elTop = dom.getBoundingClientRect().top - 40
           // 需要触发
-          console.log(elLeft + 'elLeft')
-          console.log(elTop + 'elTop')
-          this.ADD_ANIMATION({elLeft: elLeft, elTop: elTop})
+          this.ADD_ANIMATION({moveShow: true, elLeft: elLeft, elTop: elTop, img: img})
         }
       }
+    },
+    computed: {
+      ...mapState(['login', 'showMoveImg'])
     },
     mounted () {
     },
