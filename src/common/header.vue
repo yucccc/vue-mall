@@ -57,16 +57,16 @@
               <div class="shop pr" @mouseover="cartShowState(true)" @mouseout="cartShowState(false)" ref="positionMsg">
                 <router-link to="shop"></router-link>
                 <span class="cart-num"><i
-                  :class="{no:cartList.length === 0,move_in_cart:receiveInCart}">{{totalNum}}</i></span>
+                  :class="{no:totalNum <= 0,move_in_cart:receiveInCart}">{{totalNum}}</i></span>
                 <!--购物车显示块-->
                 <div class="nav-user-wrapper pa active" v-show="showCart">
                   <div class="nav-user-list">
-                    <div class="full" v-show="cartList.length">
+                    <div class="full" v-show="totalNum">
                       <!--购物列表-->
                       <div class="nav-cart-items">
                         <ul>
                           <li class="clearfix" v-for="(list,i) in cartList">
-                            <div class="cart-item" v-for="(item,j) in list.goods">
+                            <div class="cart-item" v-for="(item,j) in list.goods" data-id="item.id" v-if="item.num">
                               <div class="cart-item-inner">
                                 <div class="item-thumb">
                                   <img :src="item.img">
@@ -81,7 +81,7 @@
                                       class="item-num">x {{item.num}}</span>
                                     </h6></div>
                                 </div>
-                                <div class="del-btn del">删除</div>
+                                <div class="del-btn del" @click="delGoods(list.shopId,item.id)">删除</div>
                               </div>
                             </div>
                           </li>
@@ -98,7 +98,7 @@
                         </h6>
                       </div>
                     </div>
-                    <div v-show="!cartList.length" style="height: 100px;text-align: center">没有商品</div>
+                    <div v-show="!totalNum" style="height: 100px;text-align: center">没有商品</div>
                   </div>
                 </div>
               </div>
@@ -167,7 +167,7 @@
       }
     },
     methods: {
-      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART']),
+      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART', 'REDUCE_CART']),
       getName () {
 //        var name = sessionStorage.getItem('userMsg')
 //        if (name) {
@@ -191,6 +191,14 @@
 //        getCartList({goodsList: arr}).then(res => {
 //          this.goodsSartList = res.result
 //        })
+      },
+      // 删除商品
+      delGoods (shopid, goodsid) {
+        console.log(shopid + 'shopid' + goodsid + 'goodsid')
+        if (this.login) {
+        } else {
+          this.REDUCE_CART({shopId: shopid, goodsId: goodsid})
+        }
       },
       // 控制顶部
       navFixed () {

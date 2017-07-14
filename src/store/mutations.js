@@ -4,7 +4,8 @@ import {
   GET_USERINFO,
   RECORD_USERINFO,
   ADD_ANIMATION,
-  SHOW_CART
+  SHOW_CART,
+  REDUCE_CART
 } from './mutation-types'
 import {setStore, getStore} from '../utils/storage'
 export default {
@@ -82,15 +83,45 @@ export default {
       state.cartPositionL = cartPositionL
     }
   },
+  // 是否显示购物车
   [SHOW_CART] (state, {showCart}) {
-    let timer = null
+    // let timer = null
     state.showCart = showCart
-    clearTimeout(timer)
-    if (showCart) {
-      timer = setTimeout(() => {
-        state.showCart = false
-      }, 5000)
+    // clearTimeout(timer)
+    // if (showCart) {
+    //   timer = setTimeout(() => {
+    //     state.showCart = false
+    //   }, 5000)
+    // }
+  },
+  // 移除商品
+  [REDUCE_CART] (state, {shopId, goodsId}) {
+    let cart = state.cartList //  商品
+    for (let i = 0; i < cart.length; i++) {
+      let item = cart[i]
+      let shop = item['shopId']
+      let goods = item['goods']
+      if (shop === shopId) {
+        if (goods.length) { // 如果有商品
+          for (let j = 0; j < goods.length; j++) { // 遍历商品
+            if (goods[j]['id'] === goodsId) { // 找到对应商品
+              let num = goods[j]['num'] // 当前数量
+              if (num > 0) {
+                goods[j]['num']--
+              } else {
+                goods = null
+              }
+              break
+            }
+          }
+        } else {
+          goods = null
+        }
+      }
     }
+    state.cartList = cart
+    // 存入localStorage
+    setStore('buyCart', state.cartList)
   },
   // 记录用户信息
   [RECORD_USERINFO] (state, info) {
