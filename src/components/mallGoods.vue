@@ -32,7 +32,7 @@
       return {}
     },
     methods: {
-      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION']),
+      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART']),
       goodsDetails (id) {
         this.$router.push({path: 'goodsDetails/productId=' + id})
       },
@@ -45,15 +45,18 @@
           }
           var dom = event.target // 获取点击的元素
           // 获取点击的坐标
-          let elLeft = dom.getBoundingClientRect().left + 182
-          let elTop = dom.getBoundingClientRect().top - 40
+          let elLeft = dom.getBoundingClientRect().left + 50
+          let elTop = dom.getBoundingClientRect().top + 15
           // 需要触发
           this.ADD_ANIMATION({moveShow: true, elLeft: elLeft, elTop: elTop, img: img})
+          if (!this.showCart) {
+            this.SHOW_CART({showCart: true})
+          }
         }
       }
     },
     computed: {
-      ...mapState(['login', 'showMoveImg'])
+      ...mapState(['login', 'showMoveImg', 'showCart'])
     },
     mounted () {
     },

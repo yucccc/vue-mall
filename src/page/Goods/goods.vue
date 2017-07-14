@@ -26,7 +26,7 @@
     </div>
     <transition @after-enter='afterEnter' @before-enter="beforeEnter">
       <!--整张图片-->
-      <div class="move_img" v-if="showMoveImg">
+      <div class="move_img" v-if="showMoveImg" :style="{left:(cartPositionL-15) + 'px',top:(cartPositionT-15) + 'px'}">
         <div><img :src="moveImgUrl"></div>
       </div>
     </transition>
@@ -102,24 +102,34 @@
           this.busy = false
         }, 500)
       },
+      // 监听图片进入购物车
+      listenInCart () {
+        this.ADD_ANIMATION({moveShow: false, receiveInCart: true})
+//        if (!this.receiveInCart) {
+//          this.ADD_ANIMATION({})
+//        } else {
+//        this.ADD_ANIMATION({receiveInCart: false})
+//        }
+      },
       //
       beforeEnter (el) {
-        el.style.transform = `translate3d(0,${this.elTop - 30}px,0)`
-        el.children[0].style.transform = `translate3d(${-(this.windowWidth - this.elLeft)}px,0,0)`
-        el.children[0].style.opacity = 0
+        el.style.transform = `translate3d(0,${this.elTop - this.cartPositionT}px,0)`
+        el.children[0].style.transform = `translate3d(${-(this.cartPositionL - this.elLeft)}px,0,0) scale(1.2)`
+        el.style.opacity = 1
       },
       afterEnter (el) {
         el.style.transform = `translate3d(0,0,0)`
-        el.children[0].style.transform = `translate3d(0,0,0)`
-        el.style.transition = 'transform .55s cubic-bezier(.2,1.35,.99,1.07)'
+        el.children[0].style.transform = `translate3d(0,0,0) scale(.3)`
+        el.style.transition = 'transform .55s cubic-bezier(.29,.55,.51,1.08)'
         el.children[0].style.transition = 'transform .55s linear'
-        el.children[0].style.opacity = 1
+        el.style.opacity = 0.3
+//        el.children[0].style.transform = ``
         // 动画结束
         el.children[0].addEventListener('transitionend', () => {
-          this.ADD_ANIMATION({moveShow: false})
+          this.listenInCart()
         })
         el.children[0].addEventListener('webkitAnimationEnd', () => {
-          this.ADD_ANIMATION({moveShow: false})
+          this.listenInCart()
         })
       }
     },
@@ -129,9 +139,11 @@
     mounted () {
       this.windowHeight = window.innerHeight
       this.windowWidth = window.innerWidth
+//      window.addEventListener('scroll', this.setPosition)
+//      window.addEventListener('resize', this.setPosition)
     },
     computed: {
-      ...mapState(['showMoveImg', 'elLeft', 'elTop', 'moveImgUrl'])
+      ...mapState(['cartPositionT', 'cartPositionL', 'showMoveImg', 'elLeft', 'elTop', 'moveImgUrl'])
     },
     components: {
       mallGoods
@@ -144,15 +156,13 @@
 
   .move_img {
     position: fixed;
-    top: 30px;
-    right: 120px;
+    /*top: 40px;:340 px;*/
     width: 45px;
-    z-index: 99;
+    z-index: 29;
     height: 45px;
     img {
       width: 100%;
       height: 100%;
-      opacity: .6;
       display: block;
       border-style: none;
       border-width: 0;

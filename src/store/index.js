@@ -11,7 +11,11 @@ const state = {
   showMoveImg: false, // 显示飞入图片
   elLeft: 0,
   elTop: 0,
-  moveImgUrl: null
+  moveImgUrl: null,
+  cartPositionT: 0, // 购物车位置
+  cartPositionL: 0,
+  receiveInCart: false, // 是否进入购物车
+  showCart: false // 是否显示购物车
 }
 
 export default new Vuex.Store({

@@ -3,7 +3,8 @@ import {
   ADD_CART,
   GET_USERINFO,
   RECORD_USERINFO,
-  ADD_ANIMATION
+  ADD_ANIMATION,
+  SHOW_CART
 } from './mutation-types'
 import {setStore, getStore} from '../utils/storage'
 export default {
@@ -68,11 +69,28 @@ export default {
     setStore('buyCart', cart)
   },
   // 加入购物车动画
-  [ADD_ANIMATION] (state, {moveShow, elLeft = 0, elTop = 0, img}) {
+  [ADD_ANIMATION] (state, {moveShow, elLeft, elTop, img, cartPositionT, cartPositionL, receiveInCart}) {
     state.showMoveImg = moveShow
-    state.elLeft = elLeft
-    state.elTop = elTop
+    if (elLeft) {
+      state.elLeft = elLeft
+      state.elTop = elTop
+    }
     state.moveImgUrl = img
+    state.receiveInCart = receiveInCart
+    if (cartPositionT) {
+      state.cartPositionT = cartPositionT
+      state.cartPositionL = cartPositionL
+    }
+  },
+  [SHOW_CART] (state, {showCart}) {
+    let timer = null
+    state.showCart = showCart
+    clearTimeout(timer)
+    if (showCart) {
+      timer = setTimeout(() => {
+        state.showCart = false
+      }, 5000)
+    }
   },
   // 记录用户信息
   [RECORD_USERINFO] (state, info) {

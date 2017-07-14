@@ -54,11 +54,12 @@
                   </div>
                 </div>
               </div>
-              <div class="shop pr" @mouseover="cartShowState(true)" @mouseout="cartShowState(false)">
+              <div class="shop pr" @mouseover="cartShowState(true)" @mouseout="cartShowState(false)" ref="positionMsg">
                 <router-link to="shop"></router-link>
-                <span class="cart-num"><i :class="{no:cartList.length === 0}">{{totalNum}}</i></span>
+                <span class="cart-num"><i
+                  :class="{no:cartList.length === 0,move_in_cart:receiveInCart}">{{totalNum}}</i></span>
                 <!--购物车显示块-->
-                <div class="nav-user-wrapper pa" :class="{active:cartShow}">
+                <div class="nav-user-wrapper pa active" v-show="showCart">
                   <div class="nav-user-list">
                     <div class="full" v-show="cartList.length">
                       <!--购物列表-->
@@ -92,7 +93,7 @@
                         class="price-num">{{totalPrice}}</span></h5>
                         <h6>
                           <y-button classStyle="main-btn"
-                                    style="height: 40px;width: 100%;margin: 0;color: #fff;font-size: 14px"
+                                    style="height: 40px;width: 100%;margin: 0;color: #fff;font-size: 14px;line-height: 38px"
                                     text="去购物车"></y-button>
                         </h6>
                       </div>
@@ -134,12 +135,15 @@
         // 查询数据库的商品
         st: false,
         // 头部购物车显示
-        cartShow: false
+        cartShow: false,
+        positionL: 0,
+        positionT: 0,
+        timerCartShow: null // 定时隐藏购物车
       }
     },
     computed: {
       ...mapState([
-        'cartList', 'login'
+        'cartList', 'login', 'receiveInCart', 'showCart'
       ]),
       // 计算价格
       totalPrice () {
@@ -163,7 +167,7 @@
       }
     },
     methods: {
-      ...mapMutations(['ADD_CART', 'INIT_BUYCART']),
+      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART']),
       getName () {
 //        var name = sessionStorage.getItem('userMsg')
 //        if (name) {
@@ -174,7 +178,7 @@
       },
       // 购物车显示
       cartShowState (state) {
-        this.cartShow = state
+        this.SHOW_CART({showCart: state})
       },
       // 获取购物车商品
       getCartList () {
@@ -187,18 +191,21 @@
 //        getCartList({goodsList: arr}).then(res => {
 //          this.goodsSartList = res.result
 //        })
-
       },
       // 控制顶部
       navFixed () {
         var st = document.body.scrollTop
         st >= 100 ? this.st = true : this.st = false
+        let shop = document.querySelector('.shop')
+        this.positionL = shop.getBoundingClientRect().left
+        this.positionT = shop.getBoundingClientRect().top
+        this.ADD_ANIMATION({cartPositionL: this.positionL, cartPositionT: this.positionT})
       }
     },
     mounted () {
-      if (this.$route.path === '/goods') {
-        window.addEventListener('scroll', this.navFixed)
-      }
+      this.navFixed()
+      window.addEventListener('scroll', this.navFixed)
+      window.addEventListener('resize', this.navFixed)
       if (this.login) {
         this.getCartList()
       } else {
@@ -213,6 +220,82 @@
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../assets/style/theme";
   @import "../assets/style/mixin";
+
+  .move_in_cart {
+    animation: mymove .5s ease-in-out;
+  }
+
+  @keyframes mymove {
+    0% {
+      transform: scale(1)
+    }
+    25% {
+      transform: scale(.8)
+    }
+    50% {
+      transform: scale(1.2)
+    }
+    75% {
+      transform: scale(.9)
+    }
+    100% {
+      transform: scale(1)
+    }
+  }
+
+  @-moz-keyframes mymove {
+    0% {
+      transform: scale(1)
+    }
+    25% {
+      transform: scale(.8)
+    }
+    50% {
+      transform: scale(1.2)
+    }
+    75% {
+      transform: scale(.9)
+    }
+    100% {
+      transform: scale(1)
+    }
+  }
+
+  @-webkit-keyframes mymove {
+    0% {
+      transform: scale(1)
+    }
+    25% {
+      transform: scale(.8)
+    }
+    50% {
+      transform: scale(1.2)
+    }
+    75% {
+      transform: scale(.9)
+    }
+    100% {
+      transform: scale(1)
+    }
+  }
+
+  @-o-keyframes mymove {
+    0% {
+      transform: scale(1)
+    }
+    25% {
+      transform: scale(.8)
+    }
+    50% {
+      transform: scale(1.2)
+    }
+    75% {
+      transform: scale(.9)
+    }
+    100% {
+      transform: scale(1)
+    }
+  }
 
   .header-box {
     background: $head-bgc;
@@ -411,6 +494,7 @@
       float: left;
       margin-left: 21px;
       width: 61px;
+      z-index: 99;
       &:hover {
         a:before {
           content: " ";
