@@ -139,8 +139,6 @@
     mounted () {
       this.windowHeight = window.innerHeight
       this.windowWidth = window.innerWidth
-//      window.addEventListener('scroll', this.setPosition)
-//      window.addEventListener('resize', this.setPosition)
     },
     computed: {
       ...mapState(['cartPositionT', 'cartPositionL', 'showMoveImg', 'elLeft', 'elTop', 'moveImgUrl'])
@@ -154,19 +152,25 @@
   @import "../../assets/style/mixin";
   @import "../../assets/style/theme";
 
+  .bn {
+    border-style: none;
+    border-width: 0;
+    border: none;
+  }
+
   .move_img {
     position: fixed;
-    /*top: 40px;:340 px;*/
     width: 45px;
     z-index: 29;
     height: 45px;
+    div {
+      @extend .bn;
+    }
     img {
       width: 100%;
       height: 100%;
       display: block;
-      border-style: none;
-      border-width: 0;
-      border: none;
+      @extend .bn;
     }
   }
 

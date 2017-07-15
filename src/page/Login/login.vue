@@ -6,7 +6,6 @@
           <div class="return-btn ng-hide"></div>
           <h4>使用 Smartisan ID 登录在线商城</h4><a class="close"></a></div>
         <div class="content">
-          <!--<form autocomplete="off" novalidate>-->
           <ul class="common-form">
             <li class="username border-1p">
               <div class="input invalid">
@@ -26,7 +25,6 @@
             <y-button text="登陆" classStyle="main-btn" @btnClick="login"
                       style="margin: 0;width: 100%;height: 48px;font-size: 18px;"></y-button>
           </div>
-          <!--</form>-->
         </div>
       </div>
 
@@ -87,6 +85,8 @@
   }
 
   .login {
+    overflow-x: hidden;
+    overflow-y: hidden;
     .wrapper {
       background-image: url(/static/images/bg_9b9dcb65ff.png);
       background-image: -webkit-image-set(url(/static/images/bg_9b9dcb65ff.png) 1x, url(/static/images/bg_9b9dcb65ff@2x.png) 2x);

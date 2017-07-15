@@ -14,7 +14,11 @@ Vue.use(VueLazyload, {
   // attempt: 1
 })
 Vue.config.productionTip = false
-
+// 不需要登陆的页面
+// const whiteList = ['/home', '/goods']
+// router.beforeEach(function (to, from, next) {
+// 获取用户信息
+// })
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

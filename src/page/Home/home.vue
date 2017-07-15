@@ -33,13 +33,9 @@
       bannerT (e) {
         var thisPX = e.offsetLeft
         var thisPY = e.offsetTop
-        console.log(thisPX)
-        console.log(thisPY)
         var boxWidth = e.offsetWidth
         var boxHeight = e.offsetHeight
         e.classList.add('threeD')
-        console.log(boxWidth + 'boxWidth')
-        console.log(boxHeight + 'boxHeight')
 //        var boxHeight = this.outerHeight()
         var three = document.querySelector('.threeD')
         three.addEventListener('MouseMove', function (event) {

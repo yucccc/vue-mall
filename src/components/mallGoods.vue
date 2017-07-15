@@ -23,6 +23,7 @@
 </template>
 <script>
   import YButton from '/components/YButton'
+  import {addCart} from '/api/goods.js'
   import {mapMutations, mapState} from 'vuex'
   export default {
     props: {
@@ -38,15 +39,17 @@
       },
       addCart (id, price, name, img) {
         if (!this.showMoveImg) {
-          if (this.login) { // 登录了 直接存在用户名下
-
+          if (price) { // 登录了 直接存在用户名下
+            addCart({productId: id}).then(res => {
+              console.log(res)
+            })
           } else { // 未登录 vuex
             this.ADD_CART({shopId: id, goodsId: id, price: price, name: name, img: img})
           }
-          var dom = event.target // 获取点击的元素
+          var dom = event.target
           // 获取点击的坐标
-          let elLeft = dom.getBoundingClientRect().left + 50
-          let elTop = dom.getBoundingClientRect().top + 15
+          let elLeft = dom.getBoundingClientRect().left + (dom.offsetWidth / 2)
+          let elTop = dom.getBoundingClientRect().top + (dom.offsetHeight / 2)
           // 需要触发
           this.ADD_ANIMATION({moveShow: true, elLeft: elLeft, elTop: elTop, img: img})
           if (!this.showCart) {
