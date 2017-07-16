@@ -7,3 +7,12 @@ export const getBanner = () => {
 export const userLogin = (params) => {
   return http.fetchPost('/users/login', params)
 }
+// 退出登陆
+export const loginOut = (params) => {
+  return http.fetchPost('/users/loginOut', params)
+}
+// 用户信息
+export const userInfo = (params) => {
+  return http.fetchPost('/users/userInfo', params)
+}
+

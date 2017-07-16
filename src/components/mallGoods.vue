@@ -3,15 +3,15 @@
     <div class="good-item" v-for="(item,i) in msg" :key="i">
       <div style="padding: 36px 9px 10px">
         <div class="good-img">
-          <router-link :to="'goodsDetails/productId='+item.productId"><img v-lazy="item.productImageBig" alt="">
+          <router-link :to="'goodsDetails/productId='+item.productId"><img v-lazy="item.productImageBig" :alt="item.productName">
           </router-link>
         </div>
-        <p class="good-title">{{item.productTitle}}</p>
+        <p class="good-title">{{item.productName}}</p>
         <div class="good-price pr">
           <div class="ds pa">
             <y-button text="查看详情" @btnClick="goodsDetails(item.productId)"></y-button>
             <y-button text="加入购物车"
-                      @btnClick="addCart(item.productId,item.salePrice,item.productTitle,item.productImageBig)"
+                      @btnClick="addCart(item.productId,item.salePrice,item.productName,item.productImageBig)"
                       classStyle="main-btn"></y-button>
           </div>
           <p><span style="font-size: 16px">￥</span>
@@ -38,14 +38,16 @@
         this.$router.push({path: 'goodsDetails/productId=' + id})
       },
       addCart (id, price, name, img) {
-        if (!this.showMoveImg) {
-          if (price) { // 登录了 直接存在用户名下
+        if (!this.showMoveImg) {     // 动画是否在运动
+          if (this.login) { // 登录了 直接存在用户名下
             addCart({productId: id}).then(res => {
-              console.log(res)
+              // 并不重新请求数据
+              this.ADD_CART({productId: id, productPrice: price, productName: name, productImg: img})
             })
           } else { // 未登录 vuex
-            this.ADD_CART({shopId: id, goodsId: id, price: price, name: name, img: img})
+            this.ADD_CART({productId: id, productPrice: price, productName: name, productImg: img})
           }
+          // 加入购物车动画
           var dom = event.target
           // 获取点击的坐标
           let elLeft = dom.getBoundingClientRect().left + (dom.offsetWidth / 2)

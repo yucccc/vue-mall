@@ -30,7 +30,7 @@
                         <div>
                           <span class="avatar"></span>
                         </div>
-                        <p class="name">宇cccc</p>
+                        <p class="name">{{user.name}}</p>
                       </li>
                       <li>
                         <router-link to="order">我的订单</router-link>
@@ -48,7 +48,7 @@
                         <router-link to="/">收货地址</router-link>
                       </li>
                       <li>
-                        <router-link to="/">退出</router-link>
+                        <a href="javascript:;" @click="_loginOut">退出</a>
                       </li>
                     </ul>
                   </div>
@@ -65,23 +65,23 @@
                       <!--购物列表-->
                       <div class="nav-cart-items">
                         <ul>
-                          <li class="clearfix" v-for="(list,i) in cartList">
-                            <div class="cart-item" v-for="(item,j) in list.goods" data-id="item.id" v-if="item.num">
+                          <li class="clearfix" v-for="(item,i) in cartList" :key="i">
+                            <div class="cart-item">
                               <div class="cart-item-inner">
                                 <div class="item-thumb">
-                                  <img :src="item.img">
+                                  <img :src="item.productImg">
                                 </div>
                                 <div class="item-desc">
                                   <div class="cart-cell"><h4>
-                                    <a href="" v-text="item.name"></a>
+                                    <a href="" v-text="item.productName"></a>
                                   </h4>
                                     <p class="attrs"><span>白色</span>
                                     </p> <h6><span class="price-icon">¥</span><span
-                                      class="price-num">{{item.price}}</span><span
-                                      class="item-num">x {{item.num}}</span>
+                                      class="price-num">{{item.productPrice}}</span><span
+                                      class="item-num">x {{item.productNum}}</span>
                                     </h6></div>
                                 </div>
-                                <div class="del-btn del" @click="delGoods(list.shopId,item.id)">删除</div>
+                                <div class="del-btn del" @click="delGoods(item.productId)">删除</div>
                               </div>
                             </div>
                           </li>
@@ -125,13 +125,13 @@
 <script>
   import YButton from '/components/YButton'
   import {mapMutations, mapState} from 'vuex'
-  //  import {getCartList} from '/api/goods'
-  //  import {getStore} from '/utils/storage'
+  import {getCartList, delCart} from '/api/goods'
+  import {userInfo, loginOut} from '/api/index'
+  import {setStore, removeStore} from '/utils/storage'
   export default{
     data () {
       return {
-        loginRouter: 'login',
-        name: '亲，请登录',
+        user: {},
         // 查询数据库的商品
         st: false,
         // 头部购物车显示
@@ -149,9 +149,7 @@
       totalPrice () {
         var totalPrice = 0
         this.cartList && this.cartList.forEach(item => {
-          item.goods.forEach(o => {
-            totalPrice += (o.price * o.num)
-          })
+          totalPrice += (item.productNum * item.productPrice)
         })
         return totalPrice
       },
@@ -159,45 +157,34 @@
       totalNum () {
         var totalNum = 0
         this.cartList && this.cartList.forEach(item => {
-          item.goods.forEach(o => {
-            totalNum += o.num
-          })
+          totalNum += (item.productNum)
         })
         return totalNum
       }
     },
     methods: {
-      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART', 'REDUCE_CART']),
-      getName () {
-//        var name = sessionStorage.getItem('userMsg')
-//        if (name) {
-//          this.login = true
-//          this.loginRouter = 'perDetails'
-//          this.name = JSON.parse(name).name
-//        }
-      },
+      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART', 'REDUCE_CART', 'RECORD_USERINFO']),
       // 购物车显示
       cartShowState (state) {
         this.SHOW_CART({showCart: state})
       },
-      // 获取购物车商品
-      getCartList () {
-//        var arr = []
-//        // 根据id 去数据库查
-//        for (let key in this.cartList) {
-//          let goodsId = this.cartList[key]['goods'].id
-//          arr.push(goodsId)
-//        }
-//        getCartList({goodsList: arr}).then(res => {
-//          this.goodsSartList = res.result
-//        })
+      // 登陆时获取一次购物车商品
+      _getCartList () {
+        getCartList().then(res => {
+          if (res.status === '1') {
+            setStore('buyCart', res.result)
+          }
+          // 重新初始化一次本地数据
+        }).then(this.INIT_BUYCART)
       },
       // 删除商品
-      delGoods (shopid, goodsid) {
-        console.log(shopid + 'shopid' + goodsid + 'goodsid')
-        if (this.login) {
+      delGoods (productId) {
+        if (productId) { // 登陆了
+          delCart({productId}).then(res => {
+            console.log(res)
+          })
         } else {
-          this.REDUCE_CART({shopId: shopid, goodsId: goodsid})
+          this.REDUCE_CART({productId: productId})
         }
       },
       // 控制顶部
@@ -208,17 +195,31 @@
         this.positionL = shop.getBoundingClientRect().left
         this.positionT = shop.getBoundingClientRect().top
         this.ADD_ANIMATION({cartPositionL: this.positionL, cartPositionT: this.positionT})
+      },
+      // 退出登陆
+      _loginOut () {
+        loginOut().then(res => {
+          removeStore('buyCart')
+          window.location.href = '/'
+        })
       }
     },
     mounted () {
+      userInfo().then(res => {
+        if (res.status === '1') {
+          this.user = res.result
+          this.RECORD_USERINFO({info: res.result})
+        }
+      }).then(() => {
+        if (this.login) {
+          this._getCartList()
+        } else {
+          this.INIT_BUYCART()
+        }
+      })
       this.navFixed()
       window.addEventListener('scroll', this.navFixed)
       window.addEventListener('resize', this.navFixed)
-      if (this.login) {
-        this.getCartList()
-      } else {
-        this.INIT_BUYCART()
-      }
     },
     components: {
       YButton
@@ -750,7 +751,7 @@
 
   @media (max-height: 1080px) {
     .nav-cart-items {
-      max-height: 655px !important;
+      max-height: 620px !important;
     }
   }
 

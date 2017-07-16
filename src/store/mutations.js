@@ -16,54 +16,30 @@ export default {
       state.cartList = JSON.parse(initCart)
     }
   },
-  // 未登录情况下加入购物车
-  [ADD_CART] (state, {shopId, goodsId, price, name, img}) {
+  // 加入购物车
+  [ADD_CART] (state, {productId, productPrice, productName, productImg}) {
     let cart = state.cartList // 购物车
-    var goods = {
-      'name': name,
-      'id': goodsId,
-      'num': 1,
-      'price': price,
-      'img': img
+    let falg = true
+    let goods = {
+      productId,
+      productPrice,
+      productName,
+      productImg
     }
-    let flag = true
-    if (cart.length) {
-      for (let i = 0; i < cart.length; i++) {
-        let item = cart[i]
-        // 店铺id
-        if (item['shopId'] === shopId) { // 找到对应的店铺
-          flag = false
-          let flag1 = true
-          let goodsArr = item['goods']
-          if (goodsArr.length) {
-            for (let j = 0; j < goodsArr.length; j++) {
-              let goodsArrj = goodsArr[j]
-              if (goodsArrj['id'] === goodsId) { // 已经存在此商品
-                goodsArrj['num']++
-                flag1 = false
-                break
-              }
-            }
-            if (flag1) {
-              goodsArr.push(goods)
-            }
-          } else {
-            // 该店铺good列表为空
-            console.log('该店铺good列表为空')
+    if (cart.length) {        // 有内容
+      cart.forEach(item => {
+        if (item.productId === productId) {
+          if (item.productNum >= 0) {
+            falg = false
+            item.productNum++
           }
         }
-      }
-      if (flag) {
-        cart.push({
-          shopId: shopId,
-          goods: [goods]
-        })
-      }
-    } else {
-      cart.push({
-        shopId: shopId,
-        goods: [goods]
       })
+    }
+    if (!cart.length || falg) {
+      goods.productNum = 1
+      goods.checked = '1'
+      cart.push(goods)
     }
     state.cartList = cart
     // 存入localStorage

@@ -25,6 +25,7 @@
             <y-button text="登陆" classStyle="main-btn" @btnClick="login"
                       style="margin: 0;width: 100%;height: 48px;font-size: 18px;"></y-button>
           </div>
+          <!--</form>-->
         </div>
       </div>
 
