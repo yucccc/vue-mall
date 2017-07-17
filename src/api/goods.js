@@ -11,6 +11,10 @@ export const getCartList = (params) => {
 export const addCart = (params) => {
   return http.fetchPost('/goods/addCart', params)
 }
+// 加入购物车
+export const addCart1 = (params) => {
+  return http.fetchPost('/goods/addCart1', params)
+}
 // 删除购物车
 export const delCart = (params) => {
   return http.fetchPost('/goods/delCart', params)

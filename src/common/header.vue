@@ -179,7 +179,8 @@
       },
       // 删除商品
       delGoods (productId) {
-        if (productId) { // 登陆了
+        if (this.login) { // 登陆了
+          console.log('商城商品 登陆了')
           delCart({productId}).then(res => {
             console.log(res)
           })

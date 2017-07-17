@@ -71,34 +71,26 @@ export default {
     // }
   },
   // 移除商品
-  [REDUCE_CART] (state, {shopId, goodsId}) {
-    let cart = state.cartList //  商品
-    for (let i = 0; i < cart.length; i++) {
-      let item = cart[i]
-      let shop = item['shopId']
-      let goods = item['goods']
-      if (shop === shopId) {
-        if (goods.length) { // 如果有商品
-          for (let j = 0; j < goods.length; j++) { // 遍历商品
-            if (goods[j]['id'] === goodsId) { // 找到对应商品
-              let num = goods[j]['num'] // 当前数量
-              if (num > 0) {
-                goods[j]['num']--
-              } else {
-                goods = null
-              }
-              break
-            }
-          }
+  [REDUCE_CART] (state, {productId}) {
+    let cart = state.cartList
+    cart.forEach((item, i) => {
+      if (item.productId === productId) {
+        if (item.productNum > 1) {
+          item.productNum--
         } else {
-          goods = null
+          cart.splice(i, 1)
         }
       }
-    }
+    })
     state.cartList = cart
     // 存入localStorage
     setStore('buyCart', state.cartList)
   },
+  // // 登陆时将本地的购物车加到用户上
+  // [LOGIN_ADDCART] (state) {
+  //   let cart = state.cartList
+  //
+  // },
   // 记录用户信息
   [RECORD_USERINFO] (state, info) {
     state.userInfo = info

@@ -15,7 +15,7 @@
             </li>
             <li>
               <div class="input invalid">
-                <span>密码</span>
+                <span>密码3</span>
                 <input type="text" v-model="ruleForm.userPwd">
               </div>
             </li>
@@ -37,10 +37,12 @@
   import YButton from '/components/YButton'
   import {userLogin} from '/api/index.js'
   import {mapMutations} from 'vuex'
+  import {addCart1} from '/api/goods.js'
+  import {getStore} from '/utils/storage.js'
   export default {
     data () {
       return {
-//        loginWay: 1,
+        cart: [],
         ruleForm: {
           userName: '',
           userPwd: ''
@@ -56,6 +58,20 @@
       ...mapMutations([
         'RECORD_USERINFO'
       ]),
+      // 登陆时将本地的添加到用户购物车
+      login_addCart () {
+        let cartArr = []
+        let locaCart = JSON.parse(getStore('buyCart'))
+        if (locaCart.length) {
+          locaCart.forEach(item => {
+            cartArr.push({
+              'productId': item.productId,
+              'productNum': item.productNum
+            })
+          })
+        }
+        this.cart = cartArr
+      },
       login () {
         if (!this.ruleForm.userName || !this.ruleForm.userPwd) {
           console.log('账号密码不能为空')
@@ -64,8 +80,13 @@
         var params = {userName: this.ruleForm.userName, userPwd: this.ruleForm.userPwd}
         userLogin(params).then(res => {
           if (res.status === '0') {
-            this.RECORD_USERINFO({info: res.result})
-            this.$router.go(-1)
+            addCart1({productMsg: this.cart}).then(res => {
+              if (res.status === '1') {
+//                removeStore('buyCart')
+              }
+            })
+//              .then(this.$router.go(-1))
+//            this.RECORD_USERINFO({info: res.result})
           } else {
             console.log(res.msg)
           }
@@ -73,6 +94,9 @@
       }
     },
     mounted () {
+      this.login_addCart()
+      console.log(22222)
+      console.log(this.cart)
     },
     components: {
       YFooter,
