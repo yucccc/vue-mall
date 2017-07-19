@@ -17,7 +17,6 @@ Vue.config.productionTip = false
 // 不需要登陆的页面
 // const whiteList = ['/home', '/goods']
 router.beforeEach(function (to, from, next) {
-  console.log(1111 + 'rrr')
   next()
 })
 /* eslint-disable no-new */

@@ -38,7 +38,7 @@
   import {userLogin} from '/api/index.js'
   import {mapMutations} from 'vuex'
   import {addCart1} from '/api/goods.js'
-  import {getStore} from '/utils/storage.js'
+  import {getStore, removeStore} from '/utils/storage.js'
   export default {
     data () {
       return {
@@ -74,19 +74,19 @@
       },
       login () {
         if (!this.ruleForm.userName || !this.ruleForm.userPwd) {
-          console.log('账号密码不能为空')
+          alert('账号密码不能为空')
           return false
         }
         var params = {userName: this.ruleForm.userName, userPwd: this.ruleForm.userPwd}
         userLogin(params).then(res => {
           if (res.status === '0') {
-            addCart1({productMsg: this.cart}).then(res => {
-              if (res.status === '1') {
-//                removeStore('buyCart')
-              }
-            })
-//              .then(this.$router.go(-1))
-//            this.RECORD_USERINFO({info: res.result})
+            if (this.cart.length) {
+              addCart1({productMsg: this.cart}).then(res => {
+                if (res.status === '1') {
+                  removeStore('buyCart')
+                }
+              }).then(this.$router.go(-1))
+            }
           } else {
             console.log(res.msg)
           }
@@ -95,8 +95,6 @@
     },
     mounted () {
       this.login_addCart()
-      console.log(22222)
-      console.log(this.cart)
     },
     components: {
       YFooter,

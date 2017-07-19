@@ -19,3 +19,11 @@ export const addCart1 = (params) => {
 export const delCart = (params) => {
   return http.fetchPost('/goods/delCart', params)
 }
+// 编辑购物车
+export const cartEdit = (params) => {
+  return http.fetchPost('/users/cartEdit', params)
+}
+// 全选
+export const editCheckAll = (params) => {
+  return http.fetchPost('/users/editCheckAll', params)
+}

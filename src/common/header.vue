@@ -54,8 +54,9 @@
                   </div>
                 </div>
               </div>
-              <div class="shop pr" @mouseover="cartShowState(true)" @mouseout="cartShowState(false)" ref="positionMsg">
-                <router-link to="shop"></router-link>
+              <div class="shop pr" @mouseover="cartShowState(true)" @mouseout="cartShowState(false)"
+                   ref="positionMsg">
+                <router-link :to="login?'cart':'login'"></router-link>
                 <span class="cart-num"><i
                   :class="{no:totalNum <= 0,move_in_cart:receiveInCart}">{{totalNum}}</i></span>
                 <!--购物车显示块-->
@@ -94,7 +95,7 @@
                         <h6>
                           <y-button classStyle="main-btn"
                                     style="height: 40px;width: 100%;margin: 0;color: #fff;font-size: 14px;line-height: 38px"
-                                    text="去购物车"></y-button>
+                                    text="去购物车" @btnClick="toCart"></y-button>
                         </h6>
                       </div>
                     </div>
@@ -180,22 +181,32 @@
       // 删除商品
       delGoods (productId) {
         if (this.login) { // 登陆了
-          console.log('商城商品 登陆了')
           delCart({productId}).then(res => {
-            console.log(res)
+            this.REDUCE_CART({productId: productId})
           })
         } else {
           this.REDUCE_CART({productId: productId})
         }
       },
+      toCart () {
+        if (this.login) {
+          this.$router.push({path: 'cart'})
+        } else {
+          this.$router.push({path: 'login'})
+        }
+      },
       // 控制顶部
       navFixed () {
-        var st = document.body.scrollTop
-        st >= 100 ? this.st = true : this.st = false
-        let shop = document.querySelector('.shop')
-        this.positionL = shop.getBoundingClientRect().left
-        this.positionT = shop.getBoundingClientRect().top
-        this.ADD_ANIMATION({cartPositionL: this.positionL, cartPositionT: this.positionT})
+        if (this.$route.path === '/goods' || this.$route.path === '/home') {
+          var st = document.body.scrollTop
+          st >= 100 ? this.st = true : this.st = false
+          let shop = document.querySelector('.shop')
+          this.positionL = shop.getBoundingClientRect().left
+          this.positionT = shop.getBoundingClientRect().top
+          this.ADD_ANIMATION({cartPositionL: this.positionL, cartPositionT: this.positionT})
+        } else {
+          return
+        }
       },
       // 退出登陆
       _loginOut () {

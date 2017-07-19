@@ -82,7 +82,6 @@
       background-color: #6c8cd4;
       background-image: -webkit-linear-gradient(top, #6c8cd4, #4769c2);
       background-image: linear-gradient(180deg, #6c8cd4, #4769c2);
-
     }
   }
 

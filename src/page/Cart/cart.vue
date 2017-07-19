@@ -11,28 +11,27 @@
               <span class="name">商品信息</span> <span class="operation">操作</span> <span
               class="subtotal">小计</span> <span class="num">数量</span> <span class="price">单价</span></div>
             <!--列表-->
-            <div class="cart-table">
-              <div class="cart-group divide pr">
+            <div class="cart-table" v-for="(item,i) in cartList" :key="i">
+              <div class="cart-group divide pr" :data-productid="item.productId">
                 <div class="cart-top-items">
-                  <div class="cart-items clearfix js-cart-items">
+                  <div class="cart-items clearfix">
                     <!--勾选-->
                     <div class="items-choose">
-                      <span class="blue-checkbox-new checkbox-on" data-name="100026701 " data-status="true"
-                            checked="checked"><a></a></span>
+                      <span class="blue-checkbox-new " :class="{'checkbox-on':item.checked === '1'}"
+                            @click="editCart('check',item)"></span>
                     </div>
                     <!--图片-->
                     <div class="items-thumb fl">
-                      <img alt="Smartisan 原装快充充电器 18W"
-                           src="http://image.smartisanos.cn/resource/dc53bd870ee64d2053ecc51750ece43a.jpg?x-oss-process=image/resize,w_160/quality,Q_100/format,webp">
-                      <a href="#/item/100026701" title="Smartisan 原装快充充电器 18W" target="_blank"></a>
+                      <img :alt="item.productName"
+                           :src="item.productImg">
+                      <a href="javascript:;" :title="item.productName" target="_blank"></a>
                     </div>
                     <!--信息-->
                     <div class="name hide-row fl">
                       <div class="name-table">
-                        <a href="#/item/100026701" title="Smartisan 原装快充充电器 18W" target="_blank"
-                           class="ng-binding ng-scope">Smartisan 原装快充充电器 18W</a>
+                        <a href="javascript:;" :title="item.productName" target="_blank" v-text="item.productName"></a>
                         <ul class="attribute">
-                          <li ng-repeat="attr in cart.attrs" class="ng-binding ng-scope">白色</li>
+                          <li>白色</li>
                         </ul>
                       </div>
                     </div>
@@ -43,23 +42,24 @@
                     <!--商品数量-->
                     <div>
                       <!--总价格-->
-                      <div class="subtotal" style="font-size: 14px">¥ 59.00</div>
+                      <div class="subtotal" style="font-size: 14px">¥ {{item.productPrice * item.productNum}}</div>
                       <!--数量-->
                       <div class="item-cols-num">
-                        <div class="select js-select-quantity" data-id="100026701"><span
-                          class="down down-disabled">-</span>
-                          <span
-                            class="num"><input type="text">
+                        <div class="select">
+                          <span class="down" :class="{'down-disabled':item.productNum<2}">-</span>
+                          <span class="num">
+                            <input type="text" v-model="item.productNum" maxlength="2">
                           <ul>
                             <li>1</li>
                             <li>2</li>
                             </ul>
                         </span>
+
                           <span class="up">+</span>
                         </div>
                       </div>
                       <!--价格-->
-                      <div class="price">¥ 59.00</div>
+                      <div class="price">¥ {{item.productPrice}}</div>
                     </div>
                   </div>
                 </div>
@@ -71,10 +71,8 @@
           <div class="fix-bottom-inner">
             <div class="cart-bar-operation">
               <div>
-                <div class="choose-all js-choose-all"><span
-                  class="blue-checkbox-new checkbox-on"
-                  data-name="all "
-                  data-status="true" checked="checked"><a></a></span>全选
+                <div class="choose-all">
+                  <span :class="{'checkbox-on':checkAllFlag}" class="blue-checkbox-new" @click="editCheckAll"></span>全选
                 </div>
                 <div class="delete-choose-goods">删除选中的商品
                 </div>
@@ -83,15 +81,18 @@
             <div class="shipping">
               <div class="shipping-box">
                 <div class="shipping-total shipping-num"><h4
-                  class="highlight">已选择 <i>1</i> 件商品</h4>
-                  <h5>共计 <i>1</i> 件商品</h5></div>
+                  class="highlight">已选择 <i v-text="checkNum"></i> 件商品</h4>
+                  <h5>共计 <i v-text="totalNum"></i> 件商品</h5></div>
                 <div class="shipping-total shipping-price"><h4
-                  class="highlight">应付总额：<span>￥</span><i class="ng-binding">99</i>
+                  class="highlight">应付总额：<span>￥</span><i v-text="checkPrice"></i>
                 </h4>
                   <h5 class="shipping-tips ng-scope">应付总额不含运费</h5>
                 </div>
               </div>
-              <span class="jianguo-blue-main-btn big-main-btn js-checkout"><a>现在结算</a></span></div>
+              <y-button :classStyle="checkNum > 0?'main-btn':'disabled-btn'" class="big-main-btn"
+                        style="margin: 0;width: 130px;height: 50px;line-height: 50px;font-size: 16px"
+                        text="现在结算"></y-button>
+            </div>
           </div>
         </div>
       </div>
@@ -99,18 +100,110 @@
   </div>
 </template>
 <script>
+  import {getCartList, cartEdit, editCheckAll} from '/api/goods'
+  //  import {setStore} from '/utils/storage'
+  import {mapMutations} from 'vuex'
+  import YButton from '/components/YButton'
   export default {
     data () {
-      return {}
+      return {
+        cartList: []
+      }
     },
-    methods: {},
+    computed: {
+      checkAllFlag () {
+        return this.checkedCount === this.cartList.length
+      },
+      checkedCount () {
+        var i = 0
+        this.cartList && this.cartList.forEach((item) => {
+          if (item.checked === '1') i++
+        })
+        return i
+      },
+      // 计算总价格
+      totalPrice () {
+        var totalPrice = 0
+        this.cartList && this.cartList.forEach(item => {
+          totalPrice += (item.productNum * item.productPrice)
+        })
+        return totalPrice
+      },
+      // 计算总数量
+      totalNum () {
+        var totalNum = 0
+        this.cartList && this.cartList.forEach(item => {
+          totalNum += (item.productNum)
+        })
+        return totalNum
+      },
+      checkPrice () {
+        var totalPrice = 0
+        this.cartList && this.cartList.forEach(item => {
+          if (item.checked === '1') {
+            totalPrice += (item.productNum * item.productPrice)
+          }
+        })
+        return totalPrice
+      },
+      checkNum () {
+        var checkNum = 0
+        this.cartList && this.cartList.forEach(item => {
+          if (item.checked === '1') {
+            checkNum += (item.productNum)
+          }
+        })
+        return checkNum
+      }
+    },
+    methods: {
+      ...mapMutations([
+        'INIT_BUYCART'
+      ]),
+      // 获取一次购物车商品
+      _getCartList () {
+        getCartList().then(res => {
+          if (res.status === '1') {
+            this.cartList = res.result
+          }
+        })
+      },
+      editCheckAll () {
+        let checkAll = !this.checkAllFlag
+        editCheckAll({checkAll: checkAll}).then(res => {
+          this._getCartList()
+        })
+      },
+      editCart (type, item) {
+        if (type === 'check') {
+          cartEdit({productId: item.productId, productNum: item.productNum, checked: item.checked === '1' ? '0' : '1'})
+        }
+        this._getCartList()
+      }
+    },
     created () {
-
+      this._getCartList()
+    },
+    mounted () {
+    },
+    components: {
+      YButton
     }
   }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
 
+  .ui-cart .select input {
+    width: 36px;
+    height: 18px;
+    background-color: transparent;
+    border: none;
+    border-radius: 3px;
+    text-align: center;
+    line-height: 18px;
+    font-size: 14px;
+    padding: 0;
+  }
 
   .store-content {
     clear: both;
@@ -227,6 +320,9 @@
           padding-top: 4px;
           margin: 0 auto;
           line-height: 40px;
+          .down {
+            background-position: 0 -60px;
+          }
           .down.down-disabled:hover {
             background-position: 0 -300px;
             cursor: not-allowed;
@@ -455,66 +551,8 @@
     }
     .big-main-btn {
       float: right;
-      background: #5d86e5;
-      background: -webkit-linear-gradient(#688fe8, #5079e1);
-      background: linear-gradient(#688fe8, #5079e1);
-    }
-    .big-main-btn {
       height: 48px;
-      &:hover {
-        background: #6484D0;
-        background: linear-gradient(#7592D4, #5272C6);
-        a {
-          background: #6889D8;
-          background: linear-gradient(#7A99DE, #5677CF);
-          box-shadow: none;
-          color: #FFF;
-        }
-      }
-      a {
-        display: block;
-        border-radius: 9px;
-        background: #5f7ed7;
-        background: -webkit-linear-gradient(#739fe1, #5f7ed7);
-        background: -moz-linear-gradient(#739fe1, #5f7ed7);
-        background: -ms-linear-gradient(#739fe1, #5f7ed7);
-        background: -o-linear-gradient(#739fe1, #5f7ed7);
-        background: linear-gradient(#739fe1, #5f7ed7);
-        cursor: pointer;
-        color: #fff;
-        height: 44px;
-        line-height: 45px;
-        padding: 2px 32px;
-        font-size: 16px;
-        background: #6C94F3;
-        background: linear-gradient(#7EA3F5, #5A82F0);
-        box-shadow: none;
-        text-shadow: none;
-        transition: all .3s ease;
-      }
     }
-    .jianguo-blue-main-btn {
-      display: block;
-      padding: 1px;
-      margin: 0 auto;
-      border-radius: 9px;
-      background: #015e94;
-      background: linear-gradient(#5598c9, #2a6da2);
-      text-align: center;
-      text-shadow: rgba(255, 255, 255, .496094) 0 1px 0;
-      cursor: pointer;
-      -webkit-user-select: none;
-      -ms-user-select: none;
-      -o-user-select: none;
-      user-select: none;
-
-    }
-    .jianguo-blue-main-btn {
-      background: #567CE6;
-      background: linear-gradient(#799CEA, #567CE6);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, .1), inset 0 -1px 2px rgba(0, 0, 0, .2);
-    }
-
   }
 
 
