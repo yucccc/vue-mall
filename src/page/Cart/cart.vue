@@ -102,9 +102,9 @@
   </div>
 </template>
 <script>
-  import {getCartList, cartEdit, editCheckAll, cartDel} from '/api/goods'
-  import {setStore} from '/utils/storage'
-  import {mapMutations, mapState} from 'vuex'
+  import { getCartList, cartEdit, editCheckAll, cartDel } from '/api/goods'
+  import { setStore } from '/utils/storage'
+  import { mapMutations, mapState } from 'vuex'
   import YButton from '/components/YButton'
   export default {
     data () {
@@ -168,7 +168,6 @@
         getCartList().then(res => {
           if (res.status === '1') {
             setStore('buyCart', res.result)
-//            this.cartList = res.result
           }
         })
       },
@@ -176,7 +175,7 @@
       editCheckAll () {
         let checkAll = !this.checkAllFlag
         editCheckAll({checkAll: checkAll}).then(res => {
-          this._getCartList()
+          this.EDIT_CART({checked: checkAll})
         })
       },
       // 修改购物车
@@ -190,7 +189,17 @@
         ).then(res => {
           if (res.status === '0') {
             // 如果成功了
-            dn && this.ani(productId, productNum, checked)
+            if (dn) {
+              this.ani(productId, productNum, checked)
+            } else {
+              this.EDIT_CART(
+                {
+                  productId,
+                  checked,
+                  productNum
+                }
+              )
+            }
           }
         })
       },
@@ -221,7 +230,6 @@
         }
       },
       ani (productId, productNum, checked) {
-        console.log('开始')
         this.show = false
         let ul = this.$refs.ul[0]
         let ulStyle = ul.style
@@ -256,17 +264,17 @@
         })
       },
       // 删除整条购物车
-      cartdel (id) {
-        cartDel({productId: id}).then(res => {
-          this._getCartList()
+      cartdel (productId) {
+        cartDel({productId}).then(res => {
+          this.EDIT_CART({productId})
         })
       }
     },
     created () {
       this._getCartList()
-      this.INIT_BUYCART()
     },
     mounted () {
+      this.INIT_BUYCART()
     },
     components: {
       YButton

@@ -8,7 +8,7 @@ import {
   REDUCE_CART,
   EDIT_CART
 } from './mutation-types'
-import {setStore, getStore} from '../utils/storage'
+import { setStore, getStore } from '../utils/storage'
 export default {
   // 网页初始化时从本地缓存获取购物车数据
   [INIT_BUYCART] (state) {
@@ -90,12 +90,24 @@ export default {
   // 修改购物车
   [EDIT_CART] (state, {productId, productNum, checked}) {
     let cart = state.cartList
-    cart.forEach((item, i) => {
-      if (item.productId === productId) {
-        item.productNum = productNum
-        item.checked = checked
-      }
-    })
+    if (productNum) {
+      cart.forEach((item, i) => {
+        if (item.productId === productId) {
+          item.productNum = productNum
+          item.checked = checked
+        }
+      })
+    } else if (productId) {
+      cart.forEach((item, i) => {
+        if (item.productId === productId) {
+          cart.splice(i, 1)
+        }
+      })
+    } else {
+      cart.forEach((item) => {
+        item.checked = checked ? '1' : '0'
+      })
+    }
     state.cartList = cart
     // 存入localStorage
     setStore('buyCart', state.cartList)
