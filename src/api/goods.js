@@ -27,3 +27,8 @@ export const cartEdit = (params) => {
 export const editCheckAll = (params) => {
   return http.fetchPost('/users/editCheckAll', params)
 }
+// 删除整条购物车
+export const cartDel = (params) => {
+  return http.fetchPost('/users/cartDel', params)
+}
+

@@ -5,7 +5,8 @@ import {
   RECORD_USERINFO,
   ADD_ANIMATION,
   SHOW_CART,
-  REDUCE_CART
+  REDUCE_CART,
+  EDIT_CART
 } from './mutation-types'
 import {setStore, getStore} from '../utils/storage'
 export default {
@@ -80,6 +81,19 @@ export default {
         } else {
           cart.splice(i, 1)
         }
+      }
+    })
+    state.cartList = cart
+    // 存入localStorage
+    setStore('buyCart', state.cartList)
+  },
+  // 修改购物车
+  [EDIT_CART] (state, {productId, productNum, checked}) {
+    let cart = state.cartList
+    cart.forEach((item, i) => {
+      if (item.productId === productId) {
+        item.productNum = productNum
+        item.checked = checked
       }
     })
     state.cartList = cart

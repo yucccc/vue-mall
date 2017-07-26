@@ -15,7 +15,7 @@
             </li>
             <li>
               <div class="input invalid">
-                <span>密码3</span>
+                <span>密码</span>
                 <input type="text" v-model="ruleForm.userPwd">
               </div>
             </li>
@@ -44,8 +44,8 @@
       return {
         cart: [],
         ruleForm: {
-          userName: '',
-          userPwd: ''
+          userName: 'admin',
+          userPwd: 'admin'
         }
       }
     },
@@ -62,7 +62,7 @@
       login_addCart () {
         let cartArr = []
         let locaCart = JSON.parse(getStore('buyCart'))
-        if (locaCart.length) {
+        if (locaCart && locaCart.length) {
           locaCart.forEach(item => {
             cartArr.push({
               'productId': item.productId,
@@ -85,12 +85,12 @@
                 if (res.status === '1') {
                   removeStore('buyCart')
                 }
-              }).then(this.$router.go(-1))
+              })
             }
           } else {
             console.log(res.msg)
           }
-        })
+        }).then(this.$router.go(-1))
       }
     },
     mounted () {

@@ -3,7 +3,8 @@
     <div class="w">
       <div class="shuffling">
         <div class="banner w">
-          <div class="bg" @mouseover="bannerT($refs.bg)" ref="bg">
+          <!--@mouseover="bannerT($refs.bg)"-->
+          <div class="bg" ref="bg">
             <span class="img a"></span>
             <span class="text b">以傲慢与偏执<br/>回敬傲慢与偏见</span>
             <span class="copyright c">code by qingjin.me | picture from t.tt</span>
@@ -26,7 +27,6 @@
     methods: {
       _getBanner () {
         getBanner().then(res => {
-          console.log(res)
           this.banner = res.result
         })
       },

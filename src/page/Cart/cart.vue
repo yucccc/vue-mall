@@ -37,7 +37,7 @@
                     </div>
                     <!--删除按钮-->
                     <div class="operation">
-                      <a class="items-delete-btn"></a>
+                      <a class="items-delete-btn" @click="cartdel(item.productId)"></a>
                     </div>
                     <!--商品数量-->
                     <div>
@@ -46,16 +46,18 @@
                       <!--数量-->
                       <div class="item-cols-num">
                         <div class="select">
-                          <span class="down" :class="{'down-disabled':item.productNum<2}">-</span>
+                          <span class="down" @click="editCart('down',item)"
+                                :class="{'down-disabled':item.productNum<2}">-</span>
                           <span class="num">
-                            <input type="text" v-model="item.productNum" maxlength="2">
-                          <ul>
-                            <li>1</li>
-                            <li>2</li>
-                            </ul>
+                            <input type="text" :class="{show:show}" v-model="item.productNum" maxlength="2">
+                          <ul ref="ul">
+                            <li>{{item.productNum - 1}}</li>
+                            <li>{{item.productNum}}</li>
+                            <li>{{item.productNum + 1}}</li>
+                          </ul>
                         </span>
-
-                          <span class="up">+</span>
+                          <span class="up" :class="{'up-disabled':item.productNum>9}"
+                                @click="editCart('up',item)">+</span>
                         </div>
                       </div>
                       <!--价格-->
@@ -100,34 +102,33 @@
   </div>
 </template>
 <script>
-  import {getCartList, cartEdit, editCheckAll} from '/api/goods'
-  //  import {setStore} from '/utils/storage'
-  import {mapMutations} from 'vuex'
+  import {getCartList, cartEdit, editCheckAll, cartDel} from '/api/goods'
+  import {setStore} from '/utils/storage'
+  import {mapMutations, mapState} from 'vuex'
   import YButton from '/components/YButton'
   export default {
     data () {
       return {
-        cartList: []
+//        cartList: [],
+        show: true,
+        jj: ''
       }
     },
     computed: {
+      ...mapState(
+        ['cartList']
+      ),
+      // 是否全选
       checkAllFlag () {
         return this.checkedCount === this.cartList.length
       },
+      // 勾选的数量
       checkedCount () {
         var i = 0
         this.cartList && this.cartList.forEach((item) => {
           if (item.checked === '1') i++
         })
         return i
-      },
-      // 计算总价格
-      totalPrice () {
-        var totalPrice = 0
-        this.cartList && this.cartList.forEach(item => {
-          totalPrice += (item.productNum * item.productPrice)
-        })
-        return totalPrice
       },
       // 计算总数量
       totalNum () {
@@ -137,6 +138,7 @@
         })
         return totalNum
       },
+      // 选中的总价格
       checkPrice () {
         var totalPrice = 0
         this.cartList && this.cartList.forEach(item => {
@@ -146,6 +148,7 @@
         })
         return totalPrice
       },
+      // 选中的商品数量
       checkNum () {
         var checkNum = 0
         this.cartList && this.cartList.forEach(item => {
@@ -158,31 +161,110 @@
     },
     methods: {
       ...mapMutations([
-        'INIT_BUYCART'
+        'INIT_BUYCART', 'EDIT_CART'
       ]),
       // 获取一次购物车商品
       _getCartList () {
         getCartList().then(res => {
           if (res.status === '1') {
-            this.cartList = res.result
+            setStore('buyCart', res.result)
+//            this.cartList = res.result
           }
         })
       },
+      // 全选
       editCheckAll () {
         let checkAll = !this.checkAllFlag
         editCheckAll({checkAll: checkAll}).then(res => {
           this._getCartList()
         })
       },
+      // 修改购物车
+      _cartEdit (productId, productNum, checked, dn) {
+        cartEdit(
+          {
+            productId,
+            productNum,
+            checked
+          }
+        ).then(res => {
+          if (res.status === '0') {
+            // 如果成功了
+            dn && this.ani(productId, productNum, checked)
+          }
+        })
+      },
+      // 修改购物车
       editCart (type, item) {
-        if (type === 'check') {
-          cartEdit({productId: item.productId, productNum: item.productNum, checked: item.checked === '1' ? '0' : '1'})
+        if (type && item) {
+          let checked = item.checked
+          let productId = item.productId
+          let productNum = item.productNum
+          // 勾选
+          if (type === 'check') {
+            let newChecked = checked === '1' ? '0' : '1'
+            this._cartEdit(productId, productNum, newChecked)
+          } else if (type === 'up' || type === 'down') { // 加减
+            let dn = true
+            if (type === 'up' && productNum < 10) {
+              this.jj = '-'
+              this._cartEdit(productId, ++productNum, checked, dn)
+            } else if (type === 'down' && productNum > 1) {
+              this.jj = ''
+              this._cartEdit(productId, --productNum, checked, dn)
+            } else {
+              return false
+            }
+          }
+        } else {
+          console.log('缺少所需参数')
         }
-        this._getCartList()
+      },
+      ani (productId, productNum, checked) {
+        console.log('开始')
+        this.show = false
+        let ul = this.$refs.ul[0]
+        let ulStyle = ul.style
+        ulStyle.zIndex = '11'
+        ulStyle.transition = 'all .2s ease-out'
+        ulStyle.transform = `translateY(${this.jj}18px)`
+        ul.addEventListener('transitionend', () => {
+          this.show = true
+          ulStyle.zIndex = '1'
+          ulStyle.transition = 'all 0s'
+          ulStyle.transform = 'translateY(0)'
+          this.EDIT_CART(
+            {
+              productId,
+              checked,
+              productNum
+            }
+          )
+        })
+        ul.addEventListener('webkitAnimationEnd', () => {
+          this.show = true
+          ulStyle.transition = 'all 0s'
+          ulStyle.transform = 'translateY(0)'
+          ulStyle.zIndex = '1'
+          this.EDIT_CART(
+            {
+              productId,
+              checked,
+              productNum
+            }
+          )
+        })
+      },
+      // 删除整条购物车
+      cartdel (id) {
+        cartDel({productId: id}).then(res => {
+          this._getCartList()
+        })
       }
     },
     created () {
       this._getCartList()
+      this.INIT_BUYCART()
     },
     mounted () {
     },
@@ -192,17 +274,45 @@
   }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
+  .ui-cart .select {
+    input {
+      z-index: 10;
+      width: 36px;
+      height: 18px;
+      background-color: #fff;
+      border: none;
+      border-radius: 3px;
+      text-align: center;
+      line-height: 18px;
+      font-size: 14px;
+      padding: 0;
+      color: #666;
+      display: none;
+      position: relative;
+    }
+    ul {
+      transition: translate .2s ease-out;
+      padding: 0;
+      line-height: 18px;
+      font-size: 14px;
+      display: inline-block;
+      position: absolute;
+      left: 0;
+      top: -18px;
+      list-style: none;
+      width: 36px;
+      font-family: system-ui;
+      li {
+      }
+    }
+    .up.up-disabled, .up.up-disabled:hover {
+      background-position: 0 -240px !important;
+      cursor: not-allowed !important;
+    }
+  }
 
-  .ui-cart .select input {
-    width: 36px;
-    height: 18px;
-    background-color: transparent;
-    border: none;
-    border-radius: 3px;
-    text-align: center;
-    line-height: 18px;
-    font-size: 14px;
-    padding: 0;
+  .show {
+    display: block !important;
   }
 
   .store-content {
@@ -359,6 +469,7 @@
             line-height: 18px;
             text-align: center;
             font-size: 14px;
+            transition: all .2s ease-out;
           }
           .up {
             float: right;
