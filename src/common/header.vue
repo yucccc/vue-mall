@@ -20,7 +20,7 @@
             </div>
             <div class="nav-aside" ref="aside" :class="{fixed:st}">
               <div class="user pr">
-                <router-link :to="login? 'user' :'login'">个人中心</router-link>
+                <router-link to="user">个人中心</router-link>
                 <!--用户信息显示-->
                 <div class="nav-user-wrapper pa" v-if="login">
                   <div class="nav-user-list">
@@ -56,7 +56,7 @@
               </div>
               <div class="shop pr" @mouseover="cartShowState(true)" @mouseout="cartShowState(false)"
                    ref="positionMsg">
-                <router-link :to="login?'cart':'login'"></router-link>
+                <router-link to="cart"></router-link>
                 <span class="cart-num"><i
                   :class="{no:totalNum <= 0,move_in_cart:receiveInCart}">{{totalNum}}</i></span>
                 <!--购物车显示块-->
@@ -125,10 +125,10 @@
 </template>
 <script>
   import YButton from '/components/YButton'
-  import {mapMutations, mapState} from 'vuex'
-  import {getCartList, delCart} from '/api/goods'
-  import {userInfo, loginOut} from '/api/index'
-  import {setStore, removeStore} from '/utils/storage'
+  import { mapMutations, mapState } from 'vuex'
+  import { getCartList, delCart } from '/api/goods'
+  import { loginOut } from '/api/index'
+  import { setStore, removeStore } from '/utils/storage'
   export default{
     data () {
       return {
@@ -144,7 +144,7 @@
     },
     computed: {
       ...mapState([
-        'cartList', 'login', 'receiveInCart', 'showCart'
+        'cartList', 'login', 'receiveInCart', 'showCart', 'userInfo'
       ]),
       // 计算价格
       totalPrice () {
@@ -189,11 +189,11 @@
         }
       },
       toCart () {
-        if (this.login) {
-          this.$router.push({path: 'cart'})
-        } else {
-          this.$router.push({path: 'login'})
-        }
+//        if (this.login) {
+        this.$router.push({path: 'cart'})
+//        } else {
+//          this.$router.push({path: 'login'})
+//        }
       },
       // 控制顶部
       navFixed () {
@@ -217,18 +217,12 @@
       }
     },
     mounted () {
-      userInfo().then(res => {
-        if (res.status === '1') {
-          this.user = res.result
-          this.RECORD_USERINFO({info: res.result})
-        }
-      }).then(() => {
-        if (this.login) {
-          this._getCartList()
-        } else {
-          this.INIT_BUYCART()
-        }
-      })
+      if (this.login) {
+        this.user = this.userInfo.info
+        this._getCartList()
+      } else {
+        this.INIT_BUYCART()
+      }
       this.navFixed()
       window.addEventListener('scroll', this.navFixed)
       window.addEventListener('resize', this.navFixed)

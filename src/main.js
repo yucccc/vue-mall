@@ -5,6 +5,7 @@ import store from './store/'
 import VueLazyload from 'vue-lazyload'
 import infiniteScroll from 'vue-infinite-scroll'
 import VueCookie from 'vue-cookie'
+import { userInfo } from './api'
 Vue.use(infiniteScroll)
 Vue.use(VueCookie)
 Vue.use(VueLazyload, {
@@ -14,10 +15,25 @@ Vue.use(VueLazyload, {
   // attempt: 1
 })
 Vue.config.productionTip = false
-// 不需要登陆的页面
-// const whiteList = ['/home', '/goods']
+const whiteList = ['/home', '/goods', '/login'] // 不需要登陆的页面
 router.beforeEach(function (to, from, next) {
-  next()
+  userInfo().then(res => {
+    console.log(res)
+    if (res.status === '1') { // 没登录
+      console.log('没登录')
+      if (whiteList.indexOf(to.path) !== -1) { // 白名单
+        next()
+      } else {
+        next('/login')
+      }
+    } else {
+      store.commit('RECORD_USERINFO', {info: res.result})
+      if (to.path === '/login') { //  跳转到
+        next({path: '/'})
+      }
+      next()
+    }
+  })
 })
 /* eslint-disable no-new */
 new Vue({

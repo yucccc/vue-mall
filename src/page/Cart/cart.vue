@@ -4,7 +4,7 @@
       <div class="gray-box">
         <div class="title"><h2>购物清单</h2></div>
         <!--内容-->
-        <div class="box-inner ui-cart">
+        <div class="ui-cart">
           <div>
             <!--标题-->
             <div class="cart-table-title">
@@ -69,6 +69,7 @@
             </div>
           </div>
         </div>
+
         <div class="cart-bottom-bg fix-bottom">
           <div class="fix-bottom-inner">
             <div class="cart-bar-operation">
@@ -93,7 +94,7 @@
               </div>
               <y-button :classStyle="checkNum > 0?'main-btn':'disabled-btn'" class="big-main-btn"
                         style="margin: 0;width: 130px;height: 50px;line-height: 50px;font-size: 16px"
-                        text="现在结算"></y-button>
+                        text="现在结算" @btnClick="checkout"></y-button>
             </div>
           </div>
         </div>
@@ -268,6 +269,9 @@
         cartDel({productId}).then(res => {
           this.EDIT_CART({productId})
         })
+      },
+      checkout () {
+        this.$router.push({path: 'checkout'})
       }
     },
     created () {
