@@ -1,10 +1,21 @@
 <template>
   <div class="checkout">
     <div class="w" style="padding-top: 40px;">
+      <!-- 收货地址 -->
       <y-shelf title="收货信息">
-
+      <div slot="content">
+        <ul class="address-item-list clearfix">
+          <li class="add-address-item"></li>
+          <li class="add-address-item"></li>
+          <li class="add-address-item"></li>
+          <li class="add-address-item">
+            <img src="../../../static/svg/jia.svg" alt="">
+            <p>使用新地址</p>
+          </li>
+        </ul>
+      </div>
       </y-shelf>
-
+      <!-- 购物清单 -->
       <y-shelf title="购物清单">
         <div slot="content">
           <div class="box-inner ui-cart">
@@ -17,7 +28,7 @@
                 <span class="price">单价</span>
               </div>
               <!--列表-->
-              <div class="cart-table" v-for="(item,i) in cartList" :key="i">
+              <div class="cart-table" v-for="(item,i) in cartList" :key="i" v-if="item.checked === '1'">
                 <div class="cart-group divide pr" :data-productid="item.productId">
                   <div class="cart-top-items">
                     <div class="cart-items clearfix">
@@ -55,12 +66,13 @@
                 </div>
               </div>
             </div>
+            <!-- 合计 -->
             <div class="cart-bottom-bg fix-bottom">
               <div class="fix-bottom-inner">
                 <div class="shipping">
                   <div class="shipping-box" style="padding: 0 40px;">
                     <div class="shipping-total shipping-price"><h4
-                      class="highlight">应付总额：<em>￥11</em>
+                      class="highlight">应付总额：<em>￥{{checkPrice}}</em>
                     </h4>
                     </div>
                   </div>
@@ -68,7 +80,7 @@
                             classStyle="main-btn"
                             style="margin: 0;width: 130px;height: 50px;line-height: 50px;font-size: 16px"
                             text="提交订单"
-                            @btnClick="">
+                            @btnClick="payment">
                   </y-button>
                 </div>
               </div>
@@ -76,17 +88,31 @@
           </div>
         </div>
       </y-shelf>
+      <y-popup></y-popup>
     </div>
   </div>
 </template>
 <script>
-  import YShelf from '/components/shelf'
   import { getCartList } from '/api/goods'
+  import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
+  import YPopup from '/components/popup'
   export default {
     data () {
       return {
         cartList: []
+      }
+    },
+    computed: {
+      // 选中的总价格
+      checkPrice () {
+        var totalPrice = 0
+        this.cartList && this.cartList.forEach(item => {
+          if (item.checked === '1') {
+            totalPrice += (item.productNum * item.productPrice)
+          }
+        })
+        return totalPrice
       }
     },
     methods: {
@@ -94,6 +120,10 @@
         getCartList().then(res => {
           this.cartList = res.result
         })
+      },
+      // 付款
+      payment () {
+
       }
     },
     created () {
@@ -101,13 +131,56 @@
     },
     components: {
       YShelf,
-      YButton
+      YButton,
+      YPopup
     }
   }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
+  // 收货地址
+  .address-item-list{
+    padding: 30px 13px 0;
+    li {
+    position: relative;
+    overflow: hidden;
+    float: left;
+    width: 276px;
+    height: 158px;
+    margin: 0 0 30px 16px;
+    border: 1px solid #E5E5E5;
+    border-radius: 3px;
+    background: #FAFAFA;
+    line-height: 14px;
+    text-align: left;
+    word-wrap: break-word;
+    word-break: normal;
+    color: #626262;
+    cursor: pointer;
+    -moz-user-select: -moz-none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    &:hover{
+    background: #F2F2F2;
+    }
+    &.add-address-item{
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+        p{
+          margin-top: 5px;
+        }
+    }
+}
+  }
   .ui-cart {
-    /*padding-bottom: 91px;*/
+    img {
+    width: 80px;
+    height: 80px;
+  }
+
     .cart-table-title {
       position: relative;
       z-index: 1;
@@ -138,37 +211,10 @@
       position: relative;
       height: 140px;
       margin-left: 74px;
-      /*删除*/
-      .operation {
-        padding: 58px 0 0;
-        font-size: 12px;
-        line-height: 24px;
-        .items-delete-btn {
-          background-image: url(../../../static/images/delete-btn-icon_a35bf2437e@2x.jpg);
-          &:hover {
-            background-position: 0 -36px;
-          }
-        }
-        .items-delete-btn {
-          display: block;
-          width: 24px;
-          height: 24px;
-          margin: 0 auto;
-          color: #C2C2C2;
-          background: url(../../../static/images/delete-btn-icon_a35bf2437e@2x.jpg);
-          -webkit-background-size: 100% auto;
-          background-size: 100% auto;
-          -moz-transition: none;
-          -webkit-transition: none;
-          -o-transition: none;
-          transition: none;
-        }
-      }
       .subtotal {
         font-weight: 700;
       }
       .item-cols-num,
-      .operation,
       .price,
       .subtotal {
         overflow: hidden;
@@ -199,7 +245,6 @@
         .num {
           position: relative;
           overflow: hidden;
-          float: left;
           display: inline-block;
           width: 36px;
           height: 18px;
@@ -243,11 +288,7 @@
     height: 80px;
   }
 
-  img {
-    width: 80px;
-    height: 80px;
-  }
-
+  
   .cart-items .items-thumb > a, .ui-cart .cart-items .items-thumb > i {
     position: absolute;
     left: 0;

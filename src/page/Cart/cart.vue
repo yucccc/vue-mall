@@ -314,8 +314,6 @@
       list-style: none;
       width: 36px;
       font-family: system-ui;
-      li {
-      }
     }
     .up.up-disabled, .up.up-disabled:hover {
       background-position: 0 -240px !important;
@@ -453,7 +451,6 @@
             background: url(../../../static/images/cart-updown_8303731e15@2x.jpg) no-repeat;
             overflow: hidden;
             float: left;
-            display: inline-block;
             width: 34px;
             height: 37px;
             margin-right: 5px;
@@ -472,7 +469,6 @@
             position: relative;
             overflow: hidden;
             float: left;
-            display: inline-block;
             width: 36px;
             height: 18px;
             margin: 7px 0 0;
@@ -611,6 +607,7 @@
       -moz-user-select: none;
       -webkit-user-select: none;
       -ms-user-select: none;
+      user-select: none;
       vertical-align: middle;
     }
 
@@ -623,7 +620,6 @@
       color: #bbb;
     }
     .shipping {
-      display: inline-block;
       float: right;
       padding: 20px 30px;
     }
