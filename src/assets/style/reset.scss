@@ -52,3 +52,15 @@ input[type="search"],
 input[type="reset"] {
   -webkit-appearance: none;
 }
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #BEBEBE;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #BEBEBE;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #BEBEBE;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    #BEBEBE;
+}

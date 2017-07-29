@@ -31,4 +31,11 @@ export const editCheckAll = (params) => {
 export const cartDel = (params) => {
   return http.fetchPost('/users/cartDel', params)
 }
-
+// 获取用户地址
+export const addressList = (params) => {
+  return http.fetchPost('/users/addressList', params)
+}
+// 修改收货地址
+export const addressUpdate = (params) => {
+  return http.fetchPost('/users/addressUpdate', params)
+}
