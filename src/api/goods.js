@@ -48,6 +48,10 @@ export const addressDel = (params) => {
   return http.fetchPost('/users/addressDel', params)
 }
 // 支付
-export const pay = (params) => {
-  return http.fetchPost('/users/pay', params)
+export const payMent = (params) => {
+  return http.fetchPost('/users/payMent', params)
+}
+// 订单
+export const orderList = (params) => {
+  return http.fetchPost('/users/orderList', params)
 }

@@ -25,7 +25,9 @@
               <em><span>¥</span>{{checkPrice}}</em>
               <y-button text="立刻支付"
                         classStyle="main-btn"
-                        style="width: 120px;height: 40px;font-size: 16px;line-height: 38px"></y-button>
+                        style="width: 120px;height: 40px;font-size: 16px;line-height: 38px"
+                        @btnClick="paySuc()"
+              ></y-button>
             </div>
           </div>
         </div>
@@ -73,13 +75,14 @@
 <script>
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
-  import { addressList, getCartList } from '/api/goods'
+  import { addressList, getCartList, payMent } from '/api/goods'
   export default {
     data () {
       return {
         payType: 1,
         addList: {},
-        cartList: []
+        cartList: [],
+        addressId: 0
       }
     },
     computed: {
@@ -104,12 +107,21 @@
         addressList(params).then(res => {
           this.addList = res.result
         })
+      },
+      paySuc () {
+        payMent({addressId: this.addressId, orderTotal: this.checkPrice}).then(res => {
+          if (res.status === '0') {
+            this.$router.push({path: '/order/paysuc'})
+          } else {
+            alert('支付失败')
+          }
+        })
       }
     },
     created () {
-      let addressId = this.$route.query.addressId
-      if (addressId) {
-        this._addressList({addressId})
+      this.addressId = this.$route.query.addressId
+      if (this.addressId) {
+        this._addressList({addressId: this.addressId})
         this._getCartList()
       } else {
         this.$router.push({path: '/'})

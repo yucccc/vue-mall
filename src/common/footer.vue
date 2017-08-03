@@ -1,18 +1,19 @@
 <template>
-  <div class="foorter">
+  <div class="footer">
     <div class="tag">
       <a href="javascript:;">简体</a>
       <a href="javascript:;">繁体</a>
       <a href="javascript:;">English</a>
       <a href="javascript:;">常见问题</a></div>
-    <div class="cop"><p>Copyright © 2004-2017  京东JD.com 版权所有</p></div>
+    <div class="cop"><p>Copyright © 2004-2017  xx.com 版权所有</p></div>
 
   </div>
 </template>
 <style lang="scss" rel="stylesheet/scss" scoped>
-  .foorter{
-    padding:20px 0 10px;
+  .footer {
+    padding: 50px 0 20px;
   }
+
   .tag {
     display: flex;
     justify-content: center;
