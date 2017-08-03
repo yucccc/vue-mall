@@ -9,21 +9,19 @@
           <ul class="common-form">
             <li class="username border-1p">
               <div class="input invalid">
-                <span>账号</span>
-                <input type="text" v-model="ruleForm.userName">
+                <input type="text" v-model="ruleForm.userName" placeholder="账号">
               </div>
             </li>
             <li>
               <div class="input invalid">
-                <span>密码</span>
-                <input type="text" v-model="ruleForm.userPwd">
+                <input type="text" v-model="ruleForm.userPwd" placeholder="密码">
               </div>
             </li>
           </ul>
           <!--登陆-->
           <div>
             <y-button text="登陆" classStyle="main-btn" @btnClick="login"
-                      style="margin: 0;width: 100%;height: 48px;font-size: 18px;"></y-button>
+                      style="margin: 0;width: 100%;height: 48px;font-size: 18px;line-height: 48px"></y-button>
           </div>
           <!--</form>-->
         </div>
@@ -35,10 +33,10 @@
 <script>
   import YFooter from '/common/footer'
   import YButton from '/components/YButton'
-  import {userLogin} from '/api/index.js'
-  import {mapMutations} from 'vuex'
-  import {addCart1} from '/api/goods.js'
-  import {getStore, removeStore} from '/utils/storage.js'
+  import { userLogin } from '/api/index.js'
+  import { mapMutations } from 'vuex'
+  import { addCart1 } from '/api/goods.js'
+  import { getStore, removeStore } from '/utils/storage.js'
   export default {
     data () {
       return {
@@ -87,8 +85,6 @@
                 }
               })
             }
-          } else {
-            console.log(res.msg)
           }
         }).then(this.$router.go(-1))
       }
@@ -110,6 +106,20 @@
   .login {
     overflow-x: hidden;
     overflow-y: hidden;
+    .input {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      input {
+        font-size: 16px;
+        width: 100%;
+        height: 100%;
+        padding: 10px 15px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+    }
     .wrapper {
       background-image: url(/static/images/bg_9b9dcb65ff.png);
       background-image: -webkit-image-set(url(/static/images/bg_9b9dcb65ff.png) 1x, url(/static/images/bg_9b9dcb65ff@2x.png) 2x);

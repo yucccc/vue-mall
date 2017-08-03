@@ -39,3 +39,15 @@ export const addressList = (params) => {
 export const addressUpdate = (params) => {
   return http.fetchPost('/users/addressUpdate', params)
 }
+// 添加收货地址
+export const addressAdd = (params) => {
+  return http.fetchPost('/users/addressAdd', params)
+}
+// 删除收货地址
+export const addressDel = (params) => {
+  return http.fetchPost('/users/addressDel', params)
+}
+// 支付
+export const pay = (params) => {
+  return http.fetchPost('/users/pay', params)
+}

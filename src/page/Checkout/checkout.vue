@@ -9,7 +9,7 @@
                 :key="i"
                 class="address pr"
                 :class="{checked:addressId === item.addressId}"
-                @click="defaultAddress($event.target,item.addressId)">
+                @click="defaultAddress(item.addressId)">
            <span v-if="addressId === item.addressId" class="pa">
              <svg viewBox="0 0 1473 1024" width="17.34375" height="12">
              <path
@@ -23,7 +23,7 @@
               <p>手机号码: {{item.tel}}</p>
               <div class="operation-section">
                 <span class="update-btn" @click="update(item)">修改</span>
-                <span class="delete-btn" data-id="item.addressId">删除</span>
+                <span class="delete-btn" :data-id="item.addressId" @click="del(item.addressId)">删除</span>
               </div>
             </li>
 
@@ -122,15 +122,18 @@
           <div>
             <span><input type="checkbox" v-model="msg.isDefault" style="margin-right: 5px;">设为默认</span>
           </div>
-          <y-button text='保存' class="btn" :classStyle="btnHighlight?'main-btn':'disabled-btn'"
-                    @btnClick="save({addressId:msg.addressId,userName:msg.userName,tel:msg.tel,streetName:msg.streetName,isDefault:msg.isDefault})"></y-button>
+          <y-button text='保存'
+                    class="btn"
+                    :classStyle="btnHighlight?'main-btn':'disabled-btn'"
+                    @btnClick="save({addressId:msg.addressId,userName:msg.userName,tel:msg.tel,streetName:msg.streetName,isDefault:msg.isDefault})">
+          </y-button>
         </div>
       </y-popup>
     </div>
   </div>
 </template>
 <script>
-  import { getCartList, addressList, addressUpdate } from '/api/goods'
+  import { getCartList, addressList, addressUpdate, addressAdd, addressDel } from '/api/goods'
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
   import YPopup from '/components/popup'
@@ -184,12 +187,23 @@
           this._addressList()
         })
       },
+      _addressAdd (params) {
+        addressAdd(params).then(res => {
+          this._addressList()
+        })
+      },
+      _addressDel (params) {
+        addressDel(params).then(res => {
+          this._addressList()
+        })
+      },
       // 付款
       payment () {
-
+        // 需要拿到地址id
+        this.$router.push({path: '/order/payment', query: {'addressId': this.addressId}})
       },
-      // 选择默认地址
-      defaultAddress (e, id) {
+      // 选择地址
+      defaultAddress (id) {
         this.addressId = id
       },
       // 修改
@@ -213,8 +227,17 @@
       },
       // 保存
       save (p) {
-        this._addressUpdate(p)
+        if (p.addressId) {
+          this._addressUpdate(p)
+        } else {
+          delete p.addressId
+          this._addressAdd(p)
+        }
         this.popupOpen = false
+      },
+      // 删除
+      del (addressId) {
+        this._addressDel({addressId})
       }
     },
     created () {
@@ -245,6 +268,9 @@
       .pa {
         right: 15px;
         top: 18px;
+      }
+      &:hover {
+        background: #fff;
       }
     }
     li {

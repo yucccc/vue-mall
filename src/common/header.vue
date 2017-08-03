@@ -112,8 +112,11 @@
         <div class="nav-sub-wrapper" :class="{fixed:st}">
           <div class="w">
             <ul class="nav-list">
-              <li v-for="(item,i) in 10" :key="i">
+              <li>
                 <router-link to="/">首页</router-link>
+              </li>
+              <li>
+                <router-link to="/">全部商品</router-link>
               </li>
             </ul>
             <div></div>

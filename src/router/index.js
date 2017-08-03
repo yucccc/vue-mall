@@ -10,6 +10,7 @@ const Cart = resolve => require(['/page/Cart/cart'], resolve)
 const order = resolve => require(['/page/Order/order'], resolve)
 const user = resolve => require(['/page/User/user'], resolve)
 const checkout = resolve => require(['/page/Checkout/checkout'], resolve)
+const payment = resolve => require(['/page/Order/payment'], resolve)
 Vue.use(Router)
 export default new Router({
   routes: [
@@ -28,6 +29,7 @@ export default new Router({
     {path: '/perDetails', name: 'perDetails', component: PerDetails},
     {path: '/cart', name: 'cart', component: Cart},
     {path: '/order', name: 'order', component: order},
+    {path: '/order/payment', name: 'payment', component: payment},
     {path: '/user', name: 'user', component: user},
     {path: '/checkout', name: 'checkout', component: checkout},
     {path: '*', redirect: '/home'}
