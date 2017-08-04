@@ -99,7 +99,9 @@
                         </h6>
                       </div>
                     </div>
-                    <div v-show="!totalNum" style="height: 100px;text-align: center">没有商品</div>
+                    <div v-show="!totalNum" style="height: 313px;text-align: center" class="cart-con">
+                      <p>你的购物车竟然是空的!</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -107,22 +109,25 @@
           </div>
         </div>
       </header>
-      <div class="nav-sub" :class="{fixed:st}">
-        <div class="nav-sub-bg"></div>
-        <div class="nav-sub-wrapper" :class="{fixed:st}">
-          <div class="w">
-            <ul class="nav-list">
-              <li>
-                <router-link to="/">首页</router-link>
-              </li>
-              <li>
-                <router-link to="/">全部商品</router-link>
-              </li>
-            </ul>
-            <div></div>
+      <slot name="nav">
+        <div class="nav-sub" :class="{fixed:st}">
+          <div class="nav-sub-bg"></div>
+          <div class="nav-sub-wrapper" :class="{fixed:st}">
+            <div class="w">
+              <ul class="nav-list">
+                <li>
+                  <router-link to="/">首页</router-link>
+                </li>
+                <li>
+                  <router-link to="/">全部商品</router-link>
+                </li>
+              </ul>
+              <div></div>
+            </div>
           </div>
         </div>
-      </div>
+      </slot>
+
     </div>
   </div>
 </template>
@@ -877,6 +882,30 @@
     .nav-sub .nav-sub-wrapper:after {
       display: block;
     }
+  }
+
+  .cart-con {
+    /*display: flex;*/
+    text-align: center;
+    position: relative;
+    p {
+      padding-top: 185px;
+      color: #333333;
+      font-size: 16px;
+    }
+  }
+
+  .cart-con:before {
+    position: absolute;
+    content: ' ';
+    left: 50%;
+    transform: translate(-50%, -70%);
+    top: 50%;
+    width: 76px;
+    height: 62px;
+    background: url("/static/images/cart-empty-new.png") no-repeat;
+    background-size: cover;
+
   }
 </style>
 

@@ -11,7 +11,7 @@ const order = resolve => require(['/page/Order/order'], resolve)
 const user = resolve => require(['/page/User/user'], resolve)
 const checkout = resolve => require(['/page/Checkout/checkout'], resolve)
 const payment = resolve => require(['/page/Order/payment'], resolve)
-const paysuc = resolve => require(['/page/Order/paysuccess'], resolve)
+const paysuccess = resolve => require(['/page/Order/paysuccess'], resolve)
 Vue.use(Router)
 export default new Router({
   routes: [
@@ -29,9 +29,15 @@ export default new Router({
     {path: '/goodsDetails/:productId', name: 'goodsDetails', component: goodsDetails},
     {path: '/perDetails', name: 'perDetails', component: PerDetails},
     {path: '/cart', name: 'cart', component: Cart},
-    {path: '/order', name: 'order', component: order},
-    {path: '/order/payment', name: 'payment', component: payment},
-    {path: '/order/paysuc', name: 'paysuc', component: paysuc},
+    {
+      path: '/order',
+      name: 'order',
+      component: order,
+      children: [
+        {path: 'paysuccess', name: 'paysuccess', component: paysuccess},
+        {path: 'payment', name: 'payment', component: payment}
+      ]
+    },
     {path: '/user', name: 'user', component: user},
     {path: '/checkout', name: 'checkout', component: checkout},
     {path: '*', redirect: '/home'}

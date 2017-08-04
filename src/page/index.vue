@@ -7,7 +7,6 @@
 </template>
 <script>
   import YHeader from '/common/header'
-  //  import YSearch from '/components/search'
   import YFooter from '/common/footer'
   export default {
     data () {
@@ -18,7 +17,6 @@
     components: {
       YHeader,
       YFooter
-//      YSearch
     }
   }
 </script>

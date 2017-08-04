@@ -111,7 +111,7 @@
       paySuc () {
         payMent({addressId: this.addressId, orderTotal: this.checkPrice}).then(res => {
           if (res.status === '0') {
-            this.$router.push({path: '/order/paysuc'})
+            this.$router.push({path: '/order/paysuccess', query: {price: this.checkPrice}})
           } else {
             alert('支付失败')
           }
