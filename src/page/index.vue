@@ -1,7 +1,7 @@
 <template>
   <div>
     <y-header></y-header>
-    <router-view></router-view>
+    <router-view class="main"></router-view>
     <y-footer></y-footer>
   </div>
 </template>
@@ -20,5 +20,11 @@
     }
   }
 </script>
-<!--<style lang="scss" rel="stylesheet/scss" scoped>-->
-<!--</style>-->
+<style lang="scss" rel="stylesheet/scss" scoped>
+  .main {
+    min-height: calc(100vh - 454px);
+    background: #ededed;
+    overflow: hidden;
+    width: 100%;
+  }
+</style>

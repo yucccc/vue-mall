@@ -1,30 +1,30 @@
 <template>
-  <div>
-    <div class="good-item" v-for="(item,i) in msg" :key="i">
-      <div style="padding: 36px 9px 10px">
-        <div class="good-img">
-          <router-link :to="'goodsDetails/productId='+item.productId"><img v-lazy="item.productImageBig" :alt="item.productName">
-          </router-link>
+  <div class="good-item">
+    <div style="">
+      <div class="good-img">
+        <router-link :to="'goodsDetails/productId='+msg.productId">
+          <img v-lazy="msg.productImageBig" :alt="msg.productName">
+        </router-link>
+      </div>
+      <h6 class="good-title">{{msg.productName}}</h6>
+      <h3 class="sub-title ellipsis">{{msg.sub_title}}</h3>
+      <div class="good-price pr">
+        <div class="ds pa">
+          <y-button text="查看详情" @btnClick="goodsDetails(msg.productId)"></y-button>
+          <y-button text="加入购物车"
+                    @btnClick="addCart(msg.productId,msg.salePrice,msg.productName,msg.productImageBig)"
+                    classStyle="main-btn"></y-button>
         </div>
-        <p class="good-title">{{item.productName}}</p>
-        <div class="good-price pr">
-          <div class="ds pa">
-            <y-button text="查看详情" @btnClick="goodsDetails(item.productId)"></y-button>
-            <y-button text="加入购物车"
-                      @btnClick="addCart(item.productId,item.salePrice,item.productName,item.productImageBig)"
-                      classStyle="main-btn"></y-button>
-          </div>
-          <p><span style="font-size: 16px">￥</span>
-            {{item.salePrice}}</p>
-        </div>
+        <p><span style="font-size: 16px">￥</span>
+          {{msg.salePrice}}</p>
       </div>
     </div>
   </div>
 </template>
 <script>
   import YButton from '/components/YButton'
-  import {addCart} from '/api/goods.js'
-  import {mapMutations, mapState} from 'vuex'
+  import { addCart } from '/api/goods.js'
+  import { mapMutations, mapState } from 'vuex'
   export default {
     props: {
       msg: {type: [Object, Array]}
@@ -76,8 +76,9 @@
 
   .good-item {
     background: #fff;
-    width: 236px;
+    width: 25%;
     transition: all .5s;
+    height: 430px;
     &:hover {
       transform: translateY(-3px);
       box-shadow: 1px 1px 20px #999;
@@ -95,11 +96,9 @@
     }
 
     .good-img {
-      width: 220px;
-      display: block;
       img {
-        width: 100%;
-        height: 100%;
+        margin: 50px auto 10px;
+        @include wh(206px);
         display: block;
       }
     }
@@ -112,11 +111,20 @@
       font-size: 20px;
     }
     .good-title {
-
+      line-height: 1.2;
+      font-size: 16px;
+      color: #424242;
+      margin: 0 auto;
+      padding: 0 14px;
       text-align: center;
       overflow: hidden;
-      height: 20px;
-      line-height: 20px;
+    }
+    h3 {
+      text-align: center;
+      line-height: 1.2;
+      font-size: 12px;
+      color: #d0d0d0;
+      padding: 10px;
     }
 
   }

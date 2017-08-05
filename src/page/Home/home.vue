@@ -1,27 +1,50 @@
 <template>
   <div>
-    <div class="w">
-      <div class="shuffling">
-        <div class="banner w">
-          <!--@mouseover="bannerT($refs.bg)"-->
-          <div class="bg" ref="bg">
-            <span class="img a"></span>
-            <span class="text b">以傲慢与偏执<br/>回敬傲慢与偏见</span>
-            <span class="copyright c">code by qingjin.me | picture from t.tt</span>
-          </div>
-        </div>
-      </div>
-      <div>
+    <div class="banner">
+      <div class="bg" ref="bg"
+           @mouseover="bgOver($refs.bg)"
+           @mousemove="bgMove($refs.bg,$event)"
+           @mouseout="bgOut($refs.bg)">
+        <span class="img a"></span>
+        <span class="text b">以傲慢与偏执<br/>回敬傲慢与偏见</span>
+        <span class="copyright c">code by qingjin.me | picture from t.tt</span>
       </div>
     </div>
+
+    <section class="activity-panel w">
+      <ul class="box">
+        <li v-for="(item,i) in activities" :key="i">
+          <img :src="item.image" alt="">
+        </li>
+      </ul>
+    </section>
+
+    <section class="w mt30">
+      <y-shelf title="热门商品">
+        <div slot="content" class="hot">
+          <product :product="item" v-for="(item,i) in hot" :key="i"></product>
+        </div>
+      </y-shelf>
+    </section>
+
   </div>
 </template>
 <script>
-  import {getBanner} from '/api/index.js'
+  import { getBanner, productHome } from '/api/index.js'
+  import YShelf from '/components/shelf'
+  import product from '/components/product'
   export default {
     data () {
       return {
-        banner: {}
+        banner: {},
+        bgOpt: {
+          px: 0,
+          py: 0,
+          w: 0,
+          h: 0
+        },
+        activities: [], // 活动
+        hot: []
       }
     },
     methods: {
@@ -30,46 +53,54 @@
           this.banner = res.result
         })
       },
-      bannerT (e) {
-        var thisPX = e.offsetLeft
-        var thisPY = e.offsetTop
-        var boxWidth = e.offsetWidth
-        var boxHeight = e.offsetHeight
-        e.classList.add('threeD')
-//        var boxHeight = this.outerHeight()
-        var three = document.querySelector('.threeD')
-        three.addEventListener('MouseMove', function (event) {
-          var mouseX = event.pageX - thisPX
-          var mouseY = event.pageY - thisPY
-          var X
-          var Y
-          if (mouseX > boxWidth / 2) {
-            X = mouseX - boxWidth / 2
-          } else {
-            X = mouseX - boxWidth / 2
-          }
-          if (mouseY > boxHeight / 2) {
-            Y = boxHeight / 2 - mouseY
-          } else {
-            Y = boxHeight / 2 - mouseY
-          }
-          three.style.transform = `rotateY(${X / 50}deg) rotateX(${Y / 50}deg)`
-        })
+      bgOver (e) {
+        this.bgOpt.px = e.offsetLeft
+        this.bgOpt.py = e.offsetTop
+        this.bgOpt.w = e.offsetWidth
+        this.bgOpt.h = e.offsetHeight
+      },
+      bgMove (dom, eve) {
+        let bgOpt = this.bgOpt
+        let X, Y
+        let mouseX = eve.pageX - bgOpt.px
+        let mouseY = eve.pageY - bgOpt.py
+        if (mouseX > bgOpt.w / 2) {
+          X = mouseX - (bgOpt.w / 2)
+        } else {
+          X = mouseX - (bgOpt.w / 2)
+        }
+        if (mouseY > bgOpt.h / 2) {
+          Y = bgOpt.h / 2 - mouseY
+        } else {
+          Y = bgOpt.h / 2 - mouseY
+        }
+        dom.style['-webkit-transform'] = `rotateY(${X / 50}deg) rotateX(${Y / 50}deg)`
+        dom.style.transform = `rotateY(${X / 50}deg) rotateX(${Y / 50}deg)`
+      },
+      bgOut (dom) {
+        dom.style['-webkit-transform'] = 'rotateY(0deg) rotateX(0deg)'
+        dom.style.transform = 'rotateY(0deg) rotateX(0deg)'
       }
     },
     mounted () {
       this._getBanner()
+      productHome().then(res => {
+        let data = res.result.data
+        this.activities = data.home_activities
+        this.hot = data.home_hot
+      })
+    },
+    components: {
+      YShelf,
+      product
     }
   }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
   .shuffling {
-    /*width: 60%;*/
-    /*margin: 0 auto;*/
   }
 
-  /*---*/
-  * {
+  .banner, .banner span, .banner div {
     font-family: "Microsoft YaHei";
     transition: all .3s;
     -webkit-transition: all .3s;
@@ -78,27 +109,30 @@
   }
 
   .banner {
-    perspective: 800px;
+    perspective: 3000px;
+    position: relative;
+    z-index: 19;
   }
 
   .bg {
     position: relative;
-    width: 100%;
+    width: 1220px;
     height: 500px;
+    margin: 20px auto;
     background: url("http://static.smartisanos.cn/index/img/store/home/banner-3d-item-1-box-1_61bdc2f4f9.png") center no-repeat;
     background-size: 100% 100%;
     border-radius: 10px;
     transform-style: preserve-3d;
     -webkit-transform-origin: 50% 50%;
-    transform-origin: 50% 50%;
     -webkit-transform: rotateY(0deg) rotateX(0deg);
   }
 
   .img {
+    display: block;
     position: absolute;
     width: 100%;
     height: 100%;
-    bottom: 8px;
+    bottom: 5px;
     left: 0;
     background: url("http://static.smartisanos.cn/index/img/store/home/banner-3d-item-1-box-3_8fa7866d59.png") center no-repeat;
     background-size: 95% 100%;
@@ -126,24 +160,14 @@
 
   .a {
     -webkit-transform: translateZ(40px);
-    transform: translateZ(40px);
   }
 
   .b {
     -webkit-transform: translateZ(20px);
-    transform: translateZ(20px);
   }
 
   .c {
     -webkit-transform: translateZ(0px);
-    transform: translateZ(0px);
-  }
-
-  /*----*/
-  .goods {
-    display: flex;
-    padding: 12px 0;
-    background-color: #fff;
   }
 
   .sk_item {
@@ -198,22 +222,42 @@
     }
   }
 
-  .el-carousel__item a {
-    display: block;
-    margin: 0;
-    height: 100%;
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
+  .box {
+    overflow: hidden;
+    position: relative;
+    z-index: 0;
+    margin-top: 29px;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, .14);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 3px 8px -6px rgba(0, 0, 0, .1);
+
+  }
+
+  ul.box {
+    display: flex;
+    li {
+      flex: 1;
+      img {
+        display: block;
+        width: 305px;
+        height: 200px;
+      }
     }
   }
 
-  .el-carousel__item:nth-child(2n) {
-    background-color: #99a9bf;
+  .mt30 {
+    margin-top: 30px;
+
   }
 
-  .el-carousel__item:nth-child(2n+1) {
-    background-color: #d3dce6;
+  .hot {
+    display: flex;
+    > div {
+      flex: 1;
+      width: 25%;
+    }
   }
+
 </style>

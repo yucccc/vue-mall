@@ -18,7 +18,7 @@
 
     <!--商品-->
     <div class="goods-box w">
-      <mall-goods :msg="computer"></mall-goods>
+      <mall-goods v-for="(item,i) in computer" :key="i" :msg="item"></mall-goods>
     </div>
     <div v-show="!busy" class="w" style="text-align: center;background: #fff" v-infinite-scroll="loadMore"
          infinite-scroll-disabled="busy" infinite-scroll-distance="100">
@@ -33,9 +33,9 @@
   </div>
 </template>
 <script>
-  import {getComputer} from '/api/goods.js'
+  import { getComputer } from '/api/goods.js'
   import mallGoods from '/components/mallGoods'
-  import {mapState, mapMutations} from 'vuex'
+  import { mapState, mapMutations } from 'vuex'
   export default {
     data () {
       return {
@@ -115,15 +115,14 @@
       beforeEnter (el) {
         el.style.transform = `translate3d(0,${this.elTop - this.cartPositionT}px,0)`
         el.children[0].style.transform = `translate3d(${-(this.cartPositionL - this.elLeft)}px,0,0) scale(1.2)`
-        el.style.opacity = 1
+//        el.style.opacity = 1
       },
       afterEnter (el) {
         el.style.transform = `translate3d(0,0,0)`
         el.children[0].style.transform = `translate3d(0,0,0) scale(.3)`
         el.style.transition = 'transform .55s cubic-bezier(.29,.55,.51,1.08)'
         el.children[0].style.transition = 'transform .55s linear'
-        el.style.opacity = 0.3
-//        el.children[0].style.transform = ``
+//        el.style.opacity = 0.3
         // 动画结束
         el.children[0].addEventListener('transitionend', () => {
           this.listenInCart()
@@ -167,6 +166,7 @@
       @extend .bn;
     }
     img {
+      border-radius: 50%;
       width: 100%;
       height: 100%;
       display: block;
@@ -202,11 +202,9 @@
 
   .goods-box {
     > div {
-      @extend %block-center;
-      justify-content: space-between;
-      flex-wrap: wrap;
+      float: left;
+      border: 1px solid #efefef;
     }
-
   }
 
 

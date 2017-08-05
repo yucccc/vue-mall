@@ -15,4 +15,8 @@ export const loginOut = (params) => {
 export const userInfo = (params) => {
   return http.fetchPost('/users/userInfo', params)
 }
+// 首页接口
+export const productHome = (params) => {
+  return http.fetchGet('/goods/productHome', params)
+}
 
