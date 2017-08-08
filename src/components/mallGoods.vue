@@ -2,7 +2,7 @@
   <div class="good-item">
     <div style="">
       <div class="good-img">
-        <router-link :to="'goodsDetails/productId='+msg.productId">
+        <router-link :to="'goodsDetails?productId='+msg.productId">
           <img v-lazy="msg.productImageBig" :alt="msg.productName">
         </router-link>
       </div>
@@ -33,7 +33,7 @@
       return {}
     },
     methods: {
-      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART']),
+      ...mapMutations(['ADD_CART', 'ADD_ANIMATION', 'SHOW_CART']),
       goodsDetails (id) {
         this.$router.push({path: 'goodsDetails/productId=' + id})
       },

@@ -54,7 +54,30 @@
     background-position: -75px -60px;
   }
 }
+
 .layout-container {
   min-height: 400px;
   background: #E6E6E6;
+}
+
+.gray-box {
+  overflow: hidden;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #dcdcdc;
+  border-color: rgba(0, 0, 0, .14);
+  box-shadow: 0 3px 8px -6px rgba(0, 0, 0, .1);
+}
+
+.price {
+  display: block;
+  color: #d44d44;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: right;
+  i {
+    padding-left: 2px;
+    font-size: 24px;
+  }
 }

@@ -197,15 +197,11 @@
         }
       },
       toCart () {
-//        if (this.login) {
         this.$router.push({path: 'cart'})
-//        } else {
-//          this.$router.push({path: 'login'})
-//        }
       },
       // 控制顶部
       navFixed () {
-        if (this.$route.path === '/goods' || this.$route.path === '/home') {
+        if (this.$route.path === '/goods' || this.$route.path === '/home' || this.$route.path === '/goodsDetails') {
           var st = document.body.scrollTop
           st >= 100 ? this.st = true : this.st = false
           let shop = document.querySelector('.shop')

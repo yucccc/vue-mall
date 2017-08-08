@@ -11,11 +11,11 @@ Vue.use(VueCookie)
 Vue.use(VueLazyload, {
   // preLoad: 1.3,
   // error: 'dist/error.png',
-  loading: '/static/images/lazyload@2x.gif'
+  loading: '/static/images/load.gif'
   // attempt: 1
 })
 Vue.config.productionTip = false
-const whiteList = ['/home', '/goods', '/login'] // 不需要登陆的页面
+const whiteList = ['/home', '/goods', '/login', '/goodsDetails'] // 不需要登陆的页面
 router.beforeEach(function (to, from, next) {
   userInfo().then(res => {
     if (res.status === '1') { // 没登录

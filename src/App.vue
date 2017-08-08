@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view ></router-view>
+    <router-view class="main"></router-view>
   </div>
 </template>
 <script>
@@ -10,4 +10,8 @@
 </script>
 <style lang="scss" rel="stylesheet/scss">
   @import "assets/style/index.scss";
+
+  .main {
+    background: #ededed;;
+  }
 </style>

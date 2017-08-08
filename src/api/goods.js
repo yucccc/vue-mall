@@ -55,4 +55,7 @@ export const payMent = (params) => {
 export const orderList = (params) => {
   return http.fetchPost('/users/orderList', params)
 }
-
+// 商品详情
+export const productDet = (params) => {
+  return http.fetchGet('/goods/productDet', params)
+}

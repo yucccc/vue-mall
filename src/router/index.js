@@ -22,11 +22,11 @@ export default new Router({
       redirect: '/home',
       children: [
         {path: 'home', component: Home},
-        {path: 'goods', component: GoodS}
+        {path: 'goods', component: GoodS},
+        {path: 'goodsDetails', name: 'goodsDetails', component: goodsDetails}
       ]
     },
     {path: '/login', name: 'login', component: Login},
-    {path: '/goodsDetails/:productId', name: 'goodsDetails', component: goodsDetails},
     {path: '/perDetails', name: 'perDetails', component: PerDetails},
     {path: '/cart', name: 'cart', component: Cart},
     {
