@@ -13,7 +13,7 @@
               <!--标题-->
               <div class="cart-table-title">
                 <span class="name">商品信息</span> <span class="operation">操作</span> <span
-                class="subtotal">小计</span> <span class="num">数量</span> <span class="price">单价</span></div>
+                class="subtotal">小计</span> <span class="num">数量</span> <span class="price1">单价</span></div>
               <!--列表-->
               <div class="cart-table" v-for="(item,i) in cartList" :key="i">
                 <div class="cart-group divide pr" :data-productid="item.productId">
@@ -49,24 +49,19 @@
                         <!--总价格-->
                         <div class="subtotal" style="font-size: 14px">¥ {{item.productPrice * item.productNum}}</div>
                         <!--数量-->
-                        <div class="item-cols-num">
-                          <div class="select">
-                          <span class="down" @click="editCart('down',item)"
-                                :class="{'down-disabled':item.productNum<2}">-</span>
-                            <span class="num">
-                            <input type="text" :class="{show:show}" v-model="item.productNum" maxlength="2">
-                          <ul ref="ul">
-                            <li>{{item.productNum - 1}}</li>
-                            <li>{{item.productNum}}</li>
-                            <li>{{item.productNum + 1}}</li>
-                          </ul>
-                        </span>
-                            <span class="up" :class="{'up-disabled':item.productNum>9}"
-                                  @click="editCart('up',item)">+</span>
-                          </div>
-                        </div>
+                        <buy-num :num="item.productNum"
+                                 :id="item.productId"
+                                 :checked="item.checked"
+                                 style="height: 140px;
+                                   display: flex;
+                                   align-items: center;
+                                   justify-content: center;"
+                                 :limit="5"
+                                 @edit-num="EditNum"
+                        >
+                        </buy-num>
                         <!--价格-->
-                        <div class="price">¥ {{item.productPrice}}</div>
+                        <div class="price1">¥ {{item.productPrice}}</div>
                       </div>
                     </div>
                   </div>
@@ -96,7 +91,8 @@
                     <h5 class="shipping-tips ng-scope">应付总额不含运费</h5>
                   </div>
                 </div>
-                <y-button :classStyle="checkNum > 0?'main-btn':'disabled-btn'" class="big-main-btn"
+                <y-button :classStyle="checkNum > 0?'main-btn':'disabled-btn'"
+                          class="big-main-btn"
                           style="margin: 0;width: 130px;height: 50px;line-height: 50px;font-size: 16px"
                           text="现在结算" @btnClick="checkout"></y-button>
               </div>
@@ -120,18 +116,15 @@
   </div>
 </template>
 <script>
-  import { getCartList, cartEdit, editCheckAll, cartDel } from '/api/goods'
-  import { setStore } from '/utils/storage'
+  import { cartEdit, editCheckAll, cartDel } from '/api/goods'
   import { mapMutations, mapState } from 'vuex'
   import YButton from '/components/YButton'
   import YHeader from '/common/header'
   import YFooter from '/common/footer'
+  import BuyNum from '/components/buynum'
   export default {
     data () {
-      return {
-        show: true,
-        jj: ''
-      }
+      return {}
     },
     computed: {
       ...mapState(
@@ -147,7 +140,7 @@
         this.cartList && this.cartList.forEach((item) => {
           if (item.checked === '1') i++
         })
-        return i
+        return Number(i)
       },
       // 计算总数量
       totalNum () {
@@ -155,7 +148,7 @@
         this.cartList && this.cartList.forEach(item => {
           totalNum += (item.productNum)
         })
-        return totalNum
+        return Number(totalNum)
       },
       // 选中的总价格
       checkPrice () {
@@ -182,14 +175,6 @@
       ...mapMutations([
         'INIT_BUYCART', 'EDIT_CART'
       ]),
-      // 获取一次购物车商品
-      _getCartList () {
-        getCartList().then(res => {
-          if (res.status === '1') {
-            setStore('buyCart', res.result)
-          }
-        })
-      },
       // 全选
       editCheckAll () {
         let checkAll = !this.checkAllFlag
@@ -198,7 +183,7 @@
         })
       },
       // 修改购物车
-      _cartEdit (productId, productNum, checked, dn) {
+      _cartEdit (productId, productNum, checked) {
         cartEdit(
           {
             productId,
@@ -207,18 +192,13 @@
           }
         ).then(res => {
           if (res.status === '0') {
-            // 如果成功了
-            if (dn) {
-              this.ani(productId, productNum, checked)
-            } else {
-              this.EDIT_CART(
-                {
-                  productId,
-                  checked,
-                  productNum
-                }
-              )
-            }
+            this.EDIT_CART(
+              {
+                productId,
+                checked,
+                productNum
+              }
+            )
           }
         })
       },
@@ -232,55 +212,13 @@
           if (type === 'check') {
             let newChecked = checked === '1' ? '0' : '1'
             this._cartEdit(productId, productNum, newChecked)
-          } else if (type === 'up' || type === 'down') { // 加减
-            let dn = true
-            if (type === 'up' && productNum < 10) {
-              this.jj = '-'
-              this._cartEdit(productId, ++productNum, checked, dn)
-            } else if (type === 'down' && productNum > 1) {
-              this.jj = ''
-              this._cartEdit(productId, --productNum, checked, dn)
-            } else {
-              return false
-            }
           }
         } else {
           console.log('缺少所需参数')
         }
       },
-      ani (productId, productNum, checked) {
-        this.show = false
-        let ul = this.$refs.ul[0]
-        let ulStyle = ul.style
-        ulStyle.zIndex = '11'
-        ulStyle.transition = 'all .2s ease-out'
-        ulStyle.transform = `translateY(${this.jj}18px)`
-        ul.addEventListener('transitionend', () => {
-          this.show = true
-          ulStyle.zIndex = '1'
-          ulStyle.transition = 'all 0s'
-          ulStyle.transform = 'translateY(0)'
-          this.EDIT_CART(
-            {
-              productId,
-              checked,
-              productNum
-            }
-          )
-        })
-        ul.addEventListener('webkitAnimationEnd', () => {
-          this.show = true
-          ulStyle.transition = 'all 0s'
-          ulStyle.transform = 'translateY(0)'
-          ulStyle.zIndex = '1'
-          this.EDIT_CART(
-            {
-              productId,
-              checked,
-              productNum
-            }
-          )
-        })
+      EditNum (productNum, productId, checked) { // 数量
+        this._cartEdit(productId, productNum, checked)
       },
       // 删除整条购物车
       cartdel (productId) {
@@ -292,59 +230,18 @@
         this.$router.push({path: 'checkout'})
       }
     },
-    created () {
-      this._getCartList()
-    },
     mounted () {
       this.INIT_BUYCART()
     },
     components: {
       YButton,
       YHeader,
-      YFooter
+      YFooter,
+      BuyNum
     }
   }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
-  .ui-cart .select {
-    input {
-      z-index: 10;
-      width: 36px;
-      height: 18px;
-      background-color: #fff;
-      border: none;
-      border-radius: 3px;
-      text-align: center;
-      line-height: 18px;
-      font-size: 14px;
-      padding: 0;
-      color: #666;
-      display: none;
-      position: relative;
-    }
-    ul {
-      transition: translate .2s ease-out;
-      padding: 0;
-      line-height: 18px;
-      font-size: 14px;
-      display: inline-block;
-      position: absolute;
-      left: 0;
-      top: -18px;
-      list-style: none;
-      width: 36px;
-      font-family: system-ui;
-    }
-    .up.up-disabled, .up.up-disabled:hover {
-      background-position: 0 -240px !important;
-      cursor: not-allowed !important;
-    }
-  }
-
-  .show {
-    display: block !important;
-  }
-
   .store-content {
     clear: both;
     width: 1220px;
@@ -440,7 +337,7 @@
         }
         .item-cols-num,
         .operation,
-        .price,
+        .price1,
         .subtotal {
           overflow: hidden;
           float: right;
@@ -448,75 +345,6 @@
           text-align: center;
           color: #666;
           line-height: 140px;
-        }
-        /*数量*/
-        .item-cols-num {
-          padding-top: 50px;
-          line-height: 40px;
-        }
-        .select {
-          width: 112px;
-          height: 40px;
-          padding-top: 4px;
-          margin: 0 auto;
-          line-height: 40px;
-          .down {
-            background-position: 0 -60px;
-          }
-          .down.down-disabled:hover {
-            background-position: 0 -300px;
-            cursor: not-allowed;
-          }
-          .down, .up {
-            background: url(../../../static/images/cart-updown_8303731e15@2x.jpg) no-repeat;
-            overflow: hidden;
-            float: left;
-            width: 34px;
-            height: 37px;
-            margin-right: 5px;
-            background-size: 100% auto;
-            line-height: 40px;
-            text-indent: -9999em;
-            cursor: pointer;
-            -moz-user-select: -moz-none;
-            -khtml-user-select: none;
-            -webkit-user-select: none;
-            -ms-user-select: none;
-            -o-user-select: none;
-            user-select: none;
-          }
-          .num {
-            position: relative;
-            overflow: hidden;
-            float: left;
-            width: 36px;
-            height: 18px;
-            margin: 7px 0 0;
-            border: none;
-            border-radius: 3px;
-            line-height: 18px;
-            text-align: center;
-            font-size: 14px;
-            transition: all .2s ease-out;
-          }
-          .up {
-            float: right;
-            margin: 0;
-            background-position: 0 0;
-            &:hover {
-              background-position: 0 -120px;
-            }
-          }
-          .down {
-            background-position: 0 -60px;
-            &:hover {
-              background-position: 0 -180px;
-            }
-          }
-        }
-        .down.down-disabled {
-          background-position: 0 -300px;
-          cursor: not-allowed;
         }
       }
       .cart-group.divide .cart-top-items:first-child .cart-items {

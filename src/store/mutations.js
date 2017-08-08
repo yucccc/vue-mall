@@ -18,7 +18,7 @@ export default {
     }
   },
   // 加入购物车
-  [ADD_CART] (state, {productId, productPrice, productName, productImg}) {
+  [ADD_CART] (state, {productId, productPrice, productName, productImg, productNum = 1}) {
     let cart = state.cartList // 购物车
     let falg = true
     let goods = {
@@ -27,18 +27,19 @@ export default {
       productName,
       productImg
     }
+    console.log(productNum)
     if (cart.length) {        // 有内容
       cart.forEach(item => {
         if (item.productId === productId) {
           if (item.productNum >= 0) {
             falg = false
-            item.productNum++
+            item.productNum += productNum
           }
         }
       })
     }
     if (!cart.length || falg) {
-      goods.productNum = 1
+      goods.productNum = productNum
       goods.checked = '1'
       cart.push(goods)
     }

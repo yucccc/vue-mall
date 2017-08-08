@@ -33,7 +33,7 @@
                         <p class="name">{{user.name}}</p>
                       </li>
                       <li>
-                        <router-link to="order">我的订单</router-link>
+                        <router-link to="user">我的订单</router-link>
                       </li>
                       <li>
                         <router-link to="/">售后服务</router-link>

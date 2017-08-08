@@ -1,19 +1,25 @@
 <template>
   <!--数量-->
-  <div class="item-cols-num">
+  <div class="item-cols-num clearfix">
     <div class="select">
-                          <span class="down" @click="editCart('down',item)"
-                                :class="{'down-disabled':num<2}">-</span>
+      <span class="down"
+            @click.stop="down()"
+            :class="{'down-disabled':Num<=1}">-
+      </span>
       <span class="num">
-                            <input type="text" :class="{show:show}" v-model="num" maxlength="2">
-                          <ul ref="ul">
-                            <li>{{num - 1}}</li>
-                            <li>{{num}}</li>
-                            <li>{{num + 1}}</li>
-                          </ul>
-                        </span>
-      <span class="up" :class="{'up-disabled':num>limit}"
-            @click="editCart('up',item)">+</span>
+        <input type="text"
+               :class="{show:show}"
+               v-model="Num"
+               @blur="blur()"
+               maxlength="2">
+                  <ul ref="ul">
+                    <li>{{Num - 1}}</li>
+                    <li>{{Num}}</li>
+                    <li>{{Num + 1}}</li>
+                  </ul>
+      </span>
+      <span class="up" :class="{'up-disabled':Num>=limit}"
+            @click.stop="up()">+</span>
     </div>
   </div>
 </template>
@@ -21,53 +27,123 @@
   export default {
     props: {
       num: {
-        type: Number,
-        default: 5
+        type: [Number],
+        default: 1
+      },
+      id: {
+        type: [Number, String]
+      },
+      checked: {
+        type: [String, Boolean]
       },
       limit: {
         type: Number,
-        default: 5
+        default: 10
       }
     },
+    computed: {},
     data () {
       return {
         show: true,
-        jj: ''
+        flag: true,
+        Num: this.num
       }
     },
     methods: {
-      editCart (type, item) {
-        if (type && item) {
-          let checked = item.checked
-          let productId = item.productId
-          let productNum = item.productNum
-          // 勾选
-          if (type === 'check') {
-            let newChecked = checked === '1' ? '0' : '1'
-            this._cartEdit(productId, productNum, newChecked)
-          } else if (type === 'up' || type === 'down') { // 加减
-            let dn = true
-            if (type === 'up' && productNum < 10) {
-              this.jj = '-'
-              this._cartEdit(productId, ++productNum, checked, dn)
-            } else if (type === 'down' && productNum > 1) {
-              this.jj = ''
-              this._cartEdit(productId, --productNum, checked, dn)
-            } else {
-              return false
-            }
-          }
-        } else {
-          console.log('缺少所需参数')
+      up () {
+        if (this.flag && this.Num < this.limit) {
+          this.ani('up')
         }
+        return
+      },
+      down () {
+        if (this.flag && this.Num > 1) {
+          this.ani('down')
+        }
+        return
+      },
+      blur () {
+        this.Num = this.Num > this.limit ? Number(this.limit) : Number(this.Num)
+        this.$emit('edit-num', this.Num, this.id, this.checked)
+      },
+      ani (opera) {
+        this.flag = false
+        let ul = this.$refs.ul
+        let ulStyle = ul.style
+        this.show = false
+        ulStyle.zIndex = '19'
+        ulStyle.transition = 'all .2s ease-out'
+        if (opera === 'up') {
+          ulStyle.transform = `translateY(-54px)`
+          this.Num++
+        } else {
+          ulStyle.transform = `translateY(-18px)`
+          this.Num--
+        }
+        ul.addEventListener('transitionend', () => {
+          this.show = true
+          this.domInt(ulStyle)
+          this.flag = true
+        })
+        ul.addEventListener('webkitAnimationEnd', () => {
+          this.show = true
+          this.domInt(ulStyle)
+          this.flag = true
+        })
+        this.$emit('edit-num', this.Num, this.id, this.checked)
+      },
+      domInt (domStyle) {
+        domStyle.zIndex = '1'
+        domStyle.transition = 'all 0s'
+        domStyle.transform = 'translateY(-36px)' // 回到原位
       }
     }
   }
 </script>
 <style lang="scss" scoped>
+  .select {
+    input {
+      z-index: 10;
+      width: 36px;
+      height: 18px;
+      background-color: #fff;
+      border: none;
+      text-align: center;
+      line-height: 18px;
+      font-size: 14px;
+      padding: 0;
+      color: #666;
+      display: none;
+      position: relative;
+      border: none;
+    }
+    ul {
+      padding: 0;
+      line-height: 18px;
+      font-size: 14px;
+      display: inline-block;
+      position: absolute;
+      left: 0;
+      list-style: none;
+      width: 36px;
+      font-family: system-ui;
+      z-index: 1;
+      transform: translateY(-36px);
+      /*background: red;*/
+    }
+    .up.up-disabled, .up.up-disabled:hover {
+      background-position: 0 -240px !important;
+      cursor: not-allowed !important;
+    }
+  }
+
   /*数量*/
   .item-cols-num {
     display: inline-block;
+  }
+
+  .show {
+    display: block !important;
   }
 
   .select {
@@ -109,10 +185,8 @@
       line-height: 18px;
       text-align: center;
       font-size: 14px;
-      transition: all .2s ease-out;
     }
     .up {
-      float: right;
       margin: 0;
       background-position: 0 0;
       &:hover {

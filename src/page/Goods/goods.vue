@@ -1,11 +1,10 @@
 <template>
   <div class="goods">
-    <div style="background: #fff;border-bottom: 1px solid #E7E3E7;margin:10px 0;" class="nav">
+    <div class="nav">
 
       <div class="w">分类:
         <span>全部</span>
         <a href="javascript:;" :class="{active:sortType===1}" @click="reset()">综合排序</a>
-        <!--<a href="javascript:;">销量优先</a>-->
         <a href="javascript:;" @click="sort(1)" :class="{active:sortType===2}">价格从低到高</a>
         <a href="javascript:;" @click="sort(-1)" :class="{active:sortType===3}">价格从高到低</a>
         <div class="price-interval">
@@ -112,11 +111,10 @@
   @import "../../assets/style/mixin";
   @import "../../assets/style/theme";
 
-
-
-
-
   .nav {
+    background: #fff;
+    border-bottom: 1px solid #E7E3E7;
+    margin: 10px 0;
     > div {
       display: flex;
       align-items: center;

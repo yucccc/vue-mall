@@ -30,16 +30,16 @@
         </div>
         <div class="num">
           <span class="params-name">数量</span>
-          <buy-num></buy-num>
+          <buy-num @edit-num="editNum"></buy-num>
         </div>
         <div class="buy">
           <y-button text="加入购物车"
                     @btnClick="addCart(product.productId,product.salePrice,product.productName,product.productImageBig)"
                     classStyle="main-btn"
                     style="width: 145px;height: 50px;line-height: 48px"></y-button>
-          <router-link to="checkout">
-            <y-button text="现在购买" style="width: 145px;height: 50px;line-height: 48px"></y-button>
-          </router-link>
+          <y-button text="现在购买"
+                    @btnClick="checkout(product.productId)"
+                    style="width: 145px;height: 50px;line-height: 48px"></y-button>
         </div>
       </div>
     </div>
@@ -72,7 +72,8 @@
         productMsg: {},
         small: [],
         big: '',
-        product: {}
+        product: {},
+        productNum: 1
       }
     },
     computed: {
@@ -92,12 +93,24 @@
       addCart (id, price, name, img) {
         if (!this.showMoveImg) {     // 动画是否在运动
           if (this.login) { // 登录了 直接存在用户名下
-            addCart({productId: id}).then(res => {
+            addCart({productId: id, productNum: this.productNum}).then(res => {
               // 并不重新请求数据
-              this.ADD_CART({productId: id, productPrice: price, productName: name, productImg: img})
+              this.ADD_CART({
+                productId: id,
+                productPrice: price,
+                productName: name,
+                productImg: img,
+                productNum: this.productNum
+              })
             })
           } else { // 未登录 vuex
-            this.ADD_CART({productId: id, productPrice: price, productName: name, productImg: img})
+            this.ADD_CART({
+              productId: id,
+              productPrice: price,
+              productName: name,
+              productImg: img,
+              productNum: this.productNum
+            })
           }
           // 加入购物车动画
           var dom = event.target
@@ -110,6 +123,12 @@
             this.SHOW_CART({showCart: true})
           }
         }
+      },
+      checkout (productId) {
+        this.$router.push({path: '/checkout', query: {productId, num: this.productNum}})
+      },
+      editNum (num) {
+        this.productNum = num
       }
     },
     components: {
@@ -237,5 +256,18 @@
     padding: 200px 0;
     text-align: center;
     font-size: 30px;
+  }
+
+  .price {
+    display: block;
+    color: #d44d44;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: right;
+    i {
+      padding-left: 2px;
+      font-size: 24px;
+    }
   }
 </style>
