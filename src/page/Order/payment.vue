@@ -60,10 +60,10 @@
         </div>
         <div class="n-b">
           <div class="subtotal ">
-            <div class="subtotal-cell"> ¥ {{item.productPrice}}<br></div>
+            <div class="subtotal-cell"> ¥ {{item.productPrice * item.productNum}}<br></div>
           </div>
           <div class="goods-num ">{{item.productNum}}</div>
-          <div class="price ">¥ {{item.productPrice * item.productNum}}</div>
+          <div class="price ">¥ {{item.productPrice}}</div>
         </div>
       </div>
     </div>
@@ -75,14 +75,16 @@
 <script>
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
-  import { addressList, getCartList, payMent } from '/api/goods'
+  import { addressList, getCartList, payMent, productDet } from '/api/goods'
   export default {
     data () {
       return {
         payType: 1,
         addList: {},
         cartList: [],
-        addressId: 0
+        addressId: 0,
+        productId: '',
+        num: ''
       }
     },
     computed: {
@@ -109,20 +111,41 @@
         })
       },
       paySuc () {
-        payMent({addressId: this.addressId, orderTotal: this.checkPrice}).then(res => {
+        payMent({
+          addressId: this.addressId,
+          orderTotal: this.checkPrice,
+          productId: this.productId,
+          productNum: this.num
+        }).then(res => {
           if (res.status === '0') {
             this.$router.push({path: '/order/paysuccess', query: {price: this.checkPrice}})
           } else {
             alert('支付失败')
           }
         })
+      },
+      _productDet (productId) {
+        productDet({params: {productId}}).then(res => {
+          let item = res.result
+          item.checked = '1'
+          item.productNum = this.num
+          item.productPrice = item.salePrice
+          this.cartList.push(item)
+        })
       }
     },
     created () {
-      this.addressId = this.$route.query.addressId
+      let query = this.$route.query
+      this.addressId = query.addressId
       if (this.addressId) {
         this._addressList({addressId: this.addressId})
-        this._getCartList()
+        if (query.productId && query.num) {
+          this.productId = query.productId
+          this.num = query.num
+          this._productDet(this.productId)
+        } else {
+          this._getCartList()
+        }
       } else {
         this.$router.push({path: '/'})
       }
@@ -217,6 +240,7 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      padding: 0 20px;
     }
     em {
       margin-left: 5px;

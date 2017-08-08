@@ -137,7 +137,7 @@
   </div>
 </template>
 <script>
-  import { getCartList, addressList, addressUpdate, addressAdd, addressDel } from '/api/goods'
+  import { getCartList, addressList, addressUpdate, addressAdd, addressDel, productDet } from '/api/goods'
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
   import YPopup from '/components/popup'
@@ -151,6 +151,8 @@
         addressId: '1',
         popupOpen: false,
         popupTitle: '管理收货地址',
+        num: '', // 立刻购买
+        productId: '',
         msg: {
           addressId: '',
           userName: '',
@@ -206,7 +208,14 @@
       // 付款
       payment () {
         // 需要拿到地址id
-        this.$router.push({path: '/order/payment', query: {'addressId': this.addressId}})
+        this.$router.push({
+          path: '/order/payment',
+          query: {
+            'addressId': this.addressId,
+            'productId': this.productId,
+            'num': this.num
+          }
+        })
       },
       // 选择地址
       defaultAddress (id) {
@@ -244,10 +253,27 @@
       // 删除
       del (addressId) {
         this._addressDel({addressId})
+      },
+      _productDet (productId) {
+        productDet({params: {productId}}).then(res => {
+          let item = res.result
+          item.checked = '1'
+          item.productImg = item.productImageBig
+          item.productNum = this.num
+          item.productPrice = item.salePrice
+          this.cartList.push(item)
+        })
       }
     },
     created () {
-      this._getCartList()
+      let query = this.$route.query
+      if (query.productId && query.num) {
+        this.productId = query.productId
+        this.num = query.num
+        this._productDet(this.productId)
+      } else {
+        this._getCartList()
+      }
       this._addressList()
     },
     components: {

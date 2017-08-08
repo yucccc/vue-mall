@@ -134,7 +134,7 @@
 <script>
   import YButton from '/components/YButton'
   import { mapMutations, mapState } from 'vuex'
-  import { getCartList, delCart } from '/api/goods'
+  import { getCartList, cartDel } from '/api/goods'
   import { loginOut } from '/api/index'
   import { setStore, removeStore } from '/utils/storage'
   export default{
@@ -172,7 +172,7 @@
       }
     },
     methods: {
-      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART', 'REDUCE_CART', 'RECORD_USERINFO']),
+      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART', 'REDUCE_CART', 'RECORD_USERINFO', 'EDIT_CART']),
       // 购物车显示
       cartShowState (state) {
         this.SHOW_CART({showCart: state})
@@ -189,11 +189,11 @@
       // 删除商品
       delGoods (productId) {
         if (this.login) { // 登陆了
-          delCart({productId}).then(res => {
-            this.REDUCE_CART({productId: productId})
+          cartDel({productId}).then(res => {
+            this.EDIT_CART({productId})
           })
         } else {
-          this.REDUCE_CART({productId: productId})
+          this.EDIT_CART({productId})
         }
       },
       toCart () {
