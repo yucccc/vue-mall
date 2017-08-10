@@ -11,28 +11,31 @@
       </div>
     </div>
 
-    <section class="activity-panel w">
-      <ul class="box">
-        <li v-for="(item,i) in activities" :key="i">
-          <img :src="item.image" alt="">
-        </li>
-      </ul>
-    </section>
 
-    <section class="w mt30">
+    <section class="w mt30 clearfix">
       <y-shelf title="热门商品">
         <div slot="content" class="hot">
-          <product :product="item" v-for="(item,i) in hot" :key="i"></product>
+          <mall-goods :msg="item" v-for="(item,i) in hot" :key="i"></mall-goods>
         </div>
       </y-shelf>
     </section>
-
+    <section class="w mt30 clearfix" v-for="(item,i) in floors" :key="i">
+      <y-shelf :title="item.title">
+        <div slot="content" class="floors">
+          <div class="imgbanner">
+            <img v-lazy="floors[i].image.image" :alt="item.title">
+          </div>
+          <mall-goods :msg="tab" v-for="(tab,i) in item.tabs" :key="i"></mall-goods>
+        </div>
+      </y-shelf>
+    </section>
   </div>
 </template>
 <script>
-  import { getBanner, productHome } from '/api/index.js'
+  import {productHome} from '/api/index.js'
   import YShelf from '/components/shelf'
   import product from '/components/product'
+  import mallGoods from '/components/mallGoods'
   export default {
     data () {
       return {
@@ -43,16 +46,11 @@
           w: 0,
           h: 0
         },
-        activities: [], // 活动
+        floors: [],
         hot: []
       }
     },
     methods: {
-      _getBanner () {
-        getBanner().then(res => {
-          this.banner = res.result
-        })
-      },
       bgOver (e) {
         this.bgOpt.px = e.offsetLeft
         this.bgOpt.py = e.offsetTop
@@ -83,23 +81,20 @@
       }
     },
     mounted () {
-      this._getBanner()
       productHome().then(res => {
-        let data = res.result.data
-        this.activities = data.home_activities
+        let data = res.result
+        this.floors = data.home_floors
         this.hot = data.home_hot
       })
     },
     components: {
       YShelf,
-      product
+      product,
+      mallGoods
     }
   }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
-  .shuffling {
-  }
-
   .banner, .banner span, .banner div {
     font-family: "Microsoft YaHei";
     transition: all .3s;
@@ -174,7 +169,6 @@
     width: 170px;
     height: 225px;
     padding: 0 14px 0 15px;
-    /*border-right: 1px solid #e7e7e7;*/
     > div {
       width: 100%;
     }
@@ -249,7 +243,6 @@
 
   .mt30 {
     margin-top: 30px;
-
   }
 
   .hot {
@@ -257,6 +250,22 @@
     > div {
       flex: 1;
       width: 25%;
+    }
+  }
+
+  .floors {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    .imgbanner {
+      width: 50%;
+      height: 430px;
+    }
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
     }
   }
 

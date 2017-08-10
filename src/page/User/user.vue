@@ -1,5 +1,8 @@
 <template>
   <div class="layout-container">
+    <y-header>
+      <div slot="nav"></div>
+    </y-header>
     <div class="w">
       <div class="content">
         <div class="account-sidebar">
@@ -67,7 +70,7 @@
 
                   </div>
                 </div>
-                <div v-else="!orderList.length">
+                <div v-if="!orderList.length">
                   <div style="padding: 100px 0;text-align: center">
                     你还未创建过订单
                   </div>
@@ -95,6 +98,7 @@
 <script>
   import YShelf from '/components/shelf'
   import YFooter from '/common/footer'
+  import YHeader from '/common/header'
   import { orderList } from '/api/goods'
   import { mapState } from 'vuex'
   export default {
@@ -125,7 +129,8 @@
     },
     components: {
       YShelf,
-      YFooter
+      YFooter,
+      YHeader
     }
   }
 </script>
@@ -261,6 +266,16 @@
       flex: 1;
       padding: 15px 0;
       justify-content: space-between;
+      position: relative;
+      &:before {
+        position: absolute;
+        content: ' ';
+        right: -1px;
+        top: 0;
+        width: 1px;
+        background-color: #EFEFEF;
+        height: 100%;  
+      }
       .ellipsis {
         margin-left: 20px;
         width: 220px;

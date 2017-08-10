@@ -2,15 +2,15 @@
   <div class="goods">
     <div class="nav">
 
-      <div class="w">分类:
-        <span>全部</span>
+      <div class="w">
         <a href="javascript:;" :class="{active:sortType===1}" @click="reset()">综合排序</a>
         <a href="javascript:;" @click="sort(1)" :class="{active:sortType===2}">价格从低到高</a>
         <a href="javascript:;" @click="sort(-1)" :class="{active:sortType===3}">价格从高到低</a>
         <div class="price-interval">
-          <input type="number" placeholder="输入价格区间" v-model="min"><span style="margin: 0 2px"> - </span>
-          <input type="number" placeholder="输入价格区间" v-model="max">
-          <input type="button" @click="reset" style="cursor: pointer;" value="确定">
+          <input type="number" class="input" placeholder="价格" v-model="min">
+          <span style="margin: 0 5px"> - </span>
+          <input type="number" placeholder="价格" v-model="max">
+          <y-button text="确定" classStyle="main-btn" @btnClick="reset" style="margin-left: 10px;"></y-button>
         </div>
       </div>
     </div>
@@ -26,8 +26,9 @@
   </div>
 </template>
 <script>
-  import { getComputer } from '/api/goods.js'
+  import {getComputer} from '/api/goods.js'
   import mallGoods from '/components/mallGoods'
+  import YButton from '/components/YButton'
   export default {
     data () {
       return {
@@ -46,7 +47,6 @@
       }
     },
     methods: {
-
       _getComputer (flag) {
         let params = {
           params: {
@@ -72,6 +72,7 @@
       },
       // 默认排序
       reset () {
+        this.sortType = 1
         this.params.sort = ''
         this.params.page = 1
         this.busy = false
@@ -103,7 +104,8 @@
       this.windowWidth = window.innerWidth
     },
     components: {
-      mallGoods
+      mallGoods,
+      YButton
     }
   }
 </script>
@@ -112,16 +114,23 @@
   @import "../../assets/style/theme";
 
   .nav {
-    background: #fff;
-    border-bottom: 1px solid #E7E3E7;
-    margin: 10px 0;
+    height: 60px;
+    line-height: 60px;
     > div {
       display: flex;
       align-items: center;
       a {
-        padding: 15px;
+        padding: 0 15px;
         height: 100%;
         @extend %block-center;
+        font-size: 12px;
+        color: #999;
+        &.active {
+          color: #5683EA;
+        }
+        &:hover {
+          color: #5683EA;
+        }
       }
       input {
         @include wh(80px, 30px);
@@ -132,10 +141,13 @@
       }
     }
     .price-interval {
+      padding: 0 15px;
       @extend %block-center;
-      input[type="button"] {
-        background: #20a0ff;
-        color: #fff;
+      input[type=number] {
+        border: 1px solid #ccc;
+        text-align: center;
+        background: none;
+        border-radius: 5px;
       }
     }
   }
