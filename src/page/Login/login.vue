@@ -2,48 +2,104 @@
   <div class="login v2">
     <div class="wrapper">
       <div class="dialog dialog-shadow" style="display: block; margin-top: -362px;">
-        <div class="title">
-          <div class="return-btn ng-hide"></div>
-          <h4>使用 Smartisan ID 登录在线商城</h4><a class="close"></a></div>
-        <div class="content">
+        <div class="title" v-if="loginPage">
+          <h4>使用 Smartisan ID 登录官网</h4></div>
+        <div v-if="loginPage" class="content">
           <ul class="common-form">
             <li class="username border-1p">
-              <div class="input invalid">
+              <div class="input">
                 <input type="text" v-model="ruleForm.userName" placeholder="账号">
               </div>
             </li>
             <li>
-              <div class="input invalid">
-                <input type="text" v-model="ruleForm.userPwd" placeholder="密码">
+              <div class="input">
+                <input type="password" v-model="ruleForm.userPwd" placeholder="密码">
               </div>
+            </li>
+            <li style="text-align: right" class="pr">
+              <span class="pa" style="top: 0;left: 0;color: #d44d44">{{ruleForm.errMsg}}</span>
+              <a href="javascript:;" style="padding: 0 5px" @click="loginPage=false">注册 Smartisan ID</a>
             </li>
           </ul>
           <!--登陆-->
           <div>
-            <y-button text="登陆" classStyle="main-btn" @btnClick="login"
+            <y-button text="登陆"
+                      :classStyle="ruleForm.userPwd&& ruleForm.userName?'main-btn':'disabled-btn'"
+                      @btnClick="login"
                       style="margin: 0;width: 100%;height: 48px;font-size: 18px;line-height: 48px"></y-button>
           </div>
-          <!--</form>-->
+        </div>
+        <div class="registered" v-else>
+          <h4>注册 Smartisan ID</h4>
+          <div class="content" style="margin-top: 20px;">
+            <ul class="common-form">
+              <li class="username border-1p">
+                <div class="input">
+                  <input type="text"
+                         v-model="registered.userName" placeholder="账号"
+                         @keyup="registered.userName=registered.userName.replace(/[^\w\.\/]/ig,'')">
+                </div>
+              </li>
+              <li>
+                <div class="input">
+                  <input type="password"
+                         v-model="registered.userPwd"
+                         placeholder="密码">
+                </div>
+              </li>
+              <li>
+                <div class="input">
+                  <input type="password"
+                         v-model="registered.userPwd2"
+                         placeholder="重复密码">
+                </div>
+              </li>
+            </ul>
+            <div>
+              <y-button
+                :classStyle="registered.userPwd&&registered.userPwd2&&registered.userName?'main-btn':'disabled-btn'"
+                text="注册"
+                style="margin: 0;width: 100%;height: 48px;font-size: 18px;line-height: 48px"
+                @btnClick="regist"
+              >
+              </y-button>
+            </div>
+            <ul class="common-form pr">
+              <li class="pa" style="left: 0;top: 0;margin: 0;color: #d44d44">{{registered.errMsg}}</li>
+              <li style="text-align: center;line-height: 48px;margin-bottom: 0;">
+                <span>如果您已拥有 Smartisan ID，则可在此</span>
+                <a href="javascript:;"
+                   style="margin: 0 5px"
+                   @click="loginPage=true">登陆</a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
 <script>
   import YFooter from '/common/footer'
   import YButton from '/components/YButton'
-  import { userLogin } from '/api/index.js'
-  import { mapMutations } from 'vuex'
+  import { userLogin, register } from '/api/index.js'
   import { addCart1 } from '/api/goods.js'
   import { getStore, removeStore } from '/utils/storage.js'
   export default {
     data () {
       return {
         cart: [],
+        loginPage: true,
         ruleForm: {
-          userName: 'admin',
-          userPwd: 'admin'
+          userName: '',
+          userPwd: '',
+          errMsg: ''
+        },
+        registered: {
+          userName: '',
+          userPwd: '',
+          userPwd2: '',
+          errMsg: ''
         }
       }
     },
@@ -53,9 +109,6 @@
       }
     },
     methods: {
-      ...mapMutations([
-        'RECORD_USERINFO'
-      ]),
       // 登陆时将本地的添加到用户购物车
       login_addCart () {
         let cartArr = []
@@ -72,7 +125,7 @@
       },
       login () {
         if (!this.ruleForm.userName || !this.ruleForm.userPwd) {
-          alert('账号密码不能为空')
+          this.ruleForm.errMsg = '账号或者密码不能为空!'
           return false
         }
         var params = {userName: this.ruleForm.userName, userPwd: this.ruleForm.userPwd}
@@ -85,8 +138,36 @@
                 }
               })
             }
+          } else {
+            this.ruleForm.errMsg = res.msg
+            return false
           }
-        }).then(this.$router.go(-1))
+        })
+      },
+      regist () {
+        let userName = this.registered.userName
+        let userPwd = this.registered.userPwd
+        let userPwd2 = this.registered.userPwd2
+        if (!userName || !userPwd || !userPwd2) {
+          this.registered.errMsg = '账号密码不能为空'
+          return false
+        }
+        if (userPwd2 !== userPwd) {
+          this.registered.errMsg = '两次输入的密码不相同'
+          return false
+        }
+
+        register({userName, userPwd}).then(res => {
+          this.registered.errMsg = res.msg
+          if (res.status === '0') {
+            setTimeout(() => {
+              this.registered.errMsg = ''
+              this.loginPage = true
+            }, 500)
+          } else {
+            return false
+          }
+        })
       }
     },
     mounted () {
@@ -121,10 +202,8 @@
       }
     }
     .wrapper {
-      background-image: url(/static/images/bg_9b9dcb65ff.png);
-      background-image: -webkit-image-set(url(/static/images/bg_9b9dcb65ff.png) 1x, url(/static/images/bg_9b9dcb65ff@2x.png) 2x);
+      background: url(/static/images/bg_9b9dcb65ff.png) repeat;
       background-size: 100px;
-      background-repeat: repeat;
       min-height: 800px;
       min-width: 630px;
     }
@@ -145,7 +224,6 @@
       box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
       position: relative;
       background-image: url(/static/images/smartisan_4ada7fecea.png);
-      background-image: -webkit-image-set(url(/static/images/smartisan_4ada7fecea.png) 1x, url(/static/images/smartisan_4ada7fecea@2x.png) 2x);
       background-size: 160px;
       background-position: top center;
       background-repeat: no-repeat;
@@ -232,5 +310,20 @@
     }
   }
 
+  .registered {
+    h4 {
+      padding: 0;
+      text-align: center;
+      color: #666;
+      border-bottom: 1px solid #dcdcdc;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+      font-weight: 700;
+      font-size: 20px;
+      height: 60px;
+      line-height: 60px;
+    }
+  }
 
 </style>

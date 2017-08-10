@@ -152,7 +152,6 @@
   }
 
   .account-sidebar {
-    background: #fff;
     width: 210px;
     border-radius: 6px;
     .avatar {
@@ -274,7 +273,7 @@
         top: 0;
         width: 1px;
         background-color: #EFEFEF;
-        height: 100%;  
+        height: 100%;
       }
       .ellipsis {
         margin-left: 20px;

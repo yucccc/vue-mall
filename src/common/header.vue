@@ -28,7 +28,8 @@
                       <!--头像-->
                       <li class="nav-user-avatar">
                         <div>
-                          <span class="avatar"></span>
+                          <span class="avatar" :style="{backgroundImage:'url('+user.avatar+')'}">
+                          </span>
                         </div>
                         <p class="name">{{user.name}}</p>
                       </li>
@@ -481,7 +482,6 @@
             border-radius: 50%;
             display: block;
             @include wh(100%);
-            background-image: url(/static/images/user-avatar.png);
             background-repeat: no-repeat;
             background-size: contain;
           }
