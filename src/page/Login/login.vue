@@ -13,7 +13,7 @@
             </li>
             <li>
               <div class="input">
-                <input type="password" v-model="ruleForm.userPwd" placeholder="密码">
+                <input type="password" v-model="ruleForm.userPwd" @keyup.enter="login" placeholder="密码">
               </div>
             </li>
             <li style="text-align: right" class="pr">
@@ -136,7 +136,9 @@
                 if (res.status === '1') {
                   removeStore('buyCart')
                 }
-              })
+              }).then(this.$router.go(-1))
+            } else {
+              this.$router.go(-1)
             }
           } else {
             this.ruleForm.errMsg = res.msg
@@ -156,11 +158,11 @@
           this.registered.errMsg = '两次输入的密码不相同'
           return false
         }
-
         register({userName, userPwd}).then(res => {
           this.registered.errMsg = res.msg
           if (res.status === '0') {
             setTimeout(() => {
+              this.ruleForm.errMsg = ''
               this.registered.errMsg = ''
               this.loginPage = true
             }, 500)

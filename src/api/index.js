@@ -15,6 +15,14 @@ export const userInfo = (params) => {
 export const register = (params) => {
   return http.fetchPost('/users/register', params)
 }
+// 上传图片
+export const upload = (params) => {
+  return http.fetchPost('/users/upload', params)
+}
+// 修改头像
+export const updateheadimage = (params) => {
+  return http.fetchPost('/users/updateheadimage', params)
+}
 // 首页接口
 export const productHome = (params) => {
   return http.fetchGet('/goods/productHome', params)

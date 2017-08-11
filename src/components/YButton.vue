@@ -1,7 +1,10 @@
 <template>
-  <button :class="classStyle" @click="btnClick($event)" :disabled="classStyle==='disabled-btn'">
-    <span>{{text}}</span>
-  </button>
+  <input :type="inputType"
+         readonly
+         :class="classStyle"
+         @click="btnClick($event)"
+         :disabled="classStyle==='disabled-btn'"
+         :value="text">
 </template>
 <script>
   export default {
@@ -9,6 +12,10 @@
       text: {
         type: [String, Number],
         default: '一颗小按钮'
+      },
+      inputType: {
+        type: [String],
+        default: 'button'
       },
       classStyle: {
         type: String,
@@ -41,16 +48,16 @@
     background-color: $c;
   }
 
-  button {
+  input {
     display: inline-block;
     cursor: pointer;
     text-align: center;
-    > span {
-      user-select: none;
-      display: inline-block;
-      width: 100%;
-      height: 100%;
-    }
+    /*> span {*/
+    /*user-select: none;*/
+    /*display: inline-block;*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*}*/
   }
 
   /*灰色的按钮*/

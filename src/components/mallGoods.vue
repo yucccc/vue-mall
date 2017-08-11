@@ -10,7 +10,9 @@
       <h3 class="sub-title ellipsis">{{msg.sub_title}}</h3>
       <div class="good-price pr">
         <div class="ds pa">
-          <y-button text="查看详情" @btnClick="goodsDetails(msg.productId)"></y-button>
+          <router-link :to="'goodsDetails?productId='+msg.productId">
+            <y-button text="查看详情"></y-button>
+          </router-link>
           <y-button text="加入购物车"
                     @btnClick="addCart(msg.productId,msg.salePrice,msg.productName,msg.productImageBig)"
                     classStyle="main-btn"></y-button>

@@ -27,7 +27,6 @@ export default {
       productName,
       productImg
     }
-    console.log(productNum)
     if (cart.length) {        // 有内容
       cart.forEach(item => {
         if (item.productId === productId) {
@@ -113,11 +112,6 @@ export default {
     // 存入localStorage
     setStore('buyCart', state.cartList)
   },
-  // // 登陆时将本地的购物车加到用户上
-  // [LOGIN_ADDCART] (state) {
-  //   let cart = state.cartList
-  //
-  // },
   // 记录用户信息
   [RECORD_USERINFO] (state, info) {
     state.userInfo = info

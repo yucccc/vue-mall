@@ -34,20 +34,22 @@
                         <p class="name">{{user.name}}</p>
                       </li>
                       <li>
-                        <router-link to="user">我的订单</router-link>
+                        <router-link to="/user/orderList">我的订单</router-link>
                       </li>
                       <li>
-                        <router-link to="/">售后服务</router-link>
+                        <router-link to="/user/information">账号资料</router-link>
                       </li>
                       <li>
-                        <router-link to="/">我的优惠</router-link>
+                        <router-link to="/user/addressList">收货地址</router-link>
                       </li>
                       <li>
-                        <router-link to="/">账号资料</router-link>
+                        <router-link to="/user/support">售后服务</router-link>
                       </li>
                       <li>
-                        <router-link to="/">收货地址</router-link>
+                        <router-link to="/user/coupon">我的优惠</router-link>
                       </li>
+
+
                       <li>
                         <a href="javascript:;" @click="_loginOut">退出</a>
                       </li>
