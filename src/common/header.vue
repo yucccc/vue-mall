@@ -72,19 +72,21 @@
                           <li class="clearfix" v-for="(item,i) in cartList" :key="i">
                             <div class="cart-item">
                               <div class="cart-item-inner">
-                                <div class="item-thumb">
-                                  <img :src="item.productImg">
-                                </div>
-                                <div class="item-desc">
-                                  <div class="cart-cell"><h4>
-                                    <a href="" v-text="item.productName"></a>
-                                  </h4>
-                                    <p class="attrs"><span>白色</span>
-                                    </p> <h6><span class="price-icon">¥</span><span
-                                      class="price-num">{{item.productPrice}}</span><span
-                                      class="item-num">x {{item.productNum}}</span>
-                                    </h6></div>
-                                </div>
+                                <router-link :to="'goodsDetails?productId='+item.productId">
+                                  <div class="item-thumb">
+                                    <img :src="item.productImg">
+                                  </div>
+                                  <div class="item-desc">
+                                    <div class="cart-cell"><h4>
+                                      <a href="" v-text="item.productName"></a>
+                                    </h4>
+                                      <p class="attrs"><span>白色</span>
+                                      </p> <h6><span class="price-icon">¥</span><span
+                                        class="price-num">{{item.productPrice}}</span><span
+                                        class="item-num">x {{item.productNum}}</span>
+                                      </h6></div>
+                                  </div>
+                                </router-link>
                                 <div class="del-btn del" @click="delGoods(item.productId)">删除</div>
                               </div>
                             </div>

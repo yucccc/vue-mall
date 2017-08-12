@@ -5,7 +5,6 @@ const Login = resolve => require(['/page/login/login'], resolve)
 const Home = resolve => require(['/page/Home/home'], resolve)
 const GoodS = resolve => require(['/page/Goods/goods'], resolve)
 const goodsDetails = resolve => require(['/page/Goods/goodsDetails'], resolve)
-const PerDetails = resolve => require(['/page/PerDetails/perDetails'], resolve)
 const Cart = resolve => require(['/page/Cart/cart'], resolve)
 const order = resolve => require(['/page/Order/order'], resolve)
 const user = resolve => require(['/page/User/user'], resolve)
@@ -33,7 +32,6 @@ export default new Router({
       ]
     },
     {path: '/login', name: 'login', component: Login},
-    {path: '/perDetails', name: 'perDetails', component: PerDetails},
     {path: '/cart', name: 'cart', component: Cart},
     {
       path: '/order',

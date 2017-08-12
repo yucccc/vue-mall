@@ -28,9 +28,6 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/banner': {
-        target: 'http://127.0.0.1:3333'
-      },
       '/users/*': {
         target: 'http://127.0.0.1:3333'
       },
