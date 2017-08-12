@@ -5,7 +5,6 @@
       <div class="r-box">
         <h3>修改头像</h3>
         <y-button text="更换头像" classStyle="main-btn" style="margin: 0;" @btnClick="editAvatar()"></y-button>
-        <!--<input type="file" value="上传头像" @change="upimg($event)">-->
       </div>
     </div>
     <div class="edit-avatar" v-if="editAvatarShow">

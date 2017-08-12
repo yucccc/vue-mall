@@ -62,6 +62,12 @@
       }
     },
     created () {
+      let path = this.$route.path.split('/')[2]
+      this.nav.forEach(item => {
+        if (item.path === path) {
+          this.title = item.name
+        }
+      })
     },
     components: {
       YShelf,
@@ -70,10 +76,9 @@
     },
     watch: {
       $route (to) {
-        let path = to.path
-        let p = path.split('/')[2]
+        let path = to.path.split('/')[2]
         this.nav.forEach(item => {
-          if (item.path === p) {
+          if (item.path === path) {
             this.title = item.name
           }
         })
@@ -150,7 +155,6 @@
     margin-left: 20px;
     flex: 1;
   }
-
 
 
 </style>

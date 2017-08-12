@@ -186,9 +186,12 @@
       },
       _addressList () {
         addressList().then(res => {
-          if (res.length) {
-            this.addList = res.result
-            this.addressId = res.result[0].addressId || '1'
+          let data = res.result
+          if (data.length) {
+            this.addList = data
+            this.addressId = data[0].addressId || '1'
+          } else {
+            this.addList = []
           }
         })
       },

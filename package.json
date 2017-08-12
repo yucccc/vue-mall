@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
-    "image-cropper.js": "^0.3.1",
     "vue": "^2.3.3",
     "vue-cookie": "^1.1.4",
     "vue-cropper": "^0.1.7",
