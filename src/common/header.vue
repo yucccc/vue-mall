@@ -28,10 +28,10 @@
                       <!--头像-->
                       <li class="nav-user-avatar">
                         <div>
-                          <span class="avatar" :style="{backgroundImage:'url('+user.avatar+')'}">
+                          <span class="avatar" :style="{backgroundImage:'url('+userInfo.info.avatar+')'}">
                           </span>
                         </div>
-                        <p class="name">{{user.name}}</p>
+                        <p class="name">{{userInfo.info.name}}</p>
                       </li>
                       <li>
                         <router-link to="/user/orderList">我的订单</router-link>
@@ -225,7 +225,6 @@
     },
     mounted () {
       if (this.login) {
-        this.user = this.userInfo.info
         this._getCartList()
       } else {
         this.INIT_BUYCART()

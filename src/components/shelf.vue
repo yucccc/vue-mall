@@ -1,6 +1,8 @@
 <template>
   <div class="gray-box">
-    <div class="title"><h2>{{title}}</h2></div>
+    <div class="title"><h2>{{title}}</h2>
+      <slot name="right"></slot>
+    </div>
     <!--内容-->
     <div>
       <slot name="content"></slot>
@@ -43,6 +45,7 @@
         font-size: 18px;
         font-weight: 400;
         color: #626262;
+        display: inline-block;
       }
     }
   }

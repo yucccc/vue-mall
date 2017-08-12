@@ -186,8 +186,10 @@
       },
       _addressList () {
         addressList().then(res => {
-          this.addList = res.result
-          this.addressId = res.result[0].addressId || '1'
+          if (res.length) {
+            this.addList = res.result
+            this.addressId = res.result[0].addressId || '1'
+          }
         })
       },
       _addressUpdate (params) {
