@@ -25,7 +25,7 @@ vue2 + vuex + vue-router + webpack + ES6 + axios + sass + flex + svg + node + mo
 
 ## 项目运行
 
-```javascript
+```txt
 git clone https://github.com/yucccc/vue-mall.git
 
 cd vue-mall
@@ -34,12 +34,20 @@ cnpm i
 
 npm run dev
 
+// 如果运行出现代理错误 请确保 config 文件下 index.js proxyTable代理正确
+
+// 直接运行代理应为
+http://mall.yucccc.com:3333
+
+// 通过运行node-api请求本地api代理应为
+http://127.0.0.1:3333
+
 ```
 
 ## 说明
 
-> 如果对您有帮助，您可以点右上角 "Star" 支持一下 十分感谢！ ^ _ ^
-> 如有问题请直接在 Issues 中提，或者您发现问题并有非常好的解决方案，欢迎 PR
+- 如果对您有帮助，您可以点右上角 "Star" 支持一下 十分感谢！☺
+- 如有问题请直接在 Issues 中提，或者您发现问题并有非常好的解决方案，欢迎 PR
 
 ## 效果演示
 
