@@ -30,7 +30,7 @@
         </div>
         <div class="num">
           <span class="params-name">数量</span>
-          <buy-num @edit-num="editNum"></buy-num>
+          <buy-num @edit-num="editNum" :limit="product.limit_num"></buy-num>
         </div>
         <div class="buy">
           <y-button text="加入购物车"

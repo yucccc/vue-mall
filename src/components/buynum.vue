@@ -3,23 +3,21 @@
   <div class="item-cols-num clearfix">
     <div class="select">
       <span class="down"
-            @click.stop="down()"
+            @click.stop.prevent="down()"
             :class="{'down-disabled':Num<=1}">-
       </span>
       <span class="num">
         <input type="text"
                :class="{show:show}"
-               v-model="Num"
+               v-model="Num>=limit?limit:Num"
                @blur="blur()"
                maxlength="2">
                   <ul ref="ul">
-                    <li>{{Num - 1}}</li>
-                    <li>{{Num}}</li>
-                    <li>{{Num + 1}}</li>
+                    <li v-for="i in numList">{{i}}</li>
                   </ul>
       </span>
       <span class="up" :class="{'up-disabled':Num>=limit}"
-            @click.stop="up()">+</span>
+            @click.stop.prevent="up()">+</span>
     </div>
   </div>
 </template>
@@ -46,7 +44,8 @@
       return {
         show: true,
         flag: true,
-        Num: this.num
+        Num: this.num,
+        numList: []
       }
     },
     methods: {
@@ -54,13 +53,13 @@
         if (this.flag && this.Num < this.limit) {
           this.ani('up')
         }
-        return
+        return false
       },
       down () {
         if (this.flag && this.Num > 1) {
           this.ani('down')
         }
-        return
+        return false
       },
       blur () {
         this.Num = this.Num > this.limit ? Number(this.limit) : Number(this.Num)
@@ -68,17 +67,19 @@
       },
       ani (opera) {
         this.flag = false
+        let n = this.Num
+        this.numList = [n - 1, n, n + 1]
         let ul = this.$refs.ul
         let ulStyle = ul.style
         this.show = false
-        ulStyle.zIndex = '19'
+        ulStyle.zIndex = '99'
         ulStyle.transition = 'all .2s ease-out'
         if (opera === 'up') {
-          ulStyle.transform = `translateY(-54px)`
           this.Num++
+          ulStyle.transform = 'translateY(-54px)'
         } else {
-          ulStyle.transform = `translateY(-18px)`
           this.Num--
+          ulStyle.transform = `translateY(-18px)`
         }
         ul.addEventListener('transitionend', () => {
           this.show = true
@@ -113,9 +114,12 @@
       font-size: 14px;
       padding: 0;
       color: #666;
-      display: none;
+      visibility: hidden;
       position: relative;
       border: none;
+      &.show {
+        visibility: visible;
+      }
     }
     ul {
       padding: 0;
@@ -129,7 +133,6 @@
       font-family: system-ui;
       z-index: 1;
       transform: translateY(-36px);
-      /*background: red;*/
     }
     .up.up-disabled, .up.up-disabled:hover {
       background-position: 0 -240px !important;
@@ -140,10 +143,6 @@
   /*数量*/
   .item-cols-num {
     display: inline-block;
-  }
-
-  .show {
-    display: block !important;
   }
 
   .select {
