@@ -6,7 +6,7 @@
           <div class="first">
             <div>
               <span class="date" v-text="item.createDate"></span>
-              <span class="order-id"> 订单号： <a href="">{{item.orderId}}</a> </span>
+              <span class="order-id"> 订单号： <a href="javascript:;">{{item.orderId}}</a> </span>
             </div>
             <div class="f-bc">
               <span class="price">单价</span>
@@ -16,7 +16,7 @@
           </div>
           <div class="last">
             <span class="sub-total">实付金额</span>
-            <span class="order-detail"> <a href="">查看详情<em class="icon-font"></em></a> </span>
+            <span class="order-detail"> <a href="javascript:;">查看详情<em class="icon-font"></em></a> </span>
           </div>
         </div>
         <div class="pr">
@@ -31,7 +31,8 @@
               <div class="cart-l-r">
                 <div>¥ {{good.productPrice}}</div>
                 <div class="num">{{good.productNum}}</div>
-                <div class="type"></div>
+                <div class="type"><a @click="_delOrder(item.orderId)" href="javascript:;" v-if="j<1" class="del-order">删除此订单</a>
+                </div>
               </div>
             </div>
             <div class="cart-r">
@@ -54,7 +55,7 @@
   </div>
 </template>
 <script>
-  import { orderList } from '/api/goods'
+  import { orderList, delOrder } from '/api/goods'
   export default {
     data () {
       return {
@@ -65,6 +66,16 @@
       _orderList () {
         orderList().then(res => {
           this.orderList = res.result
+        })
+      },
+      _delOrder (orderId) {
+        delOrder({orderId}).then(res => {
+          if (res.status === '0') {
+            alert('删除成功')
+            this._orderList()
+          } else {
+            alert('删除失败')
+          }
         })
       }
     },
@@ -129,6 +140,14 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 24px;
+    &:hover {
+      .del-order {
+        display: block;
+      }
+    }
+    .del-order {
+      display: none;
+    }
     .cart-l {
       display: flex;
       align-items: center;

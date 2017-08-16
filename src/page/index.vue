@@ -6,7 +6,8 @@
     <!--抛物图片-->
     <transition @after-enter='afterEnter' @before-enter="beforeEnter">
       <!--整张图片-->
-      <div class="move_img" v-if="showMoveImg" :style="{left:(cartPositionL-15) + 'px',top:(cartPositionT-15) + 'px'}">
+      <div class="move_img" v-if="showMoveImg"
+           :style="{left:(cartPositionL-10) + 'px',top:(cartPositionT-10) + 'px'}">
         <div><img :src="moveImgUrl"></div>
       </div>
     </transition>
@@ -30,19 +31,25 @@
         this.ADD_ANIMATION({moveShow: false, receiveInCart: true})
       },
       beforeEnter (el) {
-        el.style.transform = `translate3d(0,${this.elTop - this.cartPositionT}px,0)`
-        el.children[0].style.transform = `translate3d(${-(this.cartPositionL - this.elLeft)}px,0,0) scale(1.2)`
+        let elStyle = el.style
+        let elChild = el.children[0]
+        let elChildSty = elChild.style
+        elStyle.transform = `translate3d(0,${this.elTop - this.cartPositionT}px,0)`
+        elChildSty.transform = `translate3d(${-(this.cartPositionL - this.elLeft)}px,0,0) scale(1.2)`
       },
       afterEnter (el) {
-        el.style.transform = `translate3d(0,0,0)`
-        el.children[0].style.transform = `translate3d(0,0,0) scale(.3)`
-        el.style.transition = 'transform .55s cubic-bezier(.29,.55,.51,1.08)'
-        el.children[0].style.transition = 'transform .55s linear'
+        let elStyle = el.style
+        let elChild = el.children[0]
+        let elChildSty = elChild.style
+        elStyle.transform = `translate3d(0,0,0)`
+        elChildSty.transform = `translate3d(0,0,0) scale(.2)`
+        elStyle.transition = 'transform .55s cubic-bezier(.29,.55,.51,1.08)'
+        elChildSty.transition = 'transform .55s linear'
         // 动画结束
-        el.children[0].addEventListener('transitionend', () => {
+        elChild.addEventListener('transitionend', () => {
           this.listenInCart()
         })
-        el.children[0].addEventListener('webkitAnimationEnd', () => {
+        elChild.addEventListener('webkitAnimationEnd', () => {
           this.listenInCart()
         })
       }
@@ -54,6 +61,8 @@
   }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
+  @import "../assets/style/mixin";
+
   .main {
     min-height: calc(100vh - 454px);
     background: #ededed;
@@ -69,6 +78,7 @@
 
   .move_img {
     position: fixed;
+    @include wh(40px);
     width: 45px;
     z-index: 29;
     height: 45px;

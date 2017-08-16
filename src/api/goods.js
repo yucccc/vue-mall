@@ -59,3 +59,7 @@ export const orderList = (params) => {
 export const productDet = (params) => {
   return http.fetchGet('/goods/productDet', params)
 }
+// 删除订单
+export const delOrder = (params) => {
+  return http.fetchPost('/users/delOrder', params)
+}

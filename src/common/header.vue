@@ -60,8 +60,8 @@
               <div class="shop pr" @mouseover="cartShowState(true)" @mouseout="cartShowState(false)"
                    ref="positionMsg">
                 <router-link to="cart"></router-link>
-                <span class="cart-num"><i
-                  :class="{no:totalNum <= 0,move_in_cart:receiveInCart}">{{totalNum}}</i></span>
+                <span class="cart-num">
+                  <i class="num" :class="{no:totalNum <= 0,move_in_cart:receiveInCart}">{{totalNum}}</i></span>
                 <!--购物车显示块-->
                 <div class="nav-user-wrapper pa active" v-show="showCart">
                   <div class="nav-user-list">
@@ -209,9 +209,10 @@
         if (this.$route.path === '/goods' || this.$route.path === '/home' || this.$route.path === '/goodsDetails') {
           var st = document.body.scrollTop
           st >= 100 ? this.st = true : this.st = false
-          let shop = document.querySelector('.shop')
-          this.positionL = shop.getBoundingClientRect().left
-          this.positionT = shop.getBoundingClientRect().top
+          // 计算小圆当前位置
+          let num = document.querySelector('.num')
+          this.positionL = num.getBoundingClientRect().left
+          this.positionT = num.getBoundingClientRect().top
           this.ADD_ANIMATION({cartPositionL: this.positionL, cartPositionT: this.positionT})
         } else {
           return
