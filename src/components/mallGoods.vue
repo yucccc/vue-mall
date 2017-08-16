@@ -11,11 +11,13 @@
       <div class="good-price pr">
         <div class="ds pa">
           <router-link :to="'goodsDetails?productId='+msg.productId">
-            <y-button text="查看详情"></y-button>
+            <y-button text="查看详情" style="margin: 0 5px"></y-button>
           </router-link>
           <y-button text="加入购物车"
+                    style="margin: 0 5px"
                     @btnClick="addCart(msg.productId,msg.salePrice,msg.productName,msg.productImageBig)"
-                    classStyle="main-btn"></y-button>
+                    classStyle="main-btn"
+          ></y-button>
         </div>
         <p><span style="font-size: 16px">￥</span>
           {{msg.salePrice}}</p>

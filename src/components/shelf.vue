@@ -1,7 +1,10 @@
 <template>
   <div class="gray-box">
-    <div class="title"><h2>{{title}}</h2>
-      <slot name="right"></slot>
+    <div class="title">
+      <h2>{{title}}</h2>
+      <div>
+        <slot name="right"></slot>
+      </div>
     </div>
     <!--内容-->
     <div>
@@ -41,6 +44,9 @@
       line-height: 60px;
       font-size: 18px;
       color: #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       h2 {
         font-size: 18px;
         font-weight: 400;

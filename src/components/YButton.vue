@@ -33,7 +33,6 @@
   @import "../assets/style/theme";
 
   %style {
-    margin: 0 5px;
     width: 100px;
     height: 30px;
     line-height: 28px;

@@ -20,11 +20,7 @@
           </div>
         </div>
         <div class="account-content">
-          <y-shelf :title="title">
-            <div slot="content">
-              <router-view></router-view>
-            </div>
-          </y-shelf>
+          <router-view></router-view>
         </div>
       </div>
     </div>
@@ -34,7 +30,6 @@
 
 </template>
 <script>
-  import YShelf from '/components/shelf'
   import YFooter from '/common/footer'
   import YHeader from '/common/header'
   import { mapState } from 'vuex'
@@ -70,7 +65,6 @@
       })
     },
     components: {
-      YShelf,
       YFooter,
       YHeader
     },
