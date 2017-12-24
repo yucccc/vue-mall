@@ -32,7 +32,7 @@
   </div>
 </template>
 <script>
-  import {productHome} from '/api/index.js'
+  import { productHome } from '/api/index.js'
   import YShelf from '/components/shelf'
   import product from '/components/product'
   import mallGoods from '/components/mallGoods'
@@ -76,8 +76,8 @@
         dom.style.transform = `rotateY(${X / 50}deg) rotateX(${Y / 50}deg)`
       },
       bgOut (dom) {
-        dom.style['-webkit-transform'] = 'rotateY(0deg) rotateX(0deg)'
         dom.style.transform = 'rotateY(0deg) rotateX(0deg)'
+        dom.style['-webkit-transform'] = 'rotateY(0deg) rotateX(0deg)'
       }
     },
     mounted () {
@@ -114,7 +114,7 @@
     width: 1220px;
     height: 500px;
     margin: 20px auto;
-    background: url("http://static.smartisanos.cn/index/img/store/home/banner-3d-item-1-box-1_61bdc2f4f9.png") center no-repeat;
+    background: url("/static/images/banner-3d-item.png") center no-repeat;
     background-size: 100% 100%;
     border-radius: 10px;
     transform-style: preserve-3d;
@@ -129,7 +129,7 @@
     height: 100%;
     bottom: 5px;
     left: 0;
-    background: url("http://static.smartisanos.cn/index/img/store/home/banner-3d-item-1-box-3_8fa7866d59.png") center no-repeat;
+    background: url("/static/images/banner-3d.png") center no-repeat;
     background-size: 95% 100%;
   }
 

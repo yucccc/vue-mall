@@ -34,7 +34,7 @@
                         <p class="name">{{userInfo.info.name}}</p>
                       </li>
                       <li>
-                        <router-link to="/user/orderList">我的订单</router-link>
+                        <router-link to="orderList">我的订单</router-link>
                       </li>
                       <li>
                         <router-link to="/user/information">账号资料</router-link>
@@ -115,7 +115,7 @@
         </div>
       </header>
       <slot name="nav">
-        <div class="nav-sub" :class="{fixed:st}">
+        <div class="nav-sub" :class="{fixed: st}">
           <div class="nav-sub-bg"></div>
           <div class="nav-sub-wrapper" :class="{fixed:st}">
             <div class="w">
@@ -132,7 +132,6 @@
           </div>
         </div>
       </slot>
-
     </div>
   </div>
 </template>
@@ -147,7 +146,7 @@
       return {
         user: {},
         // 查询数据库的商品
-        st: false,
+        st: true,
         // 头部购物车显示
         cartShow: false,
         positionL: 0,
@@ -206,8 +205,10 @@
       },
       // 控制顶部
       navFixed () {
-        if (this.$route.path === '/goods' || this.$route.path === '/home' || this.$route.path === '/goodsDetails') {
-          var st = document.body.scrollTop
+        if (this.$route.path === '/goods' ||
+          this.$route.path === '/home' ||
+          this.$route.path === '/goodsDetails') {
+          var st = document.documentElement.scrollTop || document.body.scrollTop
           st >= 100 ? this.st = true : this.st = false
           // 计算小圆当前位置
           let num = document.querySelector('.num')
