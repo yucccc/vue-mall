@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 const Index = resolve => require(['/page/index'], resolve)
-const Login = resolve => require(['/page/login/login'], resolve)
+const Login = resolve => require(['/page/Login/login'], resolve)
 const Home = resolve => require(['/page/Home/home'], resolve)
 const GoodS = resolve => require(['/page/Goods/goods'], resolve)
 const goodsDetails = resolve => require(['/page/Goods/goodsDetails'], resolve)
