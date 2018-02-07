@@ -1,8 +1,6 @@
 <template>
   <div class="shopping-cart">
-    <y-header>
-      <div slot="nav"></div>
-    </y-header>
+    <y-header :showNav="false"></y-header>
     <div class="store-content page-cart">
       <div class="gray-box">
         <div class="title"><h2>购物清单</h2></div>

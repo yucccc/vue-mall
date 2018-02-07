@@ -1,8 +1,6 @@
 <template>
   <div class="checkout">
-    <y-header>
-      <div slot="nav"></div>
-    </y-header>
+    <y-header :showNav="false"></y-header>
     <div class="w" style="padding-top: 40px;">
       <!-- 收货地址 -->
       <y-shelf title="收货信息">

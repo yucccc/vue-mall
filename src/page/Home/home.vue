@@ -32,7 +32,7 @@
   </div>
 </template>
 <script>
-  import { productHome } from '/api/index.js'
+  import { productHome } from '/api'
   import YShelf from '/components/shelf'
   import product from '/components/product'
   import mallGoods from '/components/mallGoods'
@@ -41,40 +41,45 @@
       return {
         banner: {},
         bgOpt: {
-          px: 0,
-          py: 0,
-          w: 0,
-          h: 0
+          offsetLeft: 0,
+          offsetTop: 0,
+          offsetWidth: 0,
+          offsetHeight: 0
         },
         floors: [],
         hot: []
       }
     },
     methods: {
-      bgOver (e) {
-        this.bgOpt.px = e.offsetLeft
-        this.bgOpt.py = e.offsetTop
-        this.bgOpt.w = e.offsetWidth
-        this.bgOpt.h = e.offsetHeight
+      // 鼠标移入
+      bgOver (event) {
+        // 获取移入时的位置
+        const {offsetLeft, offsetTop, offsetWidth, offsetHeight} = event
+        this.bgOpt.offsetLeft = offsetLeft
+        this.bgOpt.offsetTop = offsetTop
+        this.bgOpt.offsetWidth = offsetWidth
+        this.bgOpt.offsetHeight = offsetHeight
       },
+      // 鼠标移动
       bgMove (dom, eve) {
-        let bgOpt = this.bgOpt
+        const {offsetLeft, offsetTop, offsetWidth, offsetHeight} = this.bgOpt
         let X, Y
-        let mouseX = eve.pageX - bgOpt.px
-        let mouseY = eve.pageY - bgOpt.py
-        if (mouseX > bgOpt.w / 2) {
-          X = mouseX - (bgOpt.w / 2)
+        let mouseX = eve.pageX - offsetLeft
+        let mouseY = eve.pageY - offsetTop
+        if (mouseX > offsetWidth / 2) {
+          X = mouseX - (offsetWidth / 2)
         } else {
-          X = mouseX - (bgOpt.w / 2)
+          X = mouseX - (offsetWidth / 2)
         }
-        if (mouseY > bgOpt.h / 2) {
-          Y = bgOpt.h / 2 - mouseY
+        if (mouseY > offsetHeight / 2) {
+          Y = offsetHeight / 2 - mouseY
         } else {
-          Y = bgOpt.h / 2 - mouseY
+          Y = offsetHeight / 2 - mouseY
         }
         dom.style['-webkit-transform'] = `rotateY(${X / 50}deg) rotateX(${Y / 50}deg)`
         dom.style.transform = `rotateY(${X / 50}deg) rotateX(${Y / 50}deg)`
       },
+      // 鼠标移除
       bgOut (dom) {
         dom.style.transform = 'rotateY(0deg) rotateX(0deg)'
         dom.style['-webkit-transform'] = 'rotateY(0deg) rotateX(0deg)'
@@ -82,9 +87,9 @@
     },
     mounted () {
       productHome().then(res => {
-        let data = res.result
-        this.floors = data.home_floors
-        this.hot = data.home_hot
+        const { home_floors, home_hot } = res.result
+        this.floors = home_floors
+        this.hot = home_hot
       })
     },
     components: {

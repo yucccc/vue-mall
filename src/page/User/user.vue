@@ -1,8 +1,6 @@
 <template>
   <div class="layout-container">
-    <y-header>
-      <div slot="nav"></div>
-    </y-header>
+    <y-header :showNav="false"></y-header>
     <div class="w">
       <div class="content">
         <div class="account-sidebar">

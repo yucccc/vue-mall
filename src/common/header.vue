@@ -10,17 +10,11 @@
           </div>
           <div class="right-box">
             <div class="nav-list">
-              <router-link to="goods">全部商品</router-link>
-              <!-- <router-link to="/">坚果 Pro</router-link>
-              <router-link to="/">Smartisan M1 / M1L</router-link>
-              <router-link to="/">Smartisan OS</router-link>
-              <router-link to="/">欢喜云</router-link>
-              <router-link to="/">应用下载</router-link>
-              <router-link to="/">官方论坛</router-link> -->
+              <router-link to="/goods">全部商品</router-link>
             </div>
-            <div class="nav-aside" ref="aside" :class="{fixed:st}">
+            <div class="nav-aside" ref="aside" :class="{fixed: (st && showNav)}">
               <div class="user pr">
-                <router-link to="user">个人中心</router-link>
+                <router-link to="/user">个人中心</router-link>
                 <!--用户信息显示-->
                 <div class="nav-user-wrapper pa" v-if="login">
                   <div class="nav-user-list">
@@ -33,23 +27,9 @@
                         </div>
                         <p class="name">{{userInfo.info.name}}</p>
                       </li>
-                      <li>
-                        <router-link to="orderList">我的订单</router-link>
+                      <li v-for="(item, i) in navList" :key="i">
+                        <router-link :to="item.link">{{item.text}}</router-link>
                       </li>
-                      <li>
-                        <router-link to="/user/information">账号资料</router-link>
-                      </li>
-                      <li>
-                        <router-link to="/user/addressList">收货地址</router-link>
-                      </li>
-                      <li>
-                        <router-link to="/user/support">售后服务</router-link>
-                      </li>
-                      <li>
-                        <router-link to="/user/coupon">我的优惠</router-link>
-                      </li>
-
-
                       <li>
                         <a href="javascript:;" @click="_loginOut">退出</a>
                       </li>
@@ -59,9 +39,11 @@
               </div>
               <div class="shop pr" @mouseover="cartShowState(true)" @mouseout="cartShowState(false)"
                    ref="positionMsg">
-                <router-link to="cart"></router-link>
+                <router-link to="/cart"></router-link>
                 <span class="cart-num">
-                  <i class="num" :class="{no:totalNum <= 0,move_in_cart:receiveInCart}">{{totalNum}}</i></span>
+                  <i class="num" ref="num"
+                     :class="{no:totalNum <= 0,move_in_cart:receiveInCart}">{{totalNum}}</i></span>
+
                 <!--购物车显示块-->
                 <div class="nav-user-wrapper pa active" v-show="showCart">
                   <div class="nav-user-list">
@@ -76,17 +58,20 @@
                                   <div class="item-thumb">
                                     <img :src="item.productImg">
                                   </div>
-                                  <div class="item-desc">
-                                    <div class="cart-cell"><h4>
-                                      <a href="" v-text="item.productName"></a>
-                                    </h4>
-                                      <p class="attrs"><span>白色</span>
-                                      </p> <h6><span class="price-icon">¥</span><span
-                                        class="price-num">{{item.productPrice}}</span><span
-                                        class="item-num">x {{item.productNum}}</span>
-                                      </h6></div>
-                                  </div>
                                 </router-link>
+                                <div class="item-desc">
+                                  <div class="cart-cell">
+                                    <h4>
+                                      <router-link :to="'goodsDetails?productId='+item.productId"
+                                                   v-text="item.productName"></router-link>
+                                    </h4>
+                                    <p class="attrs"><span>白色</span>
+                                    </p> <h6><span class="price-icon">¥</span><span
+                                    class="price-num">{{item.productPrice}}</span><span
+                                    class="item-num">x {{item.productNum}}</span>
+                                  </h6></div>
+                                </div>
+
                                 <div class="del-btn del" @click="delGoods(item.productId)">删除</div>
                               </div>
                             </div>
@@ -109,13 +94,16 @@
                     </div>
                   </div>
                 </div>
+
+
               </div>
             </div>
           </div>
         </div>
       </header>
-      <slot name="nav">
-        <div class="nav-sub" :class="{fixed: st}">
+
+        <!--底部导航-->
+        <div class="nav-sub" v-show="showNav" :class="{fixed: st}">
           <div class="nav-sub-bg"></div>
           <div class="nav-sub-wrapper" :class="{fixed:st}">
             <div class="w">
@@ -127,11 +115,10 @@
                   <router-link to="/goods">全部商品</router-link>
                 </li>
               </ul>
-              <div></div>
             </div>
           </div>
         </div>
-      </slot>
+
     </div>
   </div>
 </template>
@@ -141,16 +128,37 @@
   import { getCartList, cartDel } from '/api/goods'
   import { loginOut } from '/api/index'
   import { setStore, removeStore } from '/utils/storage'
-  export default{
+
+  export default {
+    props: {
+      showNav: {
+        default: true,
+        type: Boolean
+      }
+    },
     data () {
       return {
         user: {},
-        // 查询数据库的商品
-        st: true,
+        // 列表
+        navList: [{
+          text: '我的订单',
+          link: '/user/orderList'
+        }, {
+          text: '账号资料',
+          link: '/user/information'
+        }, {
+          text: '收货地址',
+          link: '/user/addressList'
+        }, {
+          text: '售后服务',
+          link: '/user/support'
+        }, {
+          text: '我的优惠',
+          link: '/user/coupon'
+        }],
+        st: false,
         // 头部购物车显示
         cartShow: false,
-        positionL: 0,
-        positionT: 0,
         timerCartShow: null // 定时隐藏购物车
       }
     },
@@ -160,16 +168,16 @@
       ]),
       // 计算价格
       totalPrice () {
-        var totalPrice = 0
-        this.cartList && this.cartList.forEach(item => {
+        let totalPrice = 0
+        this.cartList.length && this.cartList.forEach(item => {
           totalPrice += (item.productNum * item.productPrice)
         })
         return totalPrice
       },
       // 计算数量
       totalNum () {
-        var totalNum = 0
-        this.cartList && this.cartList.forEach(item => {
+        let totalNum = 0
+        this.cartList.length && this.cartList.forEach(item => {
           totalNum += (item.productNum)
         })
         return totalNum
@@ -201,22 +209,22 @@
         }
       },
       toCart () {
-        this.$router.push({path: 'cart'})
+        this.$router.push({path: '/cart'})
       },
       // 控制顶部
       navFixed () {
         if (this.$route.path === '/goods' ||
           this.$route.path === '/home' ||
           this.$route.path === '/goodsDetails') {
-          var st = document.documentElement.scrollTop || document.body.scrollTop
-          st >= 100 ? this.st = true : this.st = false
+          // 计算是否吸顶
+          if (this.showNav) {
+            let st = document.documentElement.scrollTop || document.body.scrollTop
+            st >= 100 ? this.st = true : this.st = false
+          }
           // 计算小圆当前位置
-          let num = document.querySelector('.num')
-          this.positionL = num.getBoundingClientRect().left
-          this.positionT = num.getBoundingClientRect().top
-          this.ADD_ANIMATION({cartPositionL: this.positionL, cartPositionT: this.positionT})
-        } else {
-          return
+          let num = this.$refs.num
+          const {left, top} = num.getBoundingClientRect()
+          this.ADD_ANIMATION({cartPositionL: left, cartPositionT: top})
         }
       },
       // 退出登陆
@@ -233,7 +241,9 @@
       } else {
         this.INIT_BUYCART()
       }
-      this.navFixed()
+      setTimeout(() => {
+        this.navFixed()
+      }, 300)
       window.addEventListener('scroll', this.navFixed)
       window.addEventListener('resize', this.navFixed)
     },
@@ -249,7 +259,6 @@
   .move_in_cart {
     animation: mymove .5s ease-in-out;
   }
-
   @keyframes mymove {
     0% {
       transform: scale(1)
@@ -386,7 +395,6 @@
         width: 262px;
         position: fixed;
         left: 50%;
-        top: 19px;
         margin-left: 451px;
         margin-top: 0;
         z-index: 32;
@@ -636,7 +644,6 @@
             top: 0;
             bottom: 0;
             z-index: 2;
-            border: 1px solid #f0f0f0;
             border: 0 solid transparent;
             box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06);
             border-radius: 3px;
@@ -801,10 +808,10 @@
 
   .nav-sub {
     position: relative;
-    z-index: 20;
     height: 90px;
     background: #f7f7f7;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .04);
+    z-index: 1;
     &.fixed {
       position: fixed;
       z-index: 21;

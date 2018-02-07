@@ -17,6 +17,8 @@ module.exports = {
   ],
   // add your custom rules here
   'rules': {
+    // 去掉驼峰检查
+    "camelcase": 0,
     // allow paren-less arrow functions
     'arrow-parens': 0,
     // allow async-await

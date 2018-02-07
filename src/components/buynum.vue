@@ -8,8 +8,8 @@
       </span>
       <span class="num">
         <input type="text"
-               :class="{show:show}"
-               v-model="Num>=limit?limit:Num"
+               :class="{show: show}"
+               v-model="Num >= limit ? limit : Num"
                @blur="blur()"
                maxlength="2">
                   <ul ref="ul">
@@ -116,7 +116,6 @@
       color: #666;
       visibility: hidden;
       position: relative;
-      border: none;
       &.show {
         visibility: visible;
       }
@@ -182,7 +181,6 @@
       border: none;
       border-radius: 3px;
       line-height: 18px;
-      text-align: center;
       font-size: 14px;
     }
     .up {

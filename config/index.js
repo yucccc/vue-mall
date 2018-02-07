@@ -30,7 +30,7 @@ module.exports = {
     proxyTable: {
       '/users/*': {
         // target: 'http://127.0.0.1:3333'  // 请求本地 需要clone node-api项目
-        target: 'http://mall.yucccc.com:3333/' // 请求线上 可直接运行
+        target: 'http://mall.yucccc.com:3333' // 请求线上 可直接运行
       },
       '/goods/*': {
         // target: 'http://127.0.0.1:3333'
