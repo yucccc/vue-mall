@@ -18,15 +18,12 @@
             </li>
             <li style="text-align: right" class="pr">
               <span class="pa" style="top: 0;left: 0;color: #d44d44">{{ruleForm.errMsg}}</span>
-              <a href="javascript:;" style="padding: 0 5px" @click="loginPage=false">注册 Smartisan ID</a>
+              <a href="javascript:;" style="padding: 0 5px" @click="loginPage = false">注册 Smartisan ID</a>
             </li>
           </ul>
           <!--登陆-->
           <div>
-            <y-button text="登陆"
-                      :classStyle="ruleForm.userPwd&& ruleForm.userName?'main-btn':'disabled-btn'"
-                      @btnClick="login"
-                      style="margin: 0;width: 100%;height: 48px;font-size: 18px;line-height: 48px"></y-button>
+            <y-button text="登陆" :classStyle="isLoginOk" @btnClick="login" class="btn"></y-button>
           </div>
         </div>
         <div class="registered" v-else>
@@ -37,7 +34,7 @@
                 <div class="input">
                   <input type="text"
                          v-model="registered.userName" placeholder="账号"
-                         @keyup="registered.userName=registered.userName.replace(/[^\w\.\/]/ig,'')">
+                         @keyup="registered.userName = registered.userName.replace(/[^\w\.\/]/ig,'')">
                 </div>
               </li>
               <li>
@@ -49,20 +46,12 @@
               </li>
               <li>
                 <div class="input">
-                  <input type="password"
-                         v-model="registered.userPwd2"
-                         placeholder="重复密码">
+                  <input type="password" v-model="registered.userPwd2" placeholder="重复密码">
                 </div>
               </li>
             </ul>
             <div>
-              <y-button
-                :classStyle="registered.userPwd&&registered.userPwd2&&registered.userName?'main-btn':'disabled-btn'"
-                text="注册"
-                style="margin: 0;width: 100%;height: 48px;font-size: 18px;line-height: 48px"
-                @btnClick="regist"
-              >
-              </y-button>
+              <y-button :classStyle="isRegOk" text="注册" class="btn" @btnClick="regist"></y-button>
             </div>
             <ul class="common-form pr">
               <li class="pa" style="left: 0;top: 0;margin: 0;color: #d44d44">{{registered.errMsg}}</li>
@@ -70,7 +59,7 @@
                 <span>如果您已拥有 Smartisan ID，则可在此</span>
                 <a href="javascript:;"
                    style="margin: 0 5px"
-                   @click="loginPage=true">登陆</a>
+                   @click="loginPage = true">登陆</a>
               </li>
             </ul>
           </div>
@@ -85,6 +74,7 @@
   import { userLogin, register } from '/api/index.js'
   import { addCart1 } from '/api/goods.js'
   import { getStore, removeStore } from '/utils/storage.js'
+
   export default {
     data () {
       return {
@@ -104,8 +94,14 @@
       }
     },
     computed: {
-      count () {
-        return this.$store.state.login
+      // 可点击注册
+      isRegOk (rules) {
+        const {userPwd, userPwd2, userName} = this.registered
+        return userPwd && userPwd2 && userName ? 'main-btn' : 'disabled-btn'
+      },
+      isLoginOk () {
+        const {userPwd, userName} = this.ruleForm
+        return userPwd && userName ? 'main-btn' : 'disabled-btn'
       }
     },
     methods: {
@@ -114,42 +110,40 @@
         let cartArr = []
         let locaCart = JSON.parse(getStore('buyCart'))
         if (locaCart && locaCart.length) {
-          locaCart.forEach(item => {
-            cartArr.push({
+          cartArr = locaCart.map(item => {
+            return {
               'productId': item.productId,
               'productNum': item.productNum
-            })
+            }
           })
         }
         this.cart = cartArr
       },
       login () {
-        if (!this.ruleForm.userName || !this.ruleForm.userPwd) {
+        const {userName, userPwd} = this.ruleForm
+        if (!userName || !userPwd) {
           this.ruleForm.errMsg = '账号或者密码不能为空!'
-          return false
-        }
-        var params = {userName: this.ruleForm.userName, userPwd: this.ruleForm.userPwd}
-        userLogin(params).then(res => {
-          if (res.status === '0') {
-            if (this.cart.length) {
-              addCart1({productMsg: this.cart}).then(res => {
-                if (res.status === '1') {
-                  removeStore('buyCart')
-                }
-              }).then(this.$router.go(-1))
+        } else {
+          let params = {userName, userPwd}
+          userLogin(params).then(res => {
+            if (res.status === '0') {
+              if (this.cart.length) {
+                addCart1({productMsg: this.cart}).then(res => {
+                  if (res.status === '1') {
+                    removeStore('buyCart')
+                  }
+                }).then(this.$router.go(-1))
+              } else {
+                this.$router.go(-1)
+              }
             } else {
-              this.$router.go(-1)
+              this.ruleForm.errMsg = res.msg
             }
-          } else {
-            this.ruleForm.errMsg = res.msg
-            return false
-          }
-        })
+          })
+        }
       },
       regist () {
-        let userName = this.registered.userName
-        let userPwd = this.registered.userPwd
-        let userPwd2 = this.registered.userPwd2
+        const {userName, userPwd, userPwd2} = this.registered
         if (!userName || !userPwd || !userPwd2) {
           this.registered.errMsg = '账号密码不能为空'
           return false
@@ -209,6 +203,13 @@
       min-height: 800px;
       min-width: 630px;
     }
+    .btn {
+      margin: 0;
+      width: 100%;
+      height: 48px;
+      font-size: 18px;
+      line-height: 48px
+    }
   }
 
   .v2 .dialog {
@@ -221,9 +222,7 @@
     position: absolute;
     .title {
       background: linear-gradient(#fff, #f5f5f5);
-      height: auto;
       overflow: visible;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
       position: relative;
       background-image: url(/static/images/smartisan_4ada7fecea.png);
       background-size: 160px;
@@ -236,21 +235,12 @@
       h4 {
         padding: 0;
         text-align: center;
-        color: #666;
         border-bottom: 1px solid #dcdcdc;
-        -webkit-box-shadow: none;
-        -moz-box-shadow: none;
-        box-shadow: none;
-        font-weight: 700;
         position: absolute;
         bottom: 0;
         width: 100%;
-        text-align: center;
         margin: 0;
-        padding: 0;
         border-bottom: 0;
-        -webkit-box-shadow: none;
-        -moz-box-shadow: none;
         box-shadow: none;
         line-height: 1em;
         height: auto;
