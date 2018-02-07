@@ -23,9 +23,22 @@ vue2 + vuex + vue-router + webpack + ES6 + axios + sass + flex + svg + node + mo
 
 使用 nginx 做反向代理，解决跨域问题.
 
+1. 先在服务器安装 Nginx.
+2. 上传nodejs代码.
+- 把上传通过各种方式(命令行或者ftp)上传到服务器 进入目录下安装node依赖(与本地开发并无区别)
+- 使用pm2启动 此时会打开一个端口 假设 3333
+- 此时node已运行在服务端
+3. 将打包后的前端静态文件dist目录上传到服务器
+4. 配置方向代理
+- 找到Nginx配置文件，如果不知道在哪,可以上百度搜一下有命令提示
+- 一般默认是在 ``/usr/local/nginx/conf/nginx.conf``
+- 修改配置 找到 server 如图
+
+![nginx配置](./demo/WX20180207-154803@2x.png)
+
 ## 项目运行
 
-```txt
+```shell
 git clone https://github.com/yucccc/vue-mall.git
 
 cd vue-mall
