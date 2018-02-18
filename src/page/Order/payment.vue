@@ -117,7 +117,7 @@
           productId: this.productId,
           productNum: this.num
         }).then(res => {
-          if (res.status === '0') {
+          if (!res.status) {
             this.$router.push({path: '/order/paysuccess', query: {price: this.checkPrice}})
           } else {
             alert('支付失败')

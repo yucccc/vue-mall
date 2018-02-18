@@ -77,7 +77,7 @@
       },
       _delOrder (orderId, i) {
         delOrder({orderId}).then(res => {
-          if (res.status === '0') {
+          if (!res.status) {
             this.orderList.splice(i, 1)
           } else {
             alert('删除失败')

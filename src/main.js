@@ -22,7 +22,7 @@ const whiteList = ['/home', '/goods', '/login', '/goodsDetails']
 router.beforeEach(function (to, from, next) {
   userInfo().then(res => {
     // 没登录
-    if (res.status === '1') {
+    if (res.status) {
       // 白名单
       if (whiteList.indexOf(to.path) !== -1) {
         next()
