@@ -19,8 +19,11 @@
     <div class="goods-box w">
       <mall-goods v-for="(item,i) in computer" :key="i" :msg="item"></mall-goods>
     </div>
-    <div v-show="!busy" class="w" style="text-align: center;background: #fff" v-infinite-scroll="loadMore"
-         infinite-scroll-disabled="busy" infinite-scroll-distance="100">
+    <div v-show="!busy"
+         class="w load-more"
+         v-infinite-scroll="loadMore"
+         infinite-scroll-disabled="busy"
+         infinite-scroll-distance="100">
       正在加载中...
     </div>
   </div>
@@ -151,7 +154,9 @@
       }
     }
   }
-
+  .load-more {
+    text-align: center;background: #fff
+  }
   .goods-box {
     > div {
       float: left;

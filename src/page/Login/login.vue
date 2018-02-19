@@ -71,9 +71,9 @@
 <script>
   import YFooter from '/common/footer'
   import YButton from '/components/YButton'
-  import { userLogin, register } from '/api/index.js'
-  import { addCart1 } from '/api/goods.js'
-  import { getStore, removeStore } from '/utils/storage.js'
+  import { userLogin, register } from '/api/index'
+  import { addCartBatch } from '/api/goods'
+  import { getStore, removeStore } from '/utils/storage'
 
   export default {
     data () {
@@ -128,7 +128,7 @@
           userLogin(params).then(res => {
             if (res.status === '0') {
               if (this.cart.length) {
-                addCart1({productMsg: this.cart}).then(res => {
+                addCartBatch({productMsg: this.cart}).then(res => {
                   if (res.status === '1') {
                     removeStore('buyCart')
                   }

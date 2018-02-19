@@ -1,6 +1,6 @@
 <template>
   <div class="good-item">
-    <div style="">
+    <div>
       <div class="good-img">
         <router-link :to="'goodsDetails?productId='+msg.productId">
           <img v-lazy="msg.productImageBig" :alt="msg.productName">
@@ -11,7 +11,7 @@
       <div class="good-price pr">
         <div class="ds pa">
           <router-link :to="'goodsDetails?productId='+msg.productId">
-            <y-button text="查看详情" style="margin: 0 5px"></y-button>
+            <y-button text="查看详情" style="margin: 0 5px"/>
           </router-link>
           <y-button text="加入购物车"
                     style="margin: 0 5px"
@@ -27,7 +27,7 @@
 </template>
 <script>
   import YButton from '/components/YButton'
-  import { addCart } from '/api/goods.js'
+  import { addCart } from '/api/goods'
   import { mapMutations, mapState } from 'vuex'
   export default {
     props: {
@@ -52,7 +52,7 @@
             this.ADD_CART({productId: id, productPrice: price, productName: name, productImg: img})
           }
           // 加入购物车动画
-          var dom = event.target
+          let dom = event.target
           // 获取点击的坐标
           let elLeft = dom.getBoundingClientRect().left + (dom.offsetWidth / 2)
           let elTop = dom.getBoundingClientRect().top + (dom.offsetHeight / 2)
