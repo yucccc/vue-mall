@@ -134,11 +134,7 @@
       },
       // 勾选的数量
       checkedCount () {
-        var i = 0
-        this.cartList && this.cartList.forEach((item) => {
-          if (item.checked === '1') i++
-        })
-        return Number(i)
+        return this.cartList.filter((item) => item.checked === '1').length
       },
       // 计算总数量
       totalNum () {
@@ -170,9 +166,7 @@
       }
     },
     methods: {
-      ...mapMutations([
-        'INIT_BUYCART', 'EDIT_CART'
-      ]),
+      ...mapMutations([ 'INIT_BUYCART', 'EDIT_CART' ]),
       // 全选
       editCheckAll () {
         let checkAll = !this.checkAllFlag
@@ -203,9 +197,7 @@
       // 修改购物车
       editCart (type, item) {
         if (type && item) {
-          let checked = item.checked
-          let productId = item.productId
-          let productNum = item.productNum
+          let {checked, productId, productNum} = item
           // 勾选
           if (type === 'check') {
             let newChecked = checked === '1' ? '0' : '1'
@@ -256,7 +248,6 @@
       border-color: rgba(0, 0, 0, .14);
       box-shadow: 0 3px 8px -6px rgba(0, 0, 0, .1);
       .title {
-        padding-left: 30px;
         position: relative;
         z-index: 10;
         height: 60px;

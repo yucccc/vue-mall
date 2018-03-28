@@ -247,6 +247,10 @@
       window.addEventListener('scroll', this.navFixed)
       window.addEventListener('resize', this.navFixed)
     },
+    destroyed () {
+      window.removeEventListener('scroll', this.navFixed)
+      window.removeEventListener('resize', this.navFixed)
+    },
     components: {
       YButton
     }
@@ -260,60 +264,6 @@
     animation: mymove .5s ease-in-out;
   }
   @keyframes mymove {
-    0% {
-      transform: scale(1)
-    }
-    25% {
-      transform: scale(.8)
-    }
-    50% {
-      transform: scale(1.2)
-    }
-    75% {
-      transform: scale(.9)
-    }
-    100% {
-      transform: scale(1)
-    }
-  }
-
-  @-moz-keyframes mymove {
-    0% {
-      transform: scale(1)
-    }
-    25% {
-      transform: scale(.8)
-    }
-    50% {
-      transform: scale(1.2)
-    }
-    75% {
-      transform: scale(.9)
-    }
-    100% {
-      transform: scale(1)
-    }
-  }
-
-  @-webkit-keyframes mymove {
-    0% {
-      transform: scale(1)
-    }
-    25% {
-      transform: scale(.8)
-    }
-    50% {
-      transform: scale(1.2)
-    }
-    75% {
-      transform: scale(.9)
-    }
-    100% {
-      transform: scale(1)
-    }
-  }
-
-  @-o-keyframes mymove {
     0% {
       transform: scale(1)
     }
@@ -399,9 +349,7 @@
         margin-top: 0;
         z-index: 32;
         top: -40px;
-        -webkit-transform: translate3d(0, 59px, 0);
         transform: translate3d(0, 59px, 0);
-        -webkit-transition: -webkit-transform .3s cubic-bezier(.165, .84, .44, 1);
         transition: transform .3s cubic-bezier(.165, .84, .44, 1);
         .user {
           &:hover {
@@ -853,7 +801,6 @@
       justify-content: space-between;
     }
     .nav-list {
-      height: 28px;
       line-height: 28px;
       display: flex;
       align-items: center;

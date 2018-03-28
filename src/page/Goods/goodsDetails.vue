@@ -167,13 +167,11 @@
             @include wh(80px);
             margin-top: 10px;
             padding: 12px;
-            border: 1px solid #f0f0f0;
             border: 1px solid rgba(0, 0, 0, .06);
             border-radius: 5px;
             cursor: pointer;
             &.on {
               padding: 10px;
-              border: 3px solid #ccc;
               border: 3px solid rgba(0, 0, 0, .2);
             }
             img {

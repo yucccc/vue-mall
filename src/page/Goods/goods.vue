@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-  import {getComputer} from '/api/goods.js'
+  import {getComputer} from '/api/goods'
   import mallGoods from '/components/mallGoods'
   import YButton from '/components/YButton'
   export default {
