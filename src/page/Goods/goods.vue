@@ -7,9 +7,9 @@
         <a href="javascript:;" @click="sort(1)" :class="{active:sortType===2}">价格从低到高</a>
         <a href="javascript:;" @click="sort(-1)" :class="{active:sortType===3}">价格从高到低</a>
         <div class="price-interval">
-          <input type="number" class="input" placeholder="价格" v-model="min">
+          <input type="number" class="input" placeholder="价格" v-model="params.min">
           <span style="margin: 0 5px"> - </span>
-          <input type="number" placeholder="价格" v-model="max">
+          <input type="number" placeholder="价格" v-model="params.max">
           <y-button text="确定" classStyle="main-btn" @btnClick="reset" style="margin-left: 10px;"></y-button>
         </div>
       </div>
@@ -36,28 +36,27 @@
     data () {
       return {
         computer: [],
-        min: '',
-        max: '',
         busy: false,
         timer: null,
         sortType: 1,
         windowHeight: null,
         windowWidth: null,
         params: {
-          page: 1,
-          sort: ''
+          page: 1,  // 页码
+          sort: '', // 排序
+          min: '',  // 最小价格
+          max: ''
         }
       }
     },
     methods: {
       _getComputer (flag) {
+        const {page, sort, min, max} = this.params
         let params = {
-          params: {
-            page: this.params.page,
-            sort: this.params.sort,
-            priceGt: this.min,
-            priceLte: this.max
-          }
+          page,
+          sort,
+          priceGt: min,
+          priceLte: max
         }
         getComputer(params).then(res => {
           if (res.result.count) {

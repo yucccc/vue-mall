@@ -6,7 +6,7 @@
         <div class="gallery">
           <div class="thumbnail">
             <ul>
-              <li v-for="item in small" :class="{on:big===item}" @click="big=item">
+              <li v-for="(item, i) in small" :key="i" :class="{on:big===item}" @click="big=item">
                 <img v-lazy="item" :alt="product.productName">
               </li>
             </ul>
@@ -48,9 +48,11 @@
       <y-shelf title="产品信息">
         <div slot="content">
           <div class="img-item" v-if="productMsg">
-            <img v-for="item in productMsg.pieces_num"
+            <img v-for="(item, i) in productMsg.pieces_num"
                  v-lazy="`${productMsg.url}?x-oss-process=image/resize,w_2440/indexcrop,y_1440,i_${item-1}/quality,Q_100/format,webp`"
-                 alt="">
+                 alt="产品信息"
+                 :key="i"
+                >
           </div>
           <div class="no-info" v-else>
             该产品暂无内容
@@ -82,7 +84,7 @@
     methods: {
       ...mapMutations(['ADD_CART', 'ADD_ANIMATION', 'SHOW_CART']),
       _productDet (productId) {
-        productDet({params: {productId}}).then(res => {
+        productDet({productId}).then(res => {
           let result = res.result
           this.product = result
           this.productMsg = result.productMsg || ''

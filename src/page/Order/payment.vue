@@ -125,7 +125,7 @@
         })
       },
       _productDet (productId) {
-        productDet({params: {productId}}).then(res => {
+        productDet({productId}).then(res => {
           let item = res.result
           item.checked = '1'
           item.productNum = this.num
