@@ -125,9 +125,7 @@
       return {}
     },
     computed: {
-      ...mapState(
-        ['cartList']
-      ),
+      ...mapState(['cartList']),
       // 是否全选
       checkAllFlag () {
         return this.checkedCount === this.cartList.length
@@ -138,31 +136,15 @@
       },
       // 计算总数量
       totalNum () {
-        var totalNum = 0
-        this.cartList && this.cartList.forEach(item => {
-          totalNum += (item.productNum)
-        })
-        return Number(totalNum)
+        return this.cartList.reduce((accumulator, item) => accumulator + item.productNum, 0)
       },
       // 选中的总价格
       checkPrice () {
-        var totalPrice = 0
-        this.cartList && this.cartList.forEach(item => {
-          if (item.checked === '1') {
-            totalPrice += (item.productNum * item.productPrice)
-          }
-        })
-        return totalPrice
+        return this.cartList.reduce((a, item) => item.checked === '1' ? a + (item.productNum * item.productPrice) : a, 0)
       },
       // 选中的商品数量
       checkNum () {
-        var checkNum = 0
-        this.cartList && this.cartList.forEach(item => {
-          if (item.checked === '1') {
-            checkNum += (item.productNum)
-          }
-        })
-        return checkNum
+        return this.cartList.reduce((accumulator, item) => item.checked === '1' ? accumulator + item.productNum : accumulator, 0)
       }
     },
     methods: {
